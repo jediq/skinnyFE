@@ -1,5 +1,12 @@
 package com.jediq.skinnyfe;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -10,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 public class SkinnyFE {
 
@@ -17,40 +25,47 @@ public class SkinnyFE {
     private List<Resource> resources;
     private String templatesLocation;
 
-    public static void main(String[] args ) throws Exception {
-        String resourcesFile = args[0];
+    TemplateResolver templateResolver;
+
+    public static void main(String[] args ) throws IOException {
+        if (args.length != 2) {
+            args = new String[] {
+                    "src/test/resources/basic/config.json",
+                    "src/test/resources/basic/templates"
+            };
+        }
+        String configLocation = args[0];
         String templatesLocation = args[1];
-        new SkinnyFE(resourcesFile, templatesLocation);
+        new SkinnyFE(configLocation, templatesLocation);
     }
 
-    public SkinnyFE(String resourcesFile, String templatesLocation) throws Exception {
+    public SkinnyFE(String configLocation, String templatesLocation) throws IOException{
         this.templatesLocation = templatesLocation;
+        this.templateResolver = new TemplateResolver(templatesLocation);
 
-        loadResources(resourcesFile);
+        loadConfig(configLocation);
         startServer();
     }
 
-    private void loadResources(String resourcesFile) {
+    private void loadConfig(String configLocation) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        
+        Config config = objectMapper.readValue(new File(configLocation), Config.class);
+        this.resources = config.getResources();
     }
 
-    private void startServer() throws Exception {
+    private void startServer() throws IOException {
         Server server = new Server(8008);
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
-        handler.addServletWithMapping(HelloServlet.class, "/*");
-        server.start();
-        server.join();
-    }
+        ServletHolder servletHolder = handler.addServletWithMapping(SkinnyServlet.class, "/*");
+        try {
+            ((SkinnyServlet) servletHolder.getServlet()).setTemplateResolver(templateResolver);
 
-    public static class HelloServlet extends HttpServlet {
-        @Override
-        protected void doGet( HttpServletRequest request,
-                              HttpServletResponse response ) throws ServletException, IOException {
-            response.setContentType("text/html");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("<h1>Hello from HelloServlet</h1>");
+            server.start();
+            server.join();
+        } catch (Exception e) {
+            throw new IOException(e);
         }
     }
+
 }

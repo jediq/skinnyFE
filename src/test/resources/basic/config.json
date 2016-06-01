@@ -1,0 +1,14 @@
+{
+  "resources":[
+    {
+      "name":"Vehicle",
+      "url":"https://vehicle.api.dvsa.gov/{identifier}",
+      "methods":"GET,POST,PUT,DELETE"
+    },
+    {
+      "name":"User",
+      "url":"https://user.api.dvsa.gov/{identifier}",
+      "methods":"GET"
+    }
+  ]
+}
