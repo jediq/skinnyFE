@@ -2,8 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+         <meta property="car" resource="Vehicle" identifier="PATH.id"/>
+
     </head>
     <body>
-        yo {{this}}
+        Car: {{car.registration}}
     </body>
 </html>

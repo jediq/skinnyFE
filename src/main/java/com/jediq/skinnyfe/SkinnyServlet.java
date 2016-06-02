@@ -21,6 +21,8 @@ public class SkinnyServlet extends HttpServlet {
             String url = request.getRequestURL().toString();
             SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(url);
 
+            System.out.println("skinnyTemplate.metaList = " + skinnyTemplate.metaList);
+
             Template template = handlebars.compileInline(skinnyTemplate.content);
             String rendered = template.apply("my text");
 
