@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class Config {
 
-    private List resources;
+    private List <Resource> resources;
 
-    public List getResources() {
+    public List <Resource> getResources() {
         return resources;
     }
 
-    public void setResources(List resources) {
+    public void setResources(List <Resource> resources) {
         this.resources = resources;
     }
 }

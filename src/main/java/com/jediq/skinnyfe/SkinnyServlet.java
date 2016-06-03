@@ -7,30 +7,34 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SkinnyServlet extends HttpServlet {
 
-        private Handlebars handlebars = new Handlebars();
-        private TemplateResolver templateResolver;
+    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+    private Handlebars handlebars = new Handlebars();
+    private TemplateResolver templateResolver;
 
-            response.setContentType("text/html");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-            String url = request.getRequestURL().toString();
-            SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(url);
+        response.setContentType("text/html");
 
-            System.out.println("skinnyTemplate.metaList = " + skinnyTemplate.metaList);
+        String url = request.getRequestURL().toString();
+        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(url);
 
-            Template template = handlebars.compileInline(skinnyTemplate.content);
-            String rendered = template.apply("my text");
+        logger.info("skinnyTemplate.metaList = " + skinnyTemplate.metaList);
 
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println(rendered);
-        }
+        Template template = handlebars.compileInline(skinnyTemplate.content);
+        String rendered = template.apply("my text");
 
-        public void setTemplateResolver(TemplateResolver templateResolver) {
-            this.templateResolver = templateResolver;
-        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println(rendered);
     }
+
+    public void setTemplateResolver(TemplateResolver templateResolver) {
+        this.templateResolver = templateResolver;
+    }
+}
