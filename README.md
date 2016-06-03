@@ -1,7 +1,10 @@
 # skinnyFE - Skinny Frontend playground
 
+SkinnyFE is a front end framework that removes the ability to embed business logic in a front end application.
 
-##Front end rendering
+At it's core, SkinnyFE declares within the HTML template the RESTful API resources that are required to render the page.  These resource references are then looked up in configuration and HTTP calls are made.  Finally, the response data from the resources is made available to the HTML template to embed in the output HTML.
+
+##HTML Example
 ```
 <!DOCTYPE html>
 <html lang="en-US">
@@ -16,7 +19,7 @@
 
         <h2>{{user.displayName}}</h2>
 
-        <form method="POST" action="https://dvsa.gov/vehicle">
+        <form method="POST" action="https://example.com/">
             <input type="hidden" name="resource" value="Vehicle"/>
             <input type="hidden" name="identifier" value="PATH.id"/>
 
@@ -29,18 +32,18 @@
 </html>
 ```
     
-##Back end configuration
+##Configuration example
 ```
 {
     "resources":[
         {
             name:"Vehicle",
-            url:"https://vehicle.api.dvsa.gov/{identifier}",
+            url:"https://vehicle.api.jediq.com/{identifier}",
             methods:"GET,POST,PUT,DELETE"
         },
         {
             name:"User",
-            url:"https://user.api.dvsa.gov/{identifier}",
+            url:"https://user.api.jediq.com/{identifier}",
             methods:"GET"
         }
     ]
