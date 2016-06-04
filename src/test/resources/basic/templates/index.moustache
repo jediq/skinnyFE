@@ -2,10 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-         <meta property="car" resource="Vehicle" identifier="PATH.id"/>
+        <meta property="car" resource="Vehicle" identifier="23"/>
+        <meta property="driver" resource="User" identifier="46"/>
 
     </head>
     <body>
         Car: {{car.registration}}
+        Driver: {{driver.name}}
     </body>
 </html>

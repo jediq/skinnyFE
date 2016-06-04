@@ -1,6 +1,8 @@
 package com.jediq.skinnyfe;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -16,9 +18,11 @@ public class SkinnyFE {
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private List<Resource> resources;
-    private Server server;
-    private TemplateResolver templateResolver;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final Map<Integer, Server> servers;
+    private final TemplateResolver templateResolver;
+    private final ResourceLoader resourceLoader;
+    private final ObjectMapper objectMapper;
+    private final Config config;
 
     public static void main(String[] args ) {
         if (args.length != 2) {
@@ -34,14 +38,15 @@ public class SkinnyFE {
 
     public SkinnyFE(String configLocation, String templatesLocation) {
         this.templateResolver = new TemplateResolver(templatesLocation);
-
-        loadConfig(configLocation);
+        this.objectMapper = new ObjectMapper();
+        this.servers = new HashMap<>();
+        this.config = loadConfig(configLocation);
+        this.resourceLoader = new ResourceLoader(config);
     }
 
-    private void loadConfig(String configLocation) {
+    private Config loadConfig(String configLocation) {
         try {
-            Config config = objectMapper.readValue(new File(configLocation), Config.class);
-            this.resources = config.getResources();
+            return objectMapper.readValue(new File(configLocation), Config.class);
         } catch (IOException e) {
             throw new WrappedException(e);
         }
@@ -49,14 +54,17 @@ public class SkinnyFE {
 
     public void startServer(int port) {
         logger.info("Starting SkinnyFE server on port : " + port);
-        server = new Server(port);
+        Server server = new Server(port);
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
         ServletHolder servletHolder = handler.addServletWithMapping(SkinnyServlet.class, "/*");
         try {
-            ((SkinnyServlet) servletHolder.getServlet()).setTemplateResolver(templateResolver);
+            SkinnyServlet servlet = (SkinnyServlet) servletHolder.getServlet();
+            servlet.setTemplateResolver(templateResolver);
+            servlet.setResourceLoader(resourceLoader);
 
             server.start();
+            servers.put(port, server);
             logger.info("Started SkinnyFE server on port : " + port);
         } catch (Exception e) {
             logger.info("Caught exception starting SkinnyFE server on port : " + port);
@@ -67,10 +75,9 @@ public class SkinnyFE {
     public void stopServer(int port) {
         try {
             logger.info("Starting SkinnyFE server on port : " + port);
-            server.stop();
+            servers.get(port).stop();
             logger.info("Stopped SkinnyFE server on port : " + port);
         } catch (Exception e) {
-
             logger.info("Caught exception stopping SkinnyFE server on port : " + port);
             throw new WrappedException(e);
         }

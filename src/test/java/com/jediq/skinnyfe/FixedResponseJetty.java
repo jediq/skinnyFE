@@ -26,8 +26,10 @@ public class FixedResponseJetty implements Closeable {
     private final LinkedList<FixedResponse> responses = new LinkedList<>();
 
     public FixedResponseJetty() {
-        Random random = new Random();
-        port = random.nextInt(8900)+1100;
+        this(new Random().nextInt(8900)+1100);
+    }
+
+    public FixedResponseJetty(int port) {
         server = new Server(port);
         server.setHandler(new AbstractHandler() {
             public void handle(String target, Request baseRequest, HttpServletRequest request,
