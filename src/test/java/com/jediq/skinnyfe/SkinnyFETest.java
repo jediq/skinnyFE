@@ -1,7 +1,10 @@
 package com.jediq.skinnyfe;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -17,13 +20,12 @@ public class SkinnyFETest {
     private static int PORT = 8007;
     private static String BASE_URL;
     private static SkinnyFE skinnyFE;
+    private static String path = "src/test/resources/basic/";
 
     @BeforeClass
     public static void setup() throws Exception {
 
-        FixedResponseJetty fixedResponseJetty = new FixedResponseJetty();
 
-        String path = "src/test/resources/basic/";
         skinnyFE = new SkinnyFE(path + "config.json", path + "templates");
         skinnyFE.startServer(PORT);
 
@@ -33,14 +35,25 @@ public class SkinnyFETest {
     @Test
     public void testEndToEnd() throws Exception {
 
+        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
+        vehicleEndpoint.start();
+        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
+        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
+
+        FixedResponseJetty userEndpoint = new FixedResponseJetty(9020);
+        userEndpoint.start();
+        String userAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "user.json")));
+        userEndpoint.addResponseString(userAsJson, "text/html");
+
         HttpClient httpClient = new HttpClient();
         httpClient.start();
         ContentResponse response = httpClient.GET(BASE_URL);
         assertThat(response.getStatus(), is(200));
 
-        assertThat(response.getContentAsString(), startsWith("<!doctype html>"));
-
-
+        String content = response.getContentAsString();
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
     }
 
     @AfterClass

@@ -2,12 +2,12 @@
   "resources":[
     {
       "name":"Vehicle",
-      "url":"https://vehicle.api.dvsa.gov/{identifier}",
+      "url":"http://localhost:9019/{{identifier}}",
       "methods":"GET,POST,PUT,DELETE"
     },
     {
       "name":"User",
-      "url":"https://user.api.dvsa.gov/{identifier}",
+      "url":"http://localhost:9020/{{identifier}}",
       "methods":"GET"
     }
   ]

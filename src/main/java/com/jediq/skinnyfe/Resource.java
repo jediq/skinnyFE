@@ -1,10 +1,18 @@
 package com.jediq.skinnyfe;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Resource {
 
     private String name;
     private String url;
     private String methods;
+
+    private Handlebars handlebars = new Handlebars();
 
     public String getName() {
         return name;
@@ -28,5 +36,20 @@ public class Resource {
 
     public void setMethods(String methods) {
         this.methods = methods;
+    }
+
+    public String getEnrichedUrl(String identifier) {
+        Map <String, String> map = new HashMap<>();
+        map.put("identifier", identifier);
+        return getEnrichedUrl(map);
+    }
+
+        public String getEnrichedUrl(Map<String, String> enrichmentValues) {
+        try {
+            Template template = handlebars.compileInline(url);
+            return template.apply(enrichmentValues);
+        } catch (IOException e) {
+            throw new WrappedException(e);
+        }
     }
 }
