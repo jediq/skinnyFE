@@ -24,8 +24,6 @@ public class SkinnyFETest {
 
     @BeforeClass
     public static void setup() throws Exception {
-
-
         skinnyFE = new SkinnyFE(path + "config.json");
         skinnyFE.startServer(PORT);
 

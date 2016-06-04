@@ -11,5 +11,6 @@
       "methods":"GET"
     }
   ],
-  "templates":"src/test/resources/basic/templates"
+  "templates":"src/test/resources/basic/templates",
+  "port":8008
 }
