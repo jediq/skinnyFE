@@ -1,14 +1,12 @@
 package com.jediq.skinnyfe;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
-
-import java.io.IOException;
-import java.util.List;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,31 +15,23 @@ public class SkinnyFE {
 
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private List<Resource> resources;
     private final Map<Integer, Server> servers;
     private final TemplateResolver templateResolver;
     private final ResourceLoader resourceLoader;
     private final ObjectMapper objectMapper;
     private final Config config;
 
-    public static void main(String[] args ) {
-        if (args.length != 2) {
-            args = new String[] {
-                    "src/test/resources/basic/config.json",
-                    "src/test/resources/basic/templates"
-            };
-        }
-        String configLocation = args[0];
-        String templatesLocation = args[1];
-        new SkinnyFE(configLocation, templatesLocation).startServer(8008);
-    }
-
-    public SkinnyFE(String configLocation, String templatesLocation) {
-        this.templateResolver = new TemplateResolver(templatesLocation);
+    public SkinnyFE(String configLocation) {
         this.objectMapper = new ObjectMapper();
         this.servers = new HashMap<>();
         this.config = loadConfig(configLocation);
+        this.templateResolver = new TemplateResolver(config.getTemplates());
         this.resourceLoader = new ResourceLoader(config);
+    }
+
+    public static void main(String[] args ) {
+        String configLocation = args.length == 1 ? args[0] :  "src/test/resources/basic/config.json";
+        new SkinnyFE(configLocation).startServer(8008);
     }
 
     private Config loadConfig(String configLocation) {

@@ -26,7 +26,7 @@ public class SkinnyFETest {
     public static void setup() throws Exception {
 
 
-        skinnyFE = new SkinnyFE(path + "config.json", path + "templates");
+        skinnyFE = new SkinnyFE(path + "config.json");
         skinnyFE.startServer(PORT);
 
         BASE_URL = "http://localhost:" + PORT + "/";

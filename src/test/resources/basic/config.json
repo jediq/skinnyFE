@@ -10,5 +10,6 @@
       "url":"http://localhost:9020/{{identifier}}",
       "methods":"GET"
     }
-  ]
+  ],
+  "templates":"src/test/resources/basic/templates"
 }

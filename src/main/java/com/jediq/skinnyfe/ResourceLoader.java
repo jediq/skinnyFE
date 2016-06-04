@@ -46,10 +46,7 @@ public class ResourceLoader {
             String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier());
             ContentResponse response = httpClient.GET(enrichedUrl);
             logger.info("Resource responded with status : " + response.getStatus());
-
-            System.out.println("resource response.getContent() = " + new String(response.getContent()));
             return response.getContentAsString();
-
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new WrappedException(e);
         }
