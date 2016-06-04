@@ -1,5 +1,9 @@
 apply plugin: 'java'
 
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 dependencies {
     def jettyVersion = '9.3.8.v20160314'
 
