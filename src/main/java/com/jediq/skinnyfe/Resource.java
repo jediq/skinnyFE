@@ -46,7 +46,7 @@ public class Resource {
 
         public String getEnrichedUrl(Map<String, String> enrichmentValues) {
         try {
-            Template template = handlebars.compileInline(url);
+            Template template = handlebars.compileInline(getUrl());
             return template.apply(enrichmentValues);
         } catch (IOException e) {
             throw new WrappedException(e);
