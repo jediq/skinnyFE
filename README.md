@@ -1,4 +1,6 @@
-# skinnyFE - Skinny Frontend playground
+#SkinnyFE - Skinny Frontend
+
+[![Build Status](https://travis-ci.org/jediq/skinnyFE.svg?branch=master)](https://travis-ci.org/jediq/skinnyFE)
 
 SkinnyFE is a front end framework that removes the ability to embed business logic in a front end application.
 
