@@ -54,6 +54,14 @@ public class SkinnyFETest {
         assertThat(content, containsString("Driver: Fred Jones"));
     }
 
+    @Test
+    public void testEndToEndForUnknownTemplate() throws Exception {
+        HttpClient httpClient = new HttpClient();
+        httpClient.start();
+        ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
+        assertThat(response.getStatus(), is(404));
+    }
+
     @AfterClass
     public static void tearDown() throws Exception {
         skinnyFE.stopServer(PORT);

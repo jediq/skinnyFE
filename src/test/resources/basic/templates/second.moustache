@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta property="car" resource="Vehicle" identifier="87"/>
+        <meta property="driver" resource="User" identifier="67"/>
+
+    </head>
+    <body>
+        Second Car: {{car.registration}}
+        Second Driver: {{driver.name}}
+    </body>
+</html>

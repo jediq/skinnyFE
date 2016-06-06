@@ -27,9 +27,17 @@ public class SkinnyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        SkinnyTemplate skinnyTemplate;
+        try {
+            String url = request.getRequestURL().toString();
+            skinnyTemplate = templateResolver.resolveTemplate(url);
+        } catch (IllegalStateException e) {
+            // we could not find the template
+            logger.debug("Could not find template for : " + request.getRequestURL(), e);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
-        String url = request.getRequestURL().toString();
-        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(url);
         templatePopulator.populate(skinnyTemplate);
         response.setContentType(skinnyTemplate.getContentType());
 
