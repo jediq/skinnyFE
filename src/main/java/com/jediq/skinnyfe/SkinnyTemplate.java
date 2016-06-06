@@ -16,10 +16,6 @@ public class SkinnyTemplate {
         return contentType;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
     public String getContent() {
         return content;
     }
@@ -30,9 +26,5 @@ public class SkinnyTemplate {
 
     public List<Meta> getMetaList() {
         return metaList;
-    }
-
-    public void setMetaList(List<Meta> metaList) {
-        this.metaList = metaList;
     }
 }

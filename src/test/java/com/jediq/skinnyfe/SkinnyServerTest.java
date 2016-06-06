@@ -1,32 +1,55 @@
 package com.jediq.skinnyfe;
 
-import java.io.IOException;
 import junitx.util.PrivateAccessor;
-    import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.server.Server;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
  */
 public class SkinnyServerTest {
 
-    @Ignore("Strange issue when trying to mock a Jetty server, it throws an NPE as soon as it hits doThrow()")
-    @Test
-    public void testStart_serverThrowsAnException() throws Exception {
+    @Test(expected=WrappedException.class)
+    public void testConstructor_serverThrowsARuntimeException() throws Exception {
+        LocalSkinnyServer.localServer.set(null);
+        new LocalSkinnyServer();
+        fail(); // should never get here
+    }
 
-        Server server = mock(Server.class);
-        SkinnyServer skinnyServer = new SkinnyServer(8800, null, null);
-        doThrow(IOException.class).when(server).start();
+    @Test(expected=WrappedException.class)
+    public void testConstructor_startThrowsARuntimeException() throws Exception {
+        LocalSkinnyServer.localServer.set(new Server());
+        SkinnyServer skinnyServer = new LocalSkinnyServer();
+        PrivateAccessor.setField(skinnyServer, "server", null);
+        skinnyServer.start();
+        fail(); // should never get here
+    }
 
+    @Test(expected=WrappedException.class)
+    public void testConstructor_stopThrowsARuntimeException() throws Exception {
+        LocalSkinnyServer.localServer.set(new Server());
+        SkinnyServer skinnyServer = new LocalSkinnyServer();
+        PrivateAccessor.setField(skinnyServer, "server", null);
+        skinnyServer.stop();
+        fail(); // should never get here
+    }
 
+    private static class LocalSkinnyServer extends SkinnyServer {
+
+        // Need to use a ThreadLocal here as constructServer can't be modified prior to the super
+        // constructor being called.  ThreadLocal allows our tests to run in parallel with
+        // deterministic results.
+        static ThreadLocal <Server> localServer = new ThreadLocal<>();
+
+        public LocalSkinnyServer() {
+            super(8800, null, null, null);
+        }
+
+        @Override
+        protected Server constructServer(int port) {
+            return localServer.get();
+        }
     }
 
 }

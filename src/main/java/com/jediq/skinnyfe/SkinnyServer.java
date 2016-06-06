@@ -17,20 +17,25 @@ public class SkinnyServer {
     private int port;
     private Server server;
 
-    public SkinnyServer(int port, TemplateResolver templateResolver, ResourceLoader resourceLoader) {
-        this.server = new Server(port);
+    public SkinnyServer(int port, TemplateResolver templateResolver, TemplatePopulator templatePopulator, ResourceLoader resourceLoader) {
+        this.server = constructServer(port);
         this.port = port;
-
-        ServletHandler handler = new ServletHandler();
-        server.setHandler(handler);
-        ServletHolder servletHolder = handler.addServletWithMapping(SkinnyServlet.class, "/*");
         try {
+            ServletHandler handler = new ServletHandler();
+            server.setHandler(handler);
+            ServletHolder servletHolder = handler.addServletWithMapping(SkinnyServlet.class, "/*");
+
             SkinnyServlet servlet = (SkinnyServlet) servletHolder.getServlet();
             servlet.setTemplateResolver(templateResolver);
+            servlet.setTemplatePopulator(templatePopulator);
             servlet.setResourceLoader(resourceLoader);
-        } catch (ServletException e) {
+        } catch (ServletException | NullPointerException e) {
             throw new WrappedException(e);
         }
+    }
+
+    protected Server constructServer(int port) {
+        return new Server(port);
     }
 
 
