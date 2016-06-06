@@ -13,7 +13,7 @@ public class SkinnyFEMainTest {
         SkinnyFE.main(args);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testExecutesWithMain_NoArgs() {
         String [] args = new String [0];
         SkinnyFE.main(args);

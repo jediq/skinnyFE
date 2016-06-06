@@ -22,9 +22,22 @@ public class SkinnyFE {
     }
 
     public static void main(String[] args ) {
-        String configLocation = args.length == 1 ? args[0] :  "src/test/resources/basic/config.json";
-        SkinnyFE skinnyFE = new SkinnyFE(configLocation);
-        skinnyFE.startServer(skinnyFE.getConfig().getPort());
+        if (args.length != 1) {
+            printUsage();
+            throw new IllegalArgumentException("No config file found");
+        } else {
+            String configLocation = args[0];
+            SkinnyFE skinnyFE = new SkinnyFE(configLocation);
+            skinnyFE.startServer(skinnyFE.getConfig().getPort());
+        }
+    }
+
+    private static void printUsage() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Usage:\n");
+        builder.append("java -jar skinnyFE-all.jar config.json\n");
+        builder.append("   config.json - Your config file\n");
+        System.out.println(builder.toString()); //NOSONAR
     }
 
     public void startServer(int port) {

@@ -57,10 +57,18 @@ At it's core, SkinnyFE declares within the HTML template the RESTful API resourc
 
 SkinnyFE is built using gradle with the following command : 
 
-    gradle clean build
+    gradle clean build shadowJar
     
 to execute with test coverage and local sonarqube integration use : 
 
     gradle clean test jacoco sonarqube -Dsonar.scm.disabled=true
 
+
+##Executing
+
+To start a SkinnyFE server use the following : 
+
+    java -jar build/libs/skinnyFE-all.jar <config_json>
+    
+    
   
