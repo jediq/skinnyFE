@@ -10,7 +10,7 @@ public class Resource {
 
     private String name;
     private String url;
-    private String methods;
+    private String methods = "GET";
 
     private Handlebars handlebars = new Handlebars();
 

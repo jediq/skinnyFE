@@ -27,21 +27,19 @@ public class SkinnyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-        response.setContentType("text/html");
-
         String url = request.getRequestURL().toString();
         SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(url);
+        response.setContentType(skinnyTemplate.getContentType());
 
-        Map<Meta, String> resourceDataMap = resourceLoader.loadResources(skinnyTemplate.metaList);
+        Map<Meta, String> resourceDataMap = resourceLoader.loadResources(skinnyTemplate.getMetaList());
         JsonNode jsonNode = aggregateData(resourceDataMap);
-
 
         Context context = Context.newBuilder(jsonNode)
                 .resolver(JsonNodeValueResolver.INSTANCE).build();
 
-        logger.info("aggregated data into : {} ", jsonNode);
+        logger.debug("aggregated data into : {} ", jsonNode);
 
-        Template template = handlebars.compileInline(skinnyTemplate.content);
+        Template template = handlebars.compileInline(skinnyTemplate.getContent());
         String rendered = template.apply(context);
 
 

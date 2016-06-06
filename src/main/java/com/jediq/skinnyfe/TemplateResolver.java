@@ -8,11 +8,15 @@ import java.nio.file.Paths;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class TemplateResolver {
+
+    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String templatesLocation;
 
@@ -27,18 +31,20 @@ public class TemplateResolver {
         }
         Path filePath = Paths.get(templatesLocation, path + ".moustache");
 
-        SkinnyTemplate skinnyTemplate = new SkinnyTemplate();
+        logger.debug("Looking for template for {} at {}", url, filePath);
 
         if (!filePath.toFile().exists()) {
-            return skinnyTemplate;
+            String message = String.format("Could not find template for %s at %s", url, filePath);
+            throw new IllegalStateException(message);
         }
 
-        skinnyTemplate.content = new String(Files.readAllBytes(filePath));
+        SkinnyTemplate skinnyTemplate = new SkinnyTemplate();
+        skinnyTemplate.setContent(new String(Files.readAllBytes(filePath)));
 
-        Document document = Jsoup.parse(skinnyTemplate.content);
+        Document document = Jsoup.parse(skinnyTemplate.getContent());
         for (Element element : document.head().getElementsByTag("meta")) {
             if (hasResourceAttribute(element)) {
-                skinnyTemplate.metaList.add(convertElementToMeta(element));
+                skinnyTemplate.getMetaList().add(convertElementToMeta(element));
             }
         }
         return skinnyTemplate;
