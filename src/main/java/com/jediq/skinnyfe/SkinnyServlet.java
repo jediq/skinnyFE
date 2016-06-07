@@ -27,6 +27,11 @@ public class SkinnyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        getHandlerdoGet(request, response);
+    }
+
+    public void getHandlerdoGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         SkinnyTemplate skinnyTemplate;
         try {
             String url = request.getRequestURL().toString();
@@ -73,15 +78,10 @@ public class SkinnyServlet extends HttpServlet {
         return rootNode;
     }
 
-    public void setTemplateResolver(TemplateResolver templateResolver) {
-        this.templateResolver = templateResolver;
-    }
 
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
-
-    public void setTemplatePopulater(TemplatePopulater templatePopulater) {
-        this.templatePopulater = templatePopulater;
+    public void setConfig(Config config) {
+        templatePopulater = new TemplatePopulater();
+        templateResolver = new TemplateResolver(config.getTemplates());
+        resourceLoader = new ResourceLoader(config);
     }
 }

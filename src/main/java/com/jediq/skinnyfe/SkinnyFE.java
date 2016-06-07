@@ -10,17 +10,11 @@ public class SkinnyFE {
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Map<Integer, SkinnyServer> servers;
-    private final TemplateResolver templateResolver;
-    private TemplatePopulater templatePopulater;
-    private final ResourceLoader resourceLoader;
     private final Config config;
 
     public SkinnyFE(String configLocation) {
         this.servers = new HashMap<>();
         this.config = Config.load(configLocation);
-        this.templateResolver = new TemplateResolver(config.getTemplates());
-        this.templatePopulater = new TemplatePopulater();
-        this.resourceLoader = new ResourceLoader(config);
     }
 
     public static void main(String[] args ) {
@@ -44,7 +38,7 @@ public class SkinnyFE {
 
     public void startServer(int port) {
         logger.info("Starting SkinnyFE server on port : " + port);
-        SkinnyServer server = new SkinnyServer(port, config, templateResolver, templatePopulater, resourceLoader);
+        SkinnyServer server = new SkinnyServer(port, config);
         server.start();
         servers.put(port, server);
         logger.info("Started SkinnyFE server on port : " + port);

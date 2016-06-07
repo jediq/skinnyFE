@@ -24,11 +24,7 @@ public class SkinnyServer {
     private int port;
     private Server server;
 
-    public SkinnyServer(int port,
-                        Config config,
-                        TemplateResolver templateResolver,
-                        TemplatePopulater templatePopulater,
-                        ResourceLoader resourceLoader) {
+    public SkinnyServer(int port, Config config) {
         try {
             this.server = constructServer(port);
             this.port = port;
@@ -38,9 +34,8 @@ public class SkinnyServer {
             Optional<Handler> resourceHandler = makeResourceHandler(config);
             resourceHandler.ifPresent(handlerCollection::addHandler);
 
-            Optional<Handler> servletHandler = makeServletHandler(templateResolver, templatePopulater, resourceLoader);
+            Optional<Handler> servletHandler = makeServletHandler(config);
             servletHandler.ifPresent(handlerCollection::addHandler);
-
 
             server.setHandler(handlerCollection);
         } catch (ServletException | NullPointerException e) {
@@ -62,15 +57,11 @@ public class SkinnyServer {
         return Optional.of(contextHandler);
     }
 
-    private Optional<Handler> makeServletHandler(TemplateResolver templateResolver, TemplatePopulater templatePopulater, ResourceLoader resourceLoader) throws ServletException {
+    private Optional<Handler> makeServletHandler(Config config) throws ServletException {
         ServletHandler handler = new ServletHandler();
-
         ServletHolder servletHolder = handler.addServletWithMapping(SkinnyServlet.class, "/*");
-
         SkinnyServlet servlet = (SkinnyServlet) servletHolder.getServlet();
-        servlet.setTemplateResolver(templateResolver);
-        servlet.setTemplatePopulater(templatePopulater);
-        servlet.setResourceLoader(resourceLoader);
+        servlet.setConfig(config);
         return Optional.of(handler);
     }
 
