@@ -45,6 +45,7 @@ public class SkinnyFETest {
 
         HttpClient httpClient = new HttpClient();
         httpClient.start();
+
         ContentResponse response = httpClient.GET(BASE_URL);
         assertThat(response.getStatus(), is(200));
 
@@ -52,6 +53,12 @@ public class SkinnyFETest {
         assertThat(content, startsWith("<!doctype html>"));
         assertThat(content, containsString("Car: FR123JON"));
         assertThat(content, containsString("Driver: Fred Jones"));
+
+        ContentResponse assetResponse = httpClient.GET(BASE_URL + "assets/plain.txt");
+        assertThat(assetResponse.getStatus(), is(200));
+        assertThat(assetResponse.getContentAsString(), is("Plain text file\n"));
+
+        httpClient.stop();
     }
 
     @Test

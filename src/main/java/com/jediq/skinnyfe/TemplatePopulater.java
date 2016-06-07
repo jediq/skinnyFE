@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element;
 /**
  *
  */
-public class TemplatePopulator {
+public class TemplatePopulater {
 
     public void populate(SkinnyTemplate skinnyTemplate) {
 

@@ -23,7 +23,7 @@ public class SkinnyServlet extends HttpServlet {
     private Handlebars handlebars = new Handlebars();
     private TemplateResolver templateResolver;
     private ResourceLoader resourceLoader;
-    private TemplatePopulator templatePopulator;
+    private TemplatePopulater templatePopulater;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -38,7 +38,7 @@ public class SkinnyServlet extends HttpServlet {
             return;
         }
 
-        templatePopulator.populate(skinnyTemplate);
+        templatePopulater.populate(skinnyTemplate);
         response.setContentType(skinnyTemplate.getContentType());
 
         Map<Meta, String> resourceDataMap = resourceLoader.loadResources(skinnyTemplate.getMetaList());
@@ -81,7 +81,7 @@ public class SkinnyServlet extends HttpServlet {
         this.resourceLoader = resourceLoader;
     }
 
-    public void setTemplatePopulator(TemplatePopulator templatePopulator) {
-        this.templatePopulator = templatePopulator;
+    public void setTemplatePopulater(TemplatePopulater templatePopulater) {
+        this.templatePopulater = templatePopulater;
     }
 }

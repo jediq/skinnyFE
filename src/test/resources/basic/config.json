@@ -12,5 +12,7 @@
     }
   ],
   "templates":"src/test/resources/basic/templates",
-  "port":8008
+  "port":8008,
+  "assetsPath":"/assets",
+  "assetsFolder":"src/test/resources/basic/assets/"
 }

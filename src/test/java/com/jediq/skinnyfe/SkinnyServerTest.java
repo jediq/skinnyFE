@@ -43,7 +43,7 @@ public class SkinnyServerTest {
         static ThreadLocal <Server> localServer = new ThreadLocal<>();
 
         public LocalSkinnyServer() {
-            super(8800, null, null, null);
+            super(8800, new Config(), null, null, null);
         }
 
         @Override

@@ -13,6 +13,8 @@ public class Config {
     private int port;
     private String templates;
     private List <Resource> resources;
+    private String assetsPath;
+    private String assetsFolder;
 
     public static Config load(String configLocation) {
         try {
@@ -45,5 +47,21 @@ public class Config {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public String getAssetsPath() {
+        return assetsPath;
+    }
+
+    public void setAssetsPath(String assetsPath) {
+        this.assetsPath = assetsPath;
+    }
+
+    public String getAssetsFolder() {
+        return assetsFolder;
+    }
+
+    public void setAssetsFolder(String assetsFolder) {
+        this.assetsFolder = assetsFolder;
     }
 }

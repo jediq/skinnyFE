@@ -11,7 +11,7 @@ public class SkinnyFE {
 
     private final Map<Integer, SkinnyServer> servers;
     private final TemplateResolver templateResolver;
-    private TemplatePopulator templatePopulator;
+    private TemplatePopulater templatePopulater;
     private final ResourceLoader resourceLoader;
     private final Config config;
 
@@ -19,7 +19,7 @@ public class SkinnyFE {
         this.servers = new HashMap<>();
         this.config = Config.load(configLocation);
         this.templateResolver = new TemplateResolver(config.getTemplates());
-        this.templatePopulator = new TemplatePopulator();
+        this.templatePopulater = new TemplatePopulater();
         this.resourceLoader = new ResourceLoader(config);
     }
 
@@ -44,7 +44,7 @@ public class SkinnyFE {
 
     public void startServer(int port) {
         logger.info("Starting SkinnyFE server on port : " + port);
-        SkinnyServer server = new SkinnyServer(port, templateResolver, templatePopulator, resourceLoader);
+        SkinnyServer server = new SkinnyServer(port, config, templateResolver, templatePopulater, resourceLoader);
         server.start();
         servers.put(port, server);
         logger.info("Started SkinnyFE server on port : " + port);
