@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.jknack.handlebars.Context;
-import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.JsonNodeValueResolver;
 import com.github.jknack.handlebars.Template;
 import java.io.IOException;
@@ -14,19 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetHandler {
+public class GetHandler extends Handler {
 
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private Handlebars handlebars = new Handlebars();
-    private TemplateResolver templateResolver;
-    private ResourceLoader resourceLoader;
-    private TemplatePopulater templatePopulater;
-
     public GetHandler(Config config) {
-        templatePopulater = new TemplatePopulater();
-        templateResolver = new TemplateResolver(config.getTemplates());
-        resourceLoader = new ResourceLoader(config);
+        super(config);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -45,7 +37,7 @@ public class GetHandler {
         templatePopulater.populate(skinnyTemplate);
         response.setContentType(skinnyTemplate.getContentType());
 
-        Map<Meta, String> resourceDataMap = resourceLoader.loadResources(skinnyTemplate.getMetaList());
+        Map<Meta, String> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList());
         JsonNode jsonNode = aggregateData(resourceDataMap);
 
         Context context = Context.newBuilder(jsonNode)

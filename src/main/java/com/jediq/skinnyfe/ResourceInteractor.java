@@ -7,20 +7,21 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.util.StringContentProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  *
  */
-public class ResourceLoader {
+public class ResourceInteractor {
 
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final HttpClient httpClient;
     private final Config config;
 
-    public ResourceLoader(Config config) {
+    public ResourceInteractor(Config config) {
         this.config = config;
         httpClient = new HttpClient();
 
@@ -37,6 +38,27 @@ public class ResourceLoader {
             metaMap.put(meta, loadResource(meta));
         }
         return metaMap;
+    }
+
+    public void saveResources(Map<Meta, String> metaMap) {
+        for (Meta meta : metaMap.keySet()) {
+            saveResource(meta, metaMap.get(meta));
+        }
+    }
+
+    private void saveResource(Meta meta, String string) {
+        try {
+
+            logger.info("Loading resource from : " + meta.getResource());
+            Resource resource = findResource(meta.getResource());
+            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier());
+            ContentResponse response = httpClient.POST(enrichedUrl)
+                    .content(new StringContentProvider(string), "application/json")
+                    .send();
+
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new WrappedException(e);
+        }
     }
 
     private String loadResource(Meta meta) {
@@ -58,6 +80,6 @@ public class ResourceLoader {
                 return resource;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Could not find resource for : " + resourceName);
     }
 }

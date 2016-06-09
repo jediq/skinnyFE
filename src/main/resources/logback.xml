@@ -5,16 +5,6 @@
         </encoder>
     </appender>
 
-     <appender name="SAME_LINE" class="ch.qos.logback.core.ConsoleAppender">
-       <encoder>
-         <pattern>XXXX%msg</pattern>
-       </encoder>
-     </appender>
-
-    <logger name="SAME_LINE" level="INFO">
-        <appender-ref ref="SAME_LINE"/>
-    </logger>
-
     <logger name="org.eclipse" level="INFO"/>
     <logger name="com.jediq" level="INFO"/>
 
