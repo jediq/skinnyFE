@@ -10,6 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -67,6 +68,22 @@ public class SkinnyFETest {
         httpClient.start();
         ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
         assertThat(response.getStatus(), is(404));
+    }
+
+    @Test
+    public void testEndToEndPathResource() throws Exception {
+
+
+        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
+        vehicleEndpoint.start();
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.start();
+        ContentResponse goodResponse = httpClient.GET(BASE_URL + "/pathed/12345");
+        assertThat(goodResponse.getStatus(), is(200));
+
+        ContentResponse badResponse = httpClient.GET(BASE_URL + "/pathed/23456");
+        assertThat(badResponse.getStatus(), is(404));
     }
 
     @AfterClass
