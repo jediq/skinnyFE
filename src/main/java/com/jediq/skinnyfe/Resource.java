@@ -2,6 +2,7 @@ package com.jediq.skinnyfe;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import com.jediq.skinnyfe.WrappedException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

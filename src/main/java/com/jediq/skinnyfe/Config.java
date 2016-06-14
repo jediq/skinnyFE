@@ -11,8 +11,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class Config {
 
     private int port;
-    private String templates;
+    private String defaultTemplates;
     private List <Resource> resources;
+    private List <Template> templates;
     private String assetsPath;
     private String assetsFolder;
 
@@ -33,12 +34,12 @@ public class Config {
         this.resources = resources;
     }
 
-    public String getTemplates() {
-        return templates;
+    public String getDefaultTemplates() {
+        return defaultTemplates;
     }
 
-    public void setTemplates(String templates) {
-        this.templates = templates;
+    public void setDefaultTemplates(String defaultTemplates) {
+        this.defaultTemplates = defaultTemplates;
     }
 
     public int getPort() {
@@ -63,5 +64,13 @@ public class Config {
 
     public void setAssetsFolder(String assetsFolder) {
         this.assetsFolder = assetsFolder;
+    }
+
+    public List<Template> getTemplates() {
+        return templates;
+    }
+
+    public void setTemplates(List<Template> templates) {
+        this.templates = templates;
     }
 }
