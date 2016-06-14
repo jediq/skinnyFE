@@ -70,6 +70,7 @@ public class SkinnyFETest {
         assertThat(response.getStatus(), is(404));
     }
 
+    @Ignore
     @Test
     public void testEndToEndPathResource() throws Exception {
 

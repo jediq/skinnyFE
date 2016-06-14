@@ -3,7 +3,6 @@ package com.jediq.skinnyfe;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.*;
-import com.github.jknack.handlebars.context.MapValueResolver;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;

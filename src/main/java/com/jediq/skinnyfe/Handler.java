@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe;
 
 import com.github.jknack.handlebars.Handlebars;
+import com.jediq.skinnyfe.config.Config;
 
 public class Handler {
 

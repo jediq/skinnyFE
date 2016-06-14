@@ -1,5 +1,8 @@
 package com.jediq.skinnyfe;
 
+import com.jediq.skinnyfe.config.Config;
+import com.jediq.skinnyfe.config.Meta;
+import com.jediq.skinnyfe.config.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

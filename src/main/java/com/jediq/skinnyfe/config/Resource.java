@@ -1,4 +1,4 @@
-package com.jediq.skinnyfe;
+package com.jediq.skinnyfe.config;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;

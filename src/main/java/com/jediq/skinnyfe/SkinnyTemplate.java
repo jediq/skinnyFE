@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.jediq.skinnyfe.config.Meta;
 import java.util.ArrayList;
 import java.util.List;
 

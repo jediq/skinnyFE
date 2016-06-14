@@ -1,4 +1,4 @@
-package com.jediq.skinnyfe;
+package com.jediq.skinnyfe.config;
 
 /**
  *

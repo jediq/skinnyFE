@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.JsonNodeValueResolver;
 import com.github.jknack.handlebars.Template;
+import com.jediq.skinnyfe.config.Config;
+import com.jediq.skinnyfe.config.Meta;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;

@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.jediq.skinnyfe.config.Config;
 import junitx.util.PrivateAccessor;
 import org.eclipse.jetty.server.Server;
 import static org.junit.Assert.*;

@@ -1,5 +1,6 @@
-package com.jediq.skinnyfe;
+package com.jediq.skinnyfe.config;
 
+import com.jediq.skinnyfe.WrappedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

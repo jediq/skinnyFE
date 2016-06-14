@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.jediq.skinnyfe.config.Config;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
