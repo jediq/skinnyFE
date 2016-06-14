@@ -12,7 +12,7 @@ public class Handler {
     public Handler(Config config) {
         handlebars = new Handlebars();
         templatePopulater = new TemplatePopulater();
-        templateResolver = new TemplateResolver(config.getTemplates());
+        templateResolver = new TemplateResolver(config.getDefaultTemplates());
         resourceInteractor = new ResourceInteractor(config);
     }
 

@@ -11,8 +11,18 @@
       "methods":"GET"
     }
   ],
-  "templates":"src/test/resources/basic/templates",
+  "defaultTemplates":"src/test/resources/basic/templates",
   "port":8008,
   "assetsPath":"/assets",
-  "assetsFolder":"src/test/resources/basic/assets/"
+  "assetsFolder":"src/test/resources/basic/assets/",
+
+  "templates":[
+    {
+      "name":"balls",
+      "regex":"/balls/.*/",
+      "file":"src/test/resources/basic/balls.moustache",
+      "enricher":"src/test/resources/basic/ballsEnricher"
+
+    }
+  ]
 }

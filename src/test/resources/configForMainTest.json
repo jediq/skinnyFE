@@ -1,5 +1,5 @@
 {
   "resources":[],
-  "templates":"src/test/resources/basic/templates",
+  "defaultTemplates":"src/test/resources/basic/templates",
   "port":8050
 }
