@@ -29,8 +29,8 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-client', version: jettyVersion
     compile group: 'org.codehaus.jackson', name:'jackson-mapper-asl', version:'1.9.2'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
-    compile group: 'com.github.jknack', name: 'handlebars', version: '4.0.5'
-    compile group: 'com.github.jknack', name: 'handlebars-jackson2', version: '4.0.5'
+    compile group: 'com.github.jknack', name: 'handlebars', version: '4.0.1'
+    compile group: 'com.github.jknack', name: 'handlebars-jackson2', version: '4.0.1'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
 
     testCompile group: 'junit', name: 'junit', version: '4.+'
