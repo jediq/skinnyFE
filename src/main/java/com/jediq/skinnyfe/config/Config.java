@@ -3,6 +3,7 @@ package com.jediq.skinnyfe.config;
 import com.jediq.skinnyfe.WrappedException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -13,8 +14,8 @@ public class Config {
 
     private int port;
     private String defaultTemplates;
-    private List <Resource> resources;
-    private List <Template> templates;
+    private List <Resource> resources = new ArrayList<>();
+    private List <SkinnyTemplate> templates = new ArrayList<>();
     private String assetsPath;
     private String assetsFolder;
 
@@ -67,11 +68,11 @@ public class Config {
         this.assetsFolder = assetsFolder;
     }
 
-    public List<Template> getTemplates() {
+    public List<SkinnyTemplate> getTemplates() {
         return templates;
     }
 
-    public void setTemplates(List<Template> templates) {
+    public void setTemplates(List<SkinnyTemplate> templates) {
         this.templates = templates;
     }
 }

@@ -49,7 +49,7 @@ public class ResourceInteractor {
         }
     }
 
-    private void saveResource(Meta meta, String string) {
+    private boolean saveResource(Meta meta, String string) {
         try {
 
             logger.info("Loading resource from : " + meta.getResource());
@@ -58,6 +58,7 @@ public class ResourceInteractor {
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
                     .send();
+            return response.getStatus() == 200;
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new WrappedException(e);

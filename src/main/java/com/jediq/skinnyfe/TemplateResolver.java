@@ -1,10 +1,14 @@
 package com.jediq.skinnyfe;
 
+import com.jediq.skinnyfe.config.Config;
+import com.jediq.skinnyfe.config.SkinnyTemplate;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,29 +19,50 @@ public class TemplateResolver {
 
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private String templatesLocation;
+    private Config config;
 
-    public TemplateResolver(String templatesLocation) {
-        this.templatesLocation = templatesLocation;
+    public TemplateResolver(Config config) {
+        this.config = config;
     }
 
     public SkinnyTemplate resolveTemplate(String url) throws IOException {
-        String path = new URL(url).getPath();
-        if (path.endsWith("/")) {
-            path += "index";
+
+        SkinnyTemplate template = Stream.of(fromConfig(url), fromFile(url))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No template found for : " + url));
+
+
+        logger.info("Found template for {} at {}", url, template);
+
+        template.loadContent();
+
+        return template;
+    }
+
+    private Optional<SkinnyTemplate> fromFile(String url) throws MalformedURLException {
+
+        String urlPath = new URL(url).getPath();
+        if (urlPath.endsWith("/")) {
+            urlPath += "index";
         }
-        Path filePath = Paths.get(templatesLocation, path + ".moustache");
-
-        logger.debug("Looking for template for {} at {}", url, filePath);
-
-        if (!filePath.toFile().exists()) {
-            String message = String.format("Could not find template for %s at %s", url, filePath);
-            throw new IllegalStateException(message);
+        Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
+        if (path.toFile().exists()) {
+            SkinnyTemplate template = new SkinnyTemplate();
+            template.setFile(path.toFile().getAbsolutePath());
+            return Optional.of(template);
         }
+        return Optional.empty();
 
-        SkinnyTemplate skinnyTemplate = new SkinnyTemplate();
-        skinnyTemplate.setContent(new String(Files.readAllBytes(filePath)));
+    }
 
-        return skinnyTemplate;
+    private Optional <SkinnyTemplate> fromConfig(String url) {
+        for (SkinnyTemplate template : config.getTemplates()) {
+            if (template.matches(url)) {
+                return Optional.of(template);
+            }
+        }
+        return Optional.empty();
     }
 }

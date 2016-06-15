@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Meta;
+import com.jediq.skinnyfe.config.SkinnyTemplate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

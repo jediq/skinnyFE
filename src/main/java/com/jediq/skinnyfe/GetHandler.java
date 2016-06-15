@@ -8,6 +8,7 @@ import com.github.jknack.handlebars.JsonNodeValueResolver;
 import com.github.jknack.handlebars.Template;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
+import com.jediq.skinnyfe.config.SkinnyTemplate;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -23,15 +24,15 @@ public class GetHandler extends Handler {
         super(config);
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(Request request, HttpServletResponse response) throws IOException {
 
         SkinnyTemplate skinnyTemplate;
         try {
-            String url = request.getRequestURL().toString();
+            String url = request.url.toString();
             skinnyTemplate = templateResolver.resolveTemplate(url);
         } catch (IllegalStateException e) {
             // we could not find the template
-            logger.debug("Could not find template for : " + request.getRequestURL(), e);
+            logger.debug("Could not find template for : " + request.url, e);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
