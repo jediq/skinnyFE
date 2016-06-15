@@ -14,17 +14,16 @@ import java.util.Collections;
 
 public class SkinnyServlet extends HttpServlet {
 
-    private GetHandler getHandler;
-    private PostHandler postHandler;
+    private transient GetHandler getHandler;
+    private transient PostHandler postHandler;
 
     @Override
-    protected void doGet(HttpServletRequest servletRequest, HttpServletResponse response ) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) throws ServletException, IOException {
         if (getHandler == null) {
             throw new IllegalStateException("Configuration has not been set");
         }
         Request request = transformRequest(servletRequest);
-
-
+        Response response = new ServletWrappingResponse(servletResponse);
 
         getHandler.doGet(request, response);
     }
@@ -39,19 +38,18 @@ public class SkinnyServlet extends HttpServlet {
         postHandler.doPost(request, response);
     }
 
-
     private Request transformRequest(HttpServletRequest servletRequest) throws MalformedURLException {
         Request request = new Request();
-        request.url = servletRequest.getRequestURL().toString();
-        String path = new URL(request.url).getPath();
-        request.path = Arrays.asList(path.trim().split("/"));
+        request.setUrl(servletRequest.getRequestURL().toString());
+        String path = new URL(request.getUrl()).getPath();
+        request.setPath(Arrays.asList(path.trim().split("/")));
         Collections.list(servletRequest.getHeaderNames())
-                .forEach(name -> request.headers.put(name, servletRequest.getHeader(name)));
+                .forEach(name -> request.getHeaders().put(name, servletRequest.getHeader(name)));
         if (servletRequest.getCookies() != null) {
             Arrays.stream(servletRequest.getCookies())
-                    .forEach(cookie -> request.cookies.put(cookie.getName(), cookie.getValue()));
+                    .forEach(cookie -> request.getCookies().put(cookie.getName(), cookie.getValue()));
         }
-        servletRequest.getParameterMap().forEach((k,v) -> request.params.put(k, v[0]));
+        servletRequest.getParameterMap().forEach((k,v) -> request.getParams().put(k, v[0]));
         return request;
     }
 

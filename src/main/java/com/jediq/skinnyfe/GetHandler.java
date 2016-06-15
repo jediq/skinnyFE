@@ -24,15 +24,14 @@ public class GetHandler extends Handler {
         super(config);
     }
 
-    public void doGet(Request request, HttpServletResponse response) throws IOException {
+    public void doGet(Request request, Response response) throws IOException {
 
         SkinnyTemplate skinnyTemplate;
         try {
-            String url = request.url.toString();
-            skinnyTemplate = templateResolver.resolveTemplate(url);
+            skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
         } catch (IllegalStateException e) {
             // we could not find the template
-            logger.debug("Could not find template for : " + request.url, e);
+            logger.debug("Could not find template for : " + request.getUrl(), e);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -65,13 +64,13 @@ public class GetHandler extends Handler {
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
-        for (Meta meta : resourceDataMap.keySet()) {
+        for (Map.Entry<Meta, String> entry : resourceDataMap.entrySet()) {
             try {
-                JsonNode node = mapper.readTree(resourceDataMap.get(meta));
-                rootNode.put(meta.getProperty(), node);
-                logger.info("Put {} into property {}", node, meta.getProperty());
+                JsonNode node = mapper.readTree(entry.getValue());
+                rootNode.put(entry.getKey().getProperty(), node);
+                logger.info("Put {} into property {}", node, entry.getKey().getProperty());
             } catch (IOException e) {
-                logger.info("Caught exception processing : " + resourceDataMap.get(meta), e);
+                logger.info("Caught exception processing : " + entry.getValue(), e);
             }
         }
         return rootNode;

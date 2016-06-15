@@ -37,19 +37,18 @@ public class PostHandler extends Handler {
 
         SkinnyTemplate skinnyTemplate;
         try {
-            skinnyTemplate = templateResolver.resolveTemplate(request.url);
+            skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
         } catch (IllegalStateException | IOException e) {
             // we could not find the template
-            logger.debug("Could not find template for : " + request.url, e);
+            logger.debug("Could not find template for : " + request.getUrl(), e);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         try {
-
             templatePopulater.populate(skinnyTemplate);
 
-            ObjectNode rootNode = dotNotationTransformer.toJson(request.params);
+            ObjectNode rootNode = dotNotationTransformer.toJson(request.getParams());
 
             Map <Meta, String> metaStringMap = new HashMap<>();
             skinnyTemplate.getMetaList().forEach(meta -> {
@@ -66,9 +65,9 @@ public class PostHandler extends Handler {
             resourceInteractor.saveResources(metaStringMap);
 
             logger.info("POSTed, about to redirect to GET");
-            response.sendRedirect(request.url.toString());
+            response.sendRedirect(request.getUrl());
         } catch (IOException | NullPointerException e) {
-            logger.info("Exception trying to redirect to : " + request.url, e);
+            logger.info("Exception trying to redirect to : " + request.getUrl(), e);
             response.setStatus(500);
         }
     }

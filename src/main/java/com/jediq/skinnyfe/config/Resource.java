@@ -44,11 +44,11 @@ public class Resource {
     public String getEnrichedUrl(String identifier, Request request) {
         Map <String, Object> map = new HashMap<>();
         map.put("identifier", identifier);
-        map.put("URL", request.url);
-        map.put("COOKIE", request.cookies);
-        map.put("HEADER", request.headers);
-        map.put("PATH", request.path);
-        map.put("PARAM", request.params);
+        map.put("URL", request.getUrl());
+        map.put("COOKIE", request.getCookies());
+        map.put("HEADER", request.getHeaders());
+        map.put("PATH", request.getPath());
+        map.put("PARAM", request.getParams());
         return getEnrichedUrl(map);
     }
 
