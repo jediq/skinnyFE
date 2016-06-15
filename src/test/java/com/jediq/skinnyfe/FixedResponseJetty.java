@@ -43,6 +43,10 @@ public class FixedResponseJetty implements Closeable {
     }
 
     protected void respond(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (responses.isEmpty()) {
+            response.setStatus(404);
+            return;
+        }
         logger.info("Returning response for : {}", request.toString());
         FixedResponse nextResponse = responses.removeFirst();
         response.setStatus(200);

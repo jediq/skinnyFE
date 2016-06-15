@@ -1,15 +1,16 @@
 package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Config;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class SkinnyServlet extends HttpServlet {
 
@@ -42,7 +43,8 @@ public class SkinnyServlet extends HttpServlet {
     private Request transformRequest(HttpServletRequest servletRequest) throws MalformedURLException {
         Request request = new Request();
         request.url = servletRequest.getRequestURL().toString();
-        request.path = Arrays.asList(new URL(request.url).getPath().split("/"));
+        String path = new URL(request.url).getPath();
+        request.path = Arrays.asList(path.trim().split("/"));
         Collections.list(servletRequest.getHeaderNames())
                 .forEach(name -> request.headers.put(name, servletRequest.getHeader(name)));
         if (servletRequest.getCookies() != null) {

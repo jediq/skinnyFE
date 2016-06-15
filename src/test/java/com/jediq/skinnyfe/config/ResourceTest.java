@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe.config;
 
 import com.github.jknack.handlebars.Handlebars;
+import com.jediq.skinnyfe.Request;
 import com.jediq.skinnyfe.WrappedException;
 import com.jediq.skinnyfe.config.Resource;
 import java.io.IOException;
@@ -29,10 +30,36 @@ public class ResourceTest {
         resource.setUrl("http://example.com/{{enrich1}}/{{enrich2}}");
         String expected = "http://example.com/thing1/thing2";
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("enrich1", "thing1");
         map.put("enrich2", "thing2");
         String actual = resource.getEnrichedUrl(map);
+        Assert.assertThat(actual, CoreMatchers.is(expected));
+    }
+
+    @Test
+    public void testGetEnrichedUrl_usingHeaderFromRequest() {
+        Resource resource = new Resource();
+        resource.setUrl("http://example.com/{{HEADER.reference}}");
+        String expected = "http://example.com/thing1";
+
+        Request request = new Request();
+        request.headers.put("reference", "thing1");
+        String actual = resource.getEnrichedUrl("12345", request);
+        Assert.assertThat(actual, CoreMatchers.is(expected));
+    }
+
+    @Test
+    public void testGetEnrichedUrl_usingPathFromRequest() {
+        Resource resource = new Resource();
+        // Path is 1 based so element 0 is empty
+        resource.setUrl("http://example.com/{{PATH.1}}");
+        String expected = "http://example.com/23456";
+
+        Request request = new Request();
+        request.path.add("12345");
+        request.path.add("23456");
+        String actual = resource.getEnrichedUrl("01234", request);
         Assert.assertThat(actual, CoreMatchers.is(expected));
     }
 
@@ -44,7 +71,7 @@ public class ResourceTest {
         PrivateAccessor.setField(resource, "handlebars", handlebars);
         resource.setUrl("http://example.com/{{enrich1}}/{{enrich2}}");
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("enrich1", "thing1");
         map.put("enrich2", "thing2");
         resource.getEnrichedUrl(map);

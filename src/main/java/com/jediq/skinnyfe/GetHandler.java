@@ -9,12 +9,12 @@ import com.github.jknack.handlebars.Template;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
-import java.io.IOException;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
 
 public class GetHandler extends Handler {
 
@@ -40,20 +40,25 @@ public class GetHandler extends Handler {
         templatePopulater.populate(skinnyTemplate);
         response.setContentType(skinnyTemplate.getContentType());
 
-        Map<Meta, String> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList());
-        JsonNode jsonNode = aggregateData(resourceDataMap);
+        try {
+            Map<Meta, String> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
+            JsonNode jsonNode = aggregateData(resourceDataMap);
 
-        Context context = Context.newBuilder(jsonNode)
-                .resolver(JsonNodeValueResolver.INSTANCE).build();
+            Context context = Context.newBuilder(jsonNode)
+                    .resolver(JsonNodeValueResolver.INSTANCE).build();
 
-        logger.debug("aggregated data into : {} ", jsonNode);
+            logger.debug("aggregated data into : {} ", jsonNode);
 
-        Template template = handlebars.compileInline(skinnyTemplate.getContent());
-        String rendered = template.apply(context);
+            Template template = handlebars.compileInline(skinnyTemplate.getContent());
+            String rendered = template.apply(context);
 
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(rendered);
+        } catch(BadResponseException e) {
+            logger.debug("Resource returned a bad response code : " + e.getStatus(), e);
+            response.setStatus(e.getStatus());
+        }
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(rendered);
     }
 
     private JsonNode aggregateData(Map<Meta, String> resourceDataMap) {

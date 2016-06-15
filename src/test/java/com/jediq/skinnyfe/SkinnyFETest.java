@@ -60,6 +60,7 @@ public class SkinnyFETest {
         assertThat(assetResponse.getContentAsString(), is("Plain text file\n"));
 
         httpClient.stop();
+        vehicleEndpoint.close();
     }
 
     @Test
@@ -68,23 +69,27 @@ public class SkinnyFETest {
         httpClient.start();
         ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
         assertThat(response.getStatus(), is(404));
+        httpClient.stop();
+
     }
 
-    @Ignore
     @Test
     public void testEndToEndPathResource() throws Exception {
 
 
         FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
         vehicleEndpoint.start();
+        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
+        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
 
         HttpClient httpClient = new HttpClient();
         httpClient.start();
-        ContentResponse goodResponse = httpClient.GET(BASE_URL + "/pathed/12345");
+        ContentResponse goodResponse = httpClient.GET(BASE_URL + "pathed/12345");
         assertThat(goodResponse.getStatus(), is(200));
 
-        ContentResponse badResponse = httpClient.GET(BASE_URL + "/pathed/23456");
+        ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
         assertThat(badResponse.getStatus(), is(404));
+        vehicleEndpoint.close();
     }
 
     @AfterClass

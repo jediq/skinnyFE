@@ -3,16 +3,17 @@ package com.jediq.skinnyfe;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -35,10 +36,13 @@ public class ResourceInteractor {
         }
     }
 
-    public Map<Meta, String> loadResources(List<Meta> metaList) {
+    public Map<Meta, String> loadResources(List<Meta> metaList, Request request) {
         Map <Meta, String> metaMap = new HashMap<>();
         for (Meta meta : metaList) {
-            metaMap.put(meta, loadResource(meta));
+            String resourceData = loadResource(meta, request);
+            if (!resourceData.isEmpty()) {
+                metaMap.put(meta, resourceData);
+            }
         }
         return metaMap;
     }
@@ -54,7 +58,7 @@ public class ResourceInteractor {
 
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
-            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier());
+            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier(), new Request()); // TODO fix!
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
                     .send();
@@ -65,13 +69,16 @@ public class ResourceInteractor {
         }
     }
 
-    private String loadResource(Meta meta) {
+    private String loadResource(Meta meta, Request request) {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
-            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier());
+            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier(), request);
             ContentResponse response = httpClient.GET(enrichedUrl);
             logger.info("Resource responded with status : " + response.getStatus());
+            if (response.getStatus() != 200) {
+                throw new BadResponseException(response.getStatus());
+            }
             return response.getContentAsString();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new WrappedException(e);
