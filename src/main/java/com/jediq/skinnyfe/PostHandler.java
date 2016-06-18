@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class PostHandler extends Handler {
 
-    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final DotNotationTransformer dotNotationTransformer;
 

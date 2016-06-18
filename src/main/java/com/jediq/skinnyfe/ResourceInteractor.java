@@ -20,7 +20,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class ResourceInteractor {
 
-    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final HttpClient httpClient;
     private final Config config;

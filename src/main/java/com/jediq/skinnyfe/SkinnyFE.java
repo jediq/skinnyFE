@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class SkinnyFE {
 
-    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Map<Integer, SkinnyServer> servers;
     private final Config config;

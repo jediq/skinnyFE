@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  */
 public class TemplateResolver {
 
-    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Config config;
 

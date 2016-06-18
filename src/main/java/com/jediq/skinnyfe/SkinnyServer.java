@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 public class SkinnyServer {
 
-    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private int port;
     private Server server;

@@ -22,7 +22,7 @@ public class FixedResponseJetty implements Closeable {
     private int port;
     private Server server;
 
-    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final LinkedList<FixedResponse> responses = new LinkedList<>();
 
     public FixedResponseJetty() {
