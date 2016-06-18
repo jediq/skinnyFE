@@ -61,6 +61,7 @@ public class SkinnyFETest {
 
         httpClient.stop();
         vehicleEndpoint.close();
+        userEndpoint.close();
     }
 
     @Test
@@ -70,6 +71,36 @@ public class SkinnyFETest {
         ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
         assertThat(response.getStatus(), is(404));
         httpClient.stop();
+
+    }
+
+    @Test
+    public void testGetWithEnricher() throws Exception {
+
+        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
+        vehicleEndpoint.start();
+        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
+        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
+
+        FixedResponseJetty userEndpoint = new FixedResponseJetty(9020);
+        userEndpoint.start();
+        String userAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "user.json")));
+        userEndpoint.addResponseString(userAsJson, "text/html");
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.start();
+
+        ContentResponse response = httpClient.GET(BASE_URL + "enricherView");
+        String content = response.getContentAsString();
+
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+        assertThat(content, containsString("Fruit: Banana"));
+
+        httpClient.stop();
+        vehicleEndpoint.close();
+        userEndpoint.close();
 
     }
 
@@ -90,6 +121,8 @@ public class SkinnyFETest {
         ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
         assertThat(badResponse.getStatus(), is(404));
         vehicleEndpoint.close();
+
+        httpClient.stop();
     }
 
     @AfterClass

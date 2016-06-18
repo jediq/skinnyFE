@@ -9,11 +9,18 @@ import com.github.jknack.handlebars.Template;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class GetHandler extends Handler {
@@ -41,12 +48,21 @@ public class GetHandler extends Handler {
 
         try {
             Map<Meta, String> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
-            JsonNode jsonNode = aggregateData(resourceDataMap);
+            JsonNode aggregatedNode = aggregateData(resourceDataMap);
 
-            Context context = Context.newBuilder(jsonNode)
+            logger.info("aggregated data into : {} ", aggregatedNode);
+
+            JsonNode enrichedNode;
+            if (skinnyTemplate.getEnricher() != null) {
+                enrichedNode = enrichData(skinnyTemplate.getEnricher(), aggregatedNode);
+                logger.info("enriched data into : {} ", enrichedNode);
+            } else {
+                enrichedNode = aggregatedNode;
+            }
+
+
+            Context context = Context.newBuilder(enrichedNode)
                     .resolver(JsonNodeValueResolver.INSTANCE).build();
-
-            logger.debug("aggregated data into : {} ", jsonNode);
 
             Template template = handlebars.compileInline(skinnyTemplate.getContent());
             String rendered = template.apply(context);
@@ -74,5 +90,25 @@ public class GetHandler extends Handler {
             }
         }
         return rootNode;
+    }
+
+    private JsonNode enrichData(String enricherFile, JsonNode jsonNode) throws IOException {
+        String enricher = new String(Files.readAllBytes(Paths.get(enricherFile)));
+
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        try {
+            engine.eval(enricher);
+
+            Invocable invocable = (Invocable) engine;
+
+            String result = (String) invocable.invokeFunction("enrich", jsonNode.toString());
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readTree(result);
+
+        } catch (ScriptException | NoSuchMethodException e) {
+            logger.info("Caught exception trying to execute " + enricher, e);
+            throw new WrappedException(e);
+        }
     }
 }

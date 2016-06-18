@@ -31,7 +31,7 @@ public class ResourceTest {
         Map<String, Object> map = new HashMap<>();
         map.put("enrich1", "thing1");
         map.put("enrich2", "thing2");
-        String actual = resource.getEnrichedUrl(map);
+        String actual = resource.getResolvedUrl(map);
         Assert.assertThat(actual, CoreMatchers.is(expected));
     }
 
@@ -43,7 +43,7 @@ public class ResourceTest {
 
         Request request = new Request();
         request.getHeaders().put("reference", "thing1");
-        String actual = resource.getEnrichedUrl("12345", request);
+        String actual = resource.getResolvedUrl("12345", request);
         Assert.assertThat(actual, CoreMatchers.is(expected));
     }
 
@@ -57,7 +57,7 @@ public class ResourceTest {
         Request request = new Request();
         request.getPath().add("12345");
         request.getPath().add("23456");
-        String actual = resource.getEnrichedUrl("01234", request);
+        String actual = resource.getResolvedUrl("01234", request);
         Assert.assertThat(actual, CoreMatchers.is(expected));
     }
 
@@ -72,7 +72,7 @@ public class ResourceTest {
         Map<String, Object> map = new HashMap<>();
         map.put("enrich1", "thing1");
         map.put("enrich2", "thing2");
-        resource.getEnrichedUrl(map);
+        resource.getResolvedUrl(map);
     }
 
 }

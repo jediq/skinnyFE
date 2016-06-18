@@ -20,7 +20,7 @@ public class DotNotationTransformer {
     private void add(ObjectNode node, String key, String value) {
 
         if (key.contains(".")) {
-            int firstDotPos = key.indexOf(".");
+            int firstDotPos = key.indexOf('.');
             String name = key.substring(0, firstDotPos);
             String leftover = key.substring(firstDotPos + 1, key.length());
             ObjectNode child;

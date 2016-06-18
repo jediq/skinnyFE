@@ -58,7 +58,7 @@ public class ResourceInteractor {
 
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
-            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier(), new Request()); // TODO fix!
+            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), new Request()); // TODO fix!
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
                     .send();
@@ -73,7 +73,7 @@ public class ResourceInteractor {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
-            String enrichedUrl = resource.getEnrichedUrl(meta.getIdentifier(), request);
+            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
             ContentResponse response = httpClient.GET(enrichedUrl);
             logger.info("Resource responded with status : " + response.getStatus());
             if (response.getStatus() != 200) {

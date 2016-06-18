@@ -14,6 +14,7 @@ public class Resource {
     private String name;
     private String url;
     private String methods = "GET";
+    private String enricher;
 
     private Handlebars handlebars = new Handlebars();
 
@@ -41,7 +42,15 @@ public class Resource {
         this.methods = methods;
     }
 
-    public String getEnrichedUrl(String identifier, Request request) {
+    public String getEnricher() {
+        return enricher;
+    }
+
+    public void setEnricher(String enricher) {
+        this.enricher = enricher;
+    }
+
+    public String getResolvedUrl(String identifier, Request request) {
         Map <String, Object> map = new HashMap<>();
         map.put("identifier", identifier);
         map.put("URL", request.getUrl());
@@ -49,10 +58,10 @@ public class Resource {
         map.put("HEADER", request.getHeaders());
         map.put("PATH", request.getPath());
         map.put("PARAM", request.getParams());
-        return getEnrichedUrl(map);
+        return getResolvedUrl(map);
     }
 
-    public String getEnrichedUrl(Map<String, Object> enrichmentValues) {
+    public String getResolvedUrl(Map<String, Object> enrichmentValues) {
         try {
 
             Template template = handlebars.compileInline(getUrl());
