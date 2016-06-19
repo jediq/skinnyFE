@@ -6,6 +6,8 @@ import com.jediq.skinnyfe.config.Resource;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.http.HttpMethod;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,7 @@ public class ResourceInteractor {
 
     public ResourceInteractor(Config config) {
         this.config = config;
-        httpClient = new HttpClient();
+        httpClient = new HttpClient(new SslContextFactory());
 
         try {
             httpClient.start();
@@ -47,18 +49,18 @@ public class ResourceInteractor {
         return metaMap;
     }
 
-    public void saveResources(Map<Meta, String> metaMap) {
+    public void saveResources(Map<Meta, String> metaMap, Request request) {
         for (Meta meta : metaMap.keySet()) {
-            saveResource(meta, metaMap.get(meta));
+            saveResource(meta, metaMap.get(meta), request);
         }
     }
 
-    private boolean saveResource(Meta meta, String string) {
+    private boolean saveResource(Meta meta, String string, Request request) {
         try {
 
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
-            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), new Request()); // TODO fix!
+            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
                     .send();
@@ -74,9 +76,17 @@ public class ResourceInteractor {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
-            ContentResponse response = httpClient.GET(enrichedUrl);
-            logger.info("Resource responded with status : " + response.getStatus());
+
+            org.eclipse.jetty.client.api.Request httpRequest = httpClient.newRequest(enrichedUrl);
+            httpRequest.method(HttpMethod.GET);
+            logger.debug("Adding {} headers to the request", request.getHeaders().size());
+
+            resource.getHeaders().forEach((k,v) -> httpRequest.header(k, v));
+            logger.debug("Sending {} headers with the request", httpRequest.getHeaders().size());
+            ContentResponse response = httpRequest.send();
+
             if (response.getStatus() != 200) {
+                logger.info("Resource at '{}' responded with status : {}", enrichedUrl, response.getStatus());
                 throw new BadResponseException(response.getStatus());
             }
             return response.getContentAsString();

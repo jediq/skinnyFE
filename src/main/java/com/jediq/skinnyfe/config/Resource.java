@@ -15,6 +15,7 @@ public class Resource {
     private String url;
     private String methods = "GET";
     private String enricher;
+    private Map<String, String> headers = new HashMap<>();
 
     private Handlebars handlebars = new Handlebars();
 
@@ -48,6 +49,14 @@ public class Resource {
 
     public void setEnricher(String enricher) {
         this.enricher = enricher;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 
     public String getResolvedUrl(String identifier, Request request) {

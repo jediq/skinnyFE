@@ -52,6 +52,8 @@ public class GetHandler extends Handler {
             logger.info("aggregated data into : {} ", aggregatedNode);
 
             JsonNode enrichedNode;
+
+            logger.info("enriching data? : {} ", skinnyTemplate.getEnricher());
             if (skinnyTemplate.getEnricher() != null) {
                 enrichedNode = enrichData(skinnyTemplate.getEnricher(), aggregatedNode);
                 logger.info("enriched data into : {} ", enrichedNode);

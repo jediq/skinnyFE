@@ -62,7 +62,7 @@ public class PostHandler extends Handler {
                 logger.debug("{} : {}", meta, metaStringMap.get(meta))
             );
 
-            resourceInteractor.saveResources(metaStringMap);
+            resourceInteractor.saveResources(metaStringMap, request);
 
             logger.info("POSTed, about to redirect to GET");
             response.sendRedirect(request.getUrl());
