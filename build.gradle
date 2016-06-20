@@ -1,13 +1,11 @@
 buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "http://dl.bintray.com/content/aalmiray/kordamp" }
         jcenter()
     }
     dependencies {
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1"
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-        classpath 'org.kordamp:markdown-gradle-plugin:1.0.0'
     }
 }
 
@@ -16,7 +14,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.3'
     id "org.sonarqube" version "2.0.1"
     id 'jacoco'
-    id 'org.kordamp.markdown.convert'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
