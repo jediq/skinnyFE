@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Posts</h1>
-        <small>Random lorum ipsum posts for demo purposes.</small>
+        <small>Random lorem ipsum posts for demo purposes.</small>
         {{#each posts}}
             <h2>{{title}}</h2>
             <p>{{body}}</p>

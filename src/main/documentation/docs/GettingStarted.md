@@ -6,14 +6,14 @@ SkinnyFE comes pre-packaged as a Java executable JAR file, the latest release of
 
 The most basic installation requires only 2 files, a json configuration file and an html index file.  
 
-###config.json
+#####config.json
 ```
 {
     "port":8027
 }
 ```
 
-###index.html
+#####index.moustache
 ```
 <!doctype html>
 <html lang="en">
@@ -48,9 +48,10 @@ to see how powerful SkinnyFE can be.
 ##Example 2 : Using a resource
 
 We'll be pulling our resources from [http://jsonplaceholder.typicode.com](http://jsonplaceholder.typicode.com), a free
-online set of JSON endpoints for developers and testers.  To render the posts resource our `config.json` needs to look
+online set of JSON endpoints for developers and testers.  To render the posts resource our files needs to look
 like :
 
+#####config.json
 ```
 {
   "port":8027,
@@ -63,8 +64,7 @@ like :
 }
 ```
 
-and our `index.moustache` should look like :
-
+#####index.moustache
 ```
 <!doctype html>
 <html lang="en">
@@ -74,7 +74,7 @@ and our `index.moustache` should look like :
     </head>
     <body>
         <h1>Posts</h1>
-        <small>Random lorum ipsum posts for demo purposes.</small>
+        <small>Random lorem ipsum posts for demo purposes.</small>
         {{#each posts}}
             <h2>{{title}}</h2>
             <p>{{body}}</p>
@@ -83,3 +83,5 @@ and our `index.moustache` should look like :
 </html>
 ```
 
+Again, running the `java -jar skinnyFE-all.jar config.json` command from the directory should give you similar output
+in the console as above, and navigating to `http://localhost:8027` and you should see a some [Lorem Ipsum](http://www.lipsum.com/) post titles  rendered in the page.
