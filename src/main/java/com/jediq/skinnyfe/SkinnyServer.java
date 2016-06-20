@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -29,13 +30,13 @@ public class SkinnyServer {
             this.server = constructServer(port);
             this.port = port;
 
-            HandlerCollection handlerCollection = new HandlerCollection();
+            HandlerCollection handlerCollection = new HandlerList();
 
-            Optional<Handler> resourceHandler = makeResourceHandler(config);
-            resourceHandler.ifPresent(handlerCollection::addHandler);
+            Optional<Handler> staticFileHandler = makeResourceHandler(config);
+            staticFileHandler.ifPresent(handlerCollection::addHandler);
 
-            Optional<Handler> servletHandler = makeServletHandler(config);
-            servletHandler.ifPresent(handlerCollection::addHandler);
+            Optional<Handler> skinnyFEHandler = makeServletHandler(config);
+            skinnyFEHandler.ifPresent(handlerCollection::addHandler);
 
             server.setHandler(handlerCollection);
         } catch (ServletException | NullPointerException e) {

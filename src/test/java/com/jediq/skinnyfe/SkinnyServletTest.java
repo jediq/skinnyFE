@@ -19,4 +19,5 @@ public class SkinnyServletTest {
         SkinnyServlet skinnyServlet = new SkinnyServlet();
         skinnyServlet.doPost(null, null);
     }
+
 }

@@ -39,7 +39,7 @@ public class SkinnyFE {
     }
 
     public void startServer(int port) {
-        logger.info("Starting SkinnyFE server on port : " + port);
+        logger.debug("Starting SkinnyFE server on port : " + port);
         SkinnyServer server = new SkinnyServer(port, config);
         server.start();
         servers.put(port, server);
@@ -47,7 +47,7 @@ public class SkinnyFE {
     }
 
     public void stopServer(int port) {
-        logger.info("Stopping SkinnyFE server on port : " + port);
+        logger.debug("Stopping SkinnyFE server on port : " + port);
         servers.get(port).stop();
         logger.info("Stopped SkinnyFE server on port : " + port);
     }

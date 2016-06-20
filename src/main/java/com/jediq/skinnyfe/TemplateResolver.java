@@ -35,7 +35,7 @@ public class TemplateResolver {
                 .orElseThrow(() -> new IllegalStateException("No template found for : " + url));
 
 
-        logger.info("Found template for {} at {}", url, template);
+        logger.debug("Found template for {} at {}", url, template.getFile());
 
         template.loadContent();
 
