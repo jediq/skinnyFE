@@ -2,7 +2,7 @@
 
 SkinnyFE comes pre-packaged as a Java executable JAR file, the latest release of this can be downloaded from [here](http://static.jediq.com/skinnyFE-all.jar).
 
-##A basic server
+##Example 1 : A basic server
 
 The most basic installation requires only 2 files, a json configuration file and an html index file.  
 
@@ -45,7 +45,7 @@ You can navigate your browser to `http://localhost:8027` and you should see a si
 That's it, you're now running SkinnyFE, but it's not very useful, the next example adds a resource and you can start
 to see how powerful SkinnyFE can be.
 
-##Using a resource
+##Example 2 : Using a resource
 
 We'll be pulling our resources from [http://jsonplaceholder.typicode.com](http://jsonplaceholder.typicode.com), a free
 online set of JSON endpoints for developers and testers.  To render the posts resource our `config.json` needs to look
@@ -53,31 +53,33 @@ like :
 
 ```
 {
-    "port":8027,
-    "resources":[
-        {
-            "name":"Posts",
-            "url":"http://jsonplaceholder.typicode.com/posts"
-        }
-    ]
+  "port":8027,
+  "resources":[
+    {
+      "name":"Posts",
+      "url":"http://jsonplaceholder.typicode.com/posts"
+    }
+  ]
 }
 ```
 
 and our `index.moustache` should look like :
 
 ```
-    <!doctype html>
-    <html lang="en">
-        <head>
-            <meta charset="utf-8">
-        </head>
-        <body>
-            <h1>Posts</h1>
-            {{#each posts}}
-                <h2>{{title}}</h2>
-                <p>{{body}}</p>
-            {{/each}}
-        </body>
-    </html>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta property="posts" resource="Posts" identifier=""/>
+    </head>
+    <body>
+        <h1>Posts</h1>
+        <small>Random lorum ipsum posts for demo purposes.</small>
+        {{#each posts}}
+            <h2>{{title}}</h2>
+            <p>{{body}}</p>
+        {{/each}}
+    </body>
+</html>
 ```
 

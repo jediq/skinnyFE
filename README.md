@@ -76,6 +76,5 @@ To start a SkinnyFE server use the following :
 The documentation is built using [mkdocs](), this can be installed using PIP with : 
 
     pip install mkdocs
-    pip install mkdocs-material
     
 The source is located at `src/main/documentation`
