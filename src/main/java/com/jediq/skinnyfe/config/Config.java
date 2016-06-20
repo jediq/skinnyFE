@@ -14,7 +14,7 @@ import java.util.List;
 public class Config {
 
     private int port;
-    private String defaultTemplates;
+    private String defaultTemplates = ".";
     private List <Resource> resources = new ArrayList<>();
     private List <SkinnyTemplate> templates = new ArrayList<>();
     private String assetsPath;
@@ -23,7 +23,11 @@ public class Config {
     public static Config load(String configLocation) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(new File(configLocation), Config.class);
+            Config config = objectMapper.readValue(new File(configLocation), Config.class);
+            if (config.getPort() == 0) {
+                throw new IllegalStateException("At the very least the port needs to be set, see the documentaiton.");
+            }
+            return config;
         } catch (IOException e) {
             throw new WrappedException(e);
         }

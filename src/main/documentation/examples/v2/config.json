@@ -1,0 +1,9 @@
+{
+  "port":8027,
+  "resources":[
+    {
+      "name":"Posts",
+      "url":"http://jsonplaceholder.typicode.com/posts"
+    }
+  ]
+}

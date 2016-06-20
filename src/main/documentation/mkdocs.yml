@@ -1,0 +1,10 @@
+site_name: SkinnyFE
+
+pages:
+- Welcome: index.md
+- User Guide:
+    - Getting Started: GettingStarted.md
+    - Configuration: Configuration.md
+
+#theme: 'material'
+

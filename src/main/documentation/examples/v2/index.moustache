@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>Posts</h1>
+        {{#each posts}}
+            <h2>{{title}}</h2>
+            <p>{{body}}</p>
+        {{/each}}
+    </body>
+</html>

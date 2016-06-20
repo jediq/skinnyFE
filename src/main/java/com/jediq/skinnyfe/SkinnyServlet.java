@@ -20,7 +20,7 @@ public class SkinnyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) throws ServletException, IOException {
         if (getHandler == null) {
-            throw new IllegalStateException("Configuration has not been set");
+            throw new IllegalStateException("Configuration.md has not been set");
         }
         Request request = transformRequest(servletRequest);
         Response response = new ServletWrappingResponse(servletResponse);
@@ -31,7 +31,7 @@ public class SkinnyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest servletRequest, HttpServletResponse response ) throws ServletException, IOException {
         if (postHandler == null) {
-            throw new IllegalStateException("Configuration has not been set");
+            throw new IllegalStateException("Configuration.md has not been set");
         }
         Request request = transformRequest(servletRequest);
 
