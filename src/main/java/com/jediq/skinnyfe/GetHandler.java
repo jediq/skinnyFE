@@ -49,14 +49,14 @@ public class GetHandler extends Handler {
             Map<Meta, String> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
             JsonNode aggregatedNode = aggregateData(resourceDataMap);
 
-            logger.info("aggregated data into : {} ", aggregatedNode);
+            logger.debug("aggregated data into : {} ", aggregatedNode);
 
             JsonNode enrichedNode;
 
-            logger.info("enriching data? : {} ", skinnyTemplate.getEnricher());
+            logger.debug("enriching data? : {} ", skinnyTemplate.getEnricher());
             if (skinnyTemplate.getEnricher() != null) {
                 enrichedNode = enrichData(skinnyTemplate.getEnricher(), aggregatedNode);
-                logger.info("enriched data into : {} ", enrichedNode);
+                logger.debug("enriched data into : {} ", enrichedNode);
             } else {
                 enrichedNode = aggregatedNode;
             }
@@ -85,7 +85,7 @@ public class GetHandler extends Handler {
             try {
                 JsonNode node = mapper.readTree(entry.getValue());
                 rootNode.put(entry.getKey().getProperty(), node);
-                logger.info("Put {} into property {}", node, entry.getKey().getProperty());
+                logger.debug("Put {} into property {}", node, entry.getKey().getProperty());
             } catch (IOException e) {
                 logger.info("Caught exception processing : " + entry.getValue(), e);
             }
