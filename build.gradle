@@ -78,3 +78,8 @@ examplesDir.each {
     }
     build.dependsOn exampleName
 }
+
+task docs(type:Exec) {
+    workingDir 'src/main/documentation'
+    commandLine 'mkdocs', 'build'
+}

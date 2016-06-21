@@ -1,10 +1,8 @@
-site_name: SkinnyFE
+site_name: SkinnyFE Docs
+site_dir: ../../../build/site
 
 pages:
 - Welcome: index.md
 - User Guide:
     - Getting Started: GettingStarted.md
     - Configuration: Configuration.md
-
-#theme: 'material'
-
