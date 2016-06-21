@@ -24,16 +24,8 @@ The name attribute is used within [templates](#templates) to reference the resou
 
 The url attribute is the addressable endpoint of the resources.
 
-If this was as addressable as resources got, we wouldn't get very far.  So [moustache](https://mustache.github.io/)
-interpolation can be used within the urls, for example `http://api.example.com/todos/{{PATH.1}}` would add the first
-element of the requested URLs path into the resource URL.  The templating values made available for urls are :
-
-* `PATH` - An addressable array of the requested URL's path elements
-* `COOKIE` - The name of a cookie sent from the client whos value should be embedded
-* `URL` - The full requested URL
-* `HEADER` - The name of a header sent from the client whos value should be embedded
-* `PARAM` - The name of a requested URL query parameter
-* `identifier` - The meta identifier from the template
+We can also pass values into the url to select a specific resource see 
+[Getting Started example 3](GettingStarted#example-3-passing-values-to-a-resource).
 
 ##Templates
 

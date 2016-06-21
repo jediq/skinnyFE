@@ -1,0 +1,19 @@
+{
+  "port":8027,
+  "resources":[
+    {
+      "name":"Posts",
+      "url":"http://jsonplaceholder.typicode.com/posts"
+    },
+    {
+      "name":"Post",
+      "url":"http://jsonplaceholder.typicode.com/posts/{{PARAM.id}}"
+    },
+    {
+      "name":"Comments",
+      "url":"http://jsonplaceholder.typicode.com/posts/{{PARAM.id}}/comments"
+    }
+  ],
+  "assetsPath":"/assets",
+  "assetsFolder":"static/"
+}

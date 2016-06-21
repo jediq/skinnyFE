@@ -24,3 +24,13 @@ Too simple.
 
 
 ##Serving static content
+
+We can serve static content by using the configuration values `assetsPath` and `assetsFolder`.  Any urls starting with the
+`assetsPath` value will automatically be transposed into the `assetsFolder` value and served as static content from there.
+This allows us to serve local static content without requiring a second server or CDN.
+```
+{
+  "assetsPath":"/assets",
+  "assetsFolder":"static/"
+}
+```

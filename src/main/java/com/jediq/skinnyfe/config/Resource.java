@@ -8,8 +8,12 @@ import com.jediq.skinnyfe.WrappedException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Resource {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String name;
     private String url;
@@ -72,13 +76,15 @@ public class Resource {
 
     public String getResolvedUrl(Map<String, Object> enrichmentValues) {
         try {
-
+            logger.debug("Resolving URL : {}", getUrl());
             Template template = handlebars.compileInline(getUrl());
             String firstPass = template.apply(enrichmentValues);
 
             // Need to do this twice to allow for identifiers that need resolving again
             Template secondTemplate = handlebars.compileInline(firstPass);
-            return secondTemplate.apply(enrichmentValues);
+            String resolved = secondTemplate.apply(enrichmentValues);
+            logger.debug("Resolved URL to : {}", resolved);
+            return resolved;
         } catch (IOException e) {
             throw new WrappedException(e);
         }

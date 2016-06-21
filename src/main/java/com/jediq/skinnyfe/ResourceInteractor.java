@@ -77,11 +77,12 @@ public class ResourceInteractor {
             Resource resource = findResource(meta.getResource());
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
 
+            logger.info("Requesting resource from : " + enrichedUrl);
+
             org.eclipse.jetty.client.api.Request httpRequest = httpClient.newRequest(enrichedUrl);
             httpRequest.method(HttpMethod.GET);
-            logger.debug("Adding {} headers to the request", request.getHeaders().size());
 
-            resource.getHeaders().forEach((k,v) -> httpRequest.header(k, v));
+            resource.getHeaders().forEach(httpRequest::header);
             logger.debug("Sending {} headers with the request", httpRequest.getHeaders().size());
             ContentResponse response = httpRequest.send();
 

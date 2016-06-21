@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta property="post" resource="Post"/>
+        <meta property="comments" resource="Comments"/>
+        <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+
+        <h1>Post : {{post.id}}</h1>
+        <h2>{{post.title}}</h2>
+        <p>{{post.body}}</p>
+        <br>
+        <hr>
+        <h2>Comments</h2>
+        {{#each comments}}
+            <h3>{{name}} ({{email}})</h3>
+            <p>{{body}}</p>
+            <hr>
+        {{/each}}
+    </body>
+</html>
