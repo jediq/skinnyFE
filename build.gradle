@@ -67,3 +67,14 @@ repositories {
     mavenLocal()
     mavenCentral()
 }
+
+// build the example zips
+File[] examplesDir = file('src/main/documentation/examples').listFiles();
+examplesDir.each {
+    String exampleName = it.getName()
+    tasks.create(exampleName, Zip) {
+        from 'src/main/documentation/examples/'+exampleName
+        baseName = exampleName
+    }
+    build.dependsOn exampleName
+}
