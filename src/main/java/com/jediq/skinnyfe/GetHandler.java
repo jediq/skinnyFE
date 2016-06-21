@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.JsonNodeValueResolver;
-import com.github.jknack.handlebars.Template;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
@@ -35,7 +34,7 @@ public class GetHandler extends Handler {
         SkinnyTemplate skinnyTemplate;
         try {
             skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | IOException e) {
             // we could not find the template
             logger.debug("Could not find template for : " + request.getUrl(), e);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -61,12 +60,10 @@ public class GetHandler extends Handler {
                 enrichedNode = aggregatedNode;
             }
 
-
             Context context = Context.newBuilder(enrichedNode)
                     .resolver(JsonNodeValueResolver.INSTANCE).build();
 
-            Template template = handlebars.compileInline(skinnyTemplate.getContent());
-            String rendered = template.apply(context);
+            String rendered = handlebarsCompiler.compile(skinnyTemplate.getContent(), context, 1);
 
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println(rendered);
@@ -74,7 +71,6 @@ public class GetHandler extends Handler {
             logger.debug("Resource returned a bad response code : " + e.getStatus(), e);
             response.setStatus(e.getStatus());
         }
-
     }
 
     private JsonNode aggregateData(Map<Meta, String> resourceDataMap) {

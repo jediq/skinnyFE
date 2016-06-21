@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe.config;
 
 import com.github.jknack.handlebars.Handlebars;
+import com.jediq.skinnyfe.HandlebarsCompiler;
 import com.jediq.skinnyfe.Request;
 import com.jediq.skinnyfe.WrappedException;
 
@@ -64,9 +65,10 @@ public class ResourceTest {
     @Test(expected=WrappedException.class)
     public void testGetEnrichedUrl_HandlerbarsHasAProblem() throws Exception {
         Resource resource = new Resource();
-        Handlebars handlebars = Mockito.mock(Handlebars.class);
-        Mockito.when(handlebars.compileInline(any(String.class))).thenThrow(new IOException());
-        PrivateAccessor.setField(resource, "handlebars", handlebars);
+        HandlebarsCompiler handlebars = Mockito.mock(HandlebarsCompiler.class);
+        Mockito.when(handlebars.compile(any(String.class), any(Map.class), any(Integer.class)))
+                .thenThrow(new WrappedException(new Exception("")));
+        PrivateAccessor.setField(resource, "handlebarsCompiler", handlebars);
         resource.setUrl("http://example.com/{{enrich1}}/{{enrich2}}");
 
         Map<String, Object> map = new HashMap<>();

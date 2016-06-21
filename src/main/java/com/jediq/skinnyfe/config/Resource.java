@@ -1,15 +1,12 @@
 package com.jediq.skinnyfe.config;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
+import com.jediq.skinnyfe.HandlebarsCompiler;
 import com.jediq.skinnyfe.Request;
-import com.jediq.skinnyfe.WrappedException;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Resource {
 
@@ -21,7 +18,7 @@ public class Resource {
     private String enricher;
     private Map<String, String> headers = new HashMap<>();
 
-    private Handlebars handlebars = new Handlebars();
+    private HandlebarsCompiler handlebarsCompiler = new HandlebarsCompiler();
 
     public String getName() {
         return name;
@@ -75,18 +72,10 @@ public class Resource {
     }
 
     public String getResolvedUrl(Map<String, Object> enrichmentValues) {
-        try {
-            logger.debug("Resolving URL : {}", getUrl());
-            Template template = handlebars.compileInline(getUrl());
-            String firstPass = template.apply(enrichmentValues);
-
-            // Need to do this twice to allow for identifiers that need resolving again
-            Template secondTemplate = handlebars.compileInline(firstPass);
-            String resolved = secondTemplate.apply(enrichmentValues);
-            logger.debug("Resolved URL to : {}", resolved);
-            return resolved;
-        } catch (IOException e) {
-            throw new WrappedException(e);
-        }
+        logger.debug("Resolving URL : {}", getUrl());
+        // need to iterate twice to resolve all placeholders
+        String resolved = handlebarsCompiler.compile(getUrl(), enrichmentValues, 2);
+        logger.debug("Resolved URL to : {}", resolved);
+        return resolved;
     }
 }
