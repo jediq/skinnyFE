@@ -1,3 +1,9 @@
 
 body { background-image:none !important; }
 
+.navbar { background-image:none !important; background-color:#66BB6A; }
+
+.navbar .active a { background-color:#9CCC65 !important; }
+.navbar a:focus { background-color:#9CCC65 !important; }
+
+.bs-sidebar a { color:#33691E !important; }

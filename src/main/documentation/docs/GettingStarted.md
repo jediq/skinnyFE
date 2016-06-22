@@ -132,7 +132,8 @@ To select and display a particular post in our example, we would use the followi
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta property="posts" resource="Posts"/>
+        <meta property="posts" resource="Posts"/>   
+         <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
     </head>
     <body>
         <h1>Posts</h1>
@@ -152,7 +153,8 @@ To select and display a particular post in our example, we would use the followi
     <head>
         <meta charset="utf-8">
         <meta property="post" resource="Post"/>
-        <meta property="comments" resource="Comments"/>
+        <meta property="comments" resource="Comments"/>       
+         <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
     </head>
     <body>
         <h1>Post : {{post.id}}</h1>
