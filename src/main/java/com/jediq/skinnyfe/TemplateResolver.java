@@ -43,7 +43,9 @@ public class TemplateResolver {
     }
 
     private Optional<SkinnyTemplate> fromFile(String url) throws MalformedURLException {
-
+        if (url==null) {
+            return Optional.empty();
+        }
         String urlPath = new URL(url).getPath();
         if (urlPath.endsWith("/")) {
             urlPath += "index";

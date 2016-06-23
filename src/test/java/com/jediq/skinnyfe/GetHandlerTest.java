@@ -16,7 +16,7 @@ import org.junit.Test;
 /**
  *
  */
-public class SkinnyFETest {
+public class GetHandlerTest {
 
     private static int PORT = 8007;
     private static String BASE_URL;

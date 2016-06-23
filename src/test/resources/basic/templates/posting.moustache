@@ -3,11 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta property="car" resource="Vehicle" identifier="23"/>
-    <meta property="driver" resource="User" identifier="46"/>
+    <meta property="bike" resource="Vehicle" identifier="20"/>
 
 </head>
 <body>
 Car: {{car.registration}}
-Driver: {{driver.name}}
+<form>
+    <input type="text" name="car.registration" id="car-registration"/>
+    <input type="submit"/>
+</form>
 </body>
 </html>

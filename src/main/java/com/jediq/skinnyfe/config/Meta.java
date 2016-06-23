@@ -1,5 +1,7 @@
 package com.jediq.skinnyfe.config;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  *
  */
@@ -31,5 +33,20 @@ public class Meta {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public String toString() {
+        return property + " : " + resource + " : " + identifier;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(property).append(resource).append(identifier).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return hashCode() == obj.hashCode();
     }
 }

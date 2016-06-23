@@ -105,7 +105,7 @@ public class GetHandler extends Handler {
 
         } catch (ScriptException | NoSuchMethodException e) {
             logger.info("Caught exception trying to execute " + enricher, e);
-            throw new WrappedException(e);
+            throw new WrappedException(enricher, e);
         }
     }
 }

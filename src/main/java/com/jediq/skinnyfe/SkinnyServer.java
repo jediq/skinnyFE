@@ -76,7 +76,7 @@ public class SkinnyServer {
             server.start();
         } catch (Exception e) {
             logger.info("Caught exception starting SkinnyFE server on port : " + port);
-            throw new WrappedException(e);
+            throw new WrappedException("Caught exception starting SkinnyFE server on port : " + port, e);
         }
     }
 
@@ -85,7 +85,7 @@ public class SkinnyServer {
             server.stop();
         } catch (Exception e) {
             logger.info("Caught exception stopping SkinnyFE server on port : " + port);
-            throw new WrappedException(e);
+            throw new WrappedException("Caught exception starting SkinnyFE server on port : " + port, e);
         }
     }
 }
