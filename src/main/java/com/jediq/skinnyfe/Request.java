@@ -16,7 +16,6 @@ public class Request {
     private Map<String, String> headers = new HashMap<>();
     private Map<String, String> params = new HashMap<>();
 
-
     public String getUrl() {
         return url;
     }
@@ -37,23 +36,11 @@ public class Request {
         return cookies;
     }
 
-    public void setCookies(Map<String, String> cookies) {
-        this.cookies = cookies;
-    }
-
     public Map<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-
     public Map<String, String> getParams() {
         return params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
     }
 }

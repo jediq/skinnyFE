@@ -13,18 +13,8 @@ public class ServletWrappingResponse implements Response {
     }
 
     @Override
-    public int getStatus() {
-        return servletResponse.getStatus();
-    }
-
-    @Override
     public void setStatus(int status) {
         servletResponse.setStatus(status);
-    }
-
-    @Override
-    public String getContentType() {
-        return servletResponse.getContentType();
     }
 
     @Override
@@ -35,5 +25,10 @@ public class ServletWrappingResponse implements Response {
     @Override
     public PrintWriter getWriter() throws IOException {
         return servletResponse.getWriter();
+    }
+
+    @Override
+    public void sendRedirect(String location) throws IOException {
+        servletResponse.sendRedirect(location);
     }
 }

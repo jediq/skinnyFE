@@ -24,7 +24,7 @@ public class PostHandlerTest {
         request.setUrl("http://localhost/notemplate");
         request.getParams().put("car.registration", "123456");
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        Response response = mock(Response.class);
         postHandler.doPost(request, response);
 
         verify(response).setStatus(404);
@@ -42,7 +42,7 @@ public class PostHandlerTest {
 
         ResourceInteractor resourceInteractor = mock(ResourceInteractor.class);
         PrivateAccessor.setField(postHandler, "resourceInteractor", resourceInteractor);
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        Response response = mock(Response.class);
         postHandler.doPost(request, response);
 
 
@@ -69,7 +69,7 @@ public class PostHandlerTest {
 
         ResourceInteractor resourceInteractor = mock(ResourceInteractor.class);
         PrivateAccessor.setField(postHandler, "resourceInteractor", resourceInteractor);
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        Response response = mock(Response.class);
 
         Map<Meta, String> metaMap = new HashMap<>();
         Meta key = new Meta();

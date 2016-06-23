@@ -50,32 +50,16 @@ public class SkinnyTemplate {
         return enricher;
     }
 
-    public void setEnricher(String enricher) {
-        this.enricher = enricher;
-    }
-
     public String getContentType() {
         return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public List<Meta> getMetaList() {
         return metaList;
-    }
-
-    public void setMetaList(List<Meta> metaList) {
-        this.metaList = metaList;
     }
 
     public boolean matches(String url) {

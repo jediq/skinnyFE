@@ -33,7 +33,7 @@ public class PostHandler extends Handler {
         dotNotationTransformer = new DotNotationTransformer();
     }
 
-    public void doPost(Request request, HttpServletResponse response) {
+    public void doPost(Request request, Response response) {
 
         SkinnyTemplate skinnyTemplate;
         try {
