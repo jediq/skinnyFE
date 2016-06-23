@@ -1,0 +1,5 @@
+{
+  "posts": [
+    { "id": 1, "title": "My first post", "author": "Fred Jones", "content": "This is a very very verbose post" }
+  ]
+}

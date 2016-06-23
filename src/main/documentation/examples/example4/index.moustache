@@ -11,5 +11,14 @@
             <h2><a href="post?id={{id}}">{{title}} <small> by </small> {{author}}</a></h2>
             <p>{{body}}</p>
         {{/each}}
+
+        <hr/>
+        <h1>New post</h1>
+        <form method="post">
+            <input type="text" placeholder="Title" name="posts.title">
+            <input type="text" placeholder="Author" name="posts.author">
+            <textarea name="posts.content" placeholder="Content"></textarea>
+            <button>post</button>
+        </form>
     </body>
 </html>
