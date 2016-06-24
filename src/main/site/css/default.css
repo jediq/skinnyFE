@@ -18,6 +18,10 @@ body {
     background:#e37151;
 }
 
+a { text-decoration:none; }
+a { color:inherit; }
+a:hover { text-decoration:underline; }
+
 #hero .content {
     text-align:center;
     padding-top:50px;
@@ -64,6 +68,11 @@ body {
 
 #explain {
     padding-top:100px;
+}
+
+#explain div {
+    text-align:center;
+    padding-bottom:60px;
 }
 
 #documentation {
@@ -125,6 +134,23 @@ pre {
     padding-right:30px;
 }
 
+button {
+    border:2px solid black;
+    border-radius: 5px;
+    padding:10px;
+    background-color:white;
+    color:black;
+    font-size:1.4em;
+    transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+}
+
+button:hover {
+    background-color:black;
+    color:white;
+}
+
 footer {
     padding:50px 0;
     background:rgb(64, 64, 64);
@@ -140,14 +166,19 @@ footer svg {
     display:none;
 }
 
+footer ul {
+    float:right;
+    list-style:none;
+}
+
+footer ul li {
+    padding:10px;
+}
+
 
 @media handheld, only screen and (max-width: 767px) {
-    .third {
-        width:100%;
+    .third, .half {
+        width:98%;
+        margin:1%;
     }
-
-    .half {
-        width:100%;
-    }
-
 }

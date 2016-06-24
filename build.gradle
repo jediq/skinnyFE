@@ -70,16 +70,36 @@ repositories {
 
 // build the example zips
 File[] examplesDir = file('src/main/documentation/examples').listFiles();
+
 examplesDir.each {
+    if (!it.name.startsWith('example')) {
+        return;
+    }
     String exampleName = it.getName()
+
     tasks.create(exampleName, Zip) {
-        from 'src/main/documentation/examples/'+exampleName
+        from('src/main/documentation/examples/'+exampleName) {
+            into 'build/site/examples'
+        }
         baseName = exampleName
     }
     build.dependsOn exampleName
 }
 
-task docs(type:Exec) {
+task docs(type:Exec, dependsOn:shadowJar) {
     workingDir 'src/main/documentation'
     commandLine 'mkdocs', 'build'
 }
+
+task moveSite(type:Copy, dependsOn:docs) {
+    from 'src/main/site/'
+    into 'build/distributions'
+}
+
+task moveJar(type:Copy, dependsOn:moveSite) {
+    from 'build/libs/skinnyFE-all.jar'
+    into 'build/distributions'
+}
+
+build.dependsOn moveJar
+

@@ -30,26 +30,30 @@
     <div id="explain" class="content">
         <p>SkinnyFE is a Front End framework that removes the ability to embed business logic in a front end application.</p>
 
+        <div><a href="http://skinnyfe.jediq.com/skinnyFE-all.jar"><button>Download SkinnyFE here</button></a></div>
+
         <p>At it's core, SkinnyFE declares within the HTML template the RESTful API resources that are required to render
             the page. These resource references are then looked up in configuration and HTTP calls are made.
             Finally, the response data from the resources is made available to the HTML template to embed in the output HTML.</p>
+
     </div>
 
     <div id="documentation">
         <h3><span>Documentation</span></h3>
         <div class="content">
             <p>Projects and frameworks live and die by the quality and
-            usability of their documentation and so we are taking documentation very seriously on SkinnyFE.</p>
+            usability of their documentation and so we are taking documentation very seriously on SkinnyFE.
+                You can browse our documentation <a href="docs/"><strong>here</strong></a>.</p>
             <div class="third">
-                <h4>Getting started</h4>
+                <h4><a href="docs/GettingStarted">Getting started</a></h4>
                 <p>Our getting started guide helps you progress from zero knowledge to expert.</p>
             </div>
             <div class="third">
-                <h4>Examples</h4>
+                <h4><a href="docs/Examples">Examples</a></h4>
                 <p>We have working examples for you to download and play with.</p>
             </div>
             <div class="third">
-                <h4>Configuration</h4>
+                <h4><a href="docs/Configuration">Configuration</a></h4>
                 <p>We've documented all of the configurations that you can make on SkinnyFE here.</p>
             </div>
         </div>
@@ -77,6 +81,10 @@
         }
     ]
 }
+
+
+
+
 </code>
 					</pre>
                 </aside>
@@ -102,7 +110,6 @@
         {{/each}}
     &lt;/body&gt;
 &lt;/html&gt;
-
 </code>
                         </pre>
                 </aside>
@@ -114,7 +121,6 @@ $ java -jar SkinnyFE-all.jar config.json
 08:37:40.248 [main] INFO  com.jediq.skinnyfe.SkinnyFE [42] - Starting SkinnyFE server on port : 8027
 08:37:40.275 [main] INFO  org.eclipse.jetty.util.log [186] - Logging initialized @718ms
 08:37:40.681 [main] INFO  o.eclipse.jetty.server.Server [345] - jetty-9.3.z-SNAPSHOT
-08:37:40.713 [main] INFO  o.e.j.server.ServerConnector [270] - Started ServerConnector@610f7aa{HTTP/1.1,[http/1.1]}{0.0.0.0:8027}
 08:37:40.714 [main] INFO  o.eclipse.jetty.server.Server [397] - Started @1160ms
 08:37:40.714 [main] INFO  com.jediq.skinnyfe.SkinnyFE [46] - Started SkinnyFE server on port : 8027
                 </pre>
@@ -128,23 +134,35 @@ $ java -jar SkinnyFE-all.jar config.json
 
     <footer>
         <div class="content">
-            <h2>Made with &#9829; by</h2>
-            <a href="http://jediq.com"><span id="jediqLinkText">Jediq</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 725 240">
-                    <g style="stroke:white; stroke-width:32; stroke-miterlimit:4; fill:none">
-                        <path class="j_curve" d="M 150,120 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60"/>
-                        <path class="j_line" d="m 150,120 0,-120 0,0 0,0"/>
-                        <path class="e_curve" d="m 292,161 a 60,60 0 0 1 -77,7 60,60 0 0 1 -22,-74 60,60 0 0 1 68,-35 60,60 0 0 1 48,60"/>
-                        <path class="e_line" d="m 189,120 134.5,0"/>
-                        <path class="d_curve" d="m 467,121 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60 60,60 0 0 1 60,-60 60,60 0 0 1 60,60"/>
-                        <path class="d_line" d="m 467,118 0,-118 0,0 0,0"/>
-                        <path class="i_line" d="m 510,194 0,-143 0,0 0,0"/>
-                        <path class="q_curve" d="m 672,121 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60 60,60 0 0 1 60,-60 60,60 0 0 1 60,60"/>
-                        <path class="q_line" d="m 672,240 0,-118 0,0 0,0"/>
-                    </g>
-                    <ellipse class="i_dot" rx="18" ry="18" cx="510" cy="18" fill="white" stroke="0"/>
-                </svg>
-            </a>
+            <div class="half">
+                <h2>Made with &#9829; by</h2>
+                <a href="http://jediq.com"><span id="jediqLinkText">Jediq</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 725 240">
+                        <g style="stroke:white; stroke-width:32; stroke-miterlimit:4; fill:none">
+                            <path class="j_curve" d="M 150,120 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60"/>
+                            <path class="j_line" d="m 150,120 0,-120 0,0 0,0"/>
+                            <path class="e_curve" d="m 292,161 a 60,60 0 0 1 -77,7 60,60 0 0 1 -22,-74 60,60 0 0 1 68,-35 60,60 0 0 1 48,60"/>
+                            <path class="e_line" d="m 189,120 134.5,0"/>
+                            <path class="d_curve" d="m 467,121 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60 60,60 0 0 1 60,-60 60,60 0 0 1 60,60"/>
+                            <path class="d_line" d="m 467,118 0,-118 0,0 0,0"/>
+                            <path class="i_line" d="m 510,194 0,-143 0,0 0,0"/>
+                            <path class="q_curve" d="m 672,121 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60 60,60 0 0 1 60,-60 60,60 0 0 1 60,60"/>
+                            <path class="q_line" d="m 672,240 0,-118 0,0 0,0"/>
+                        </g>
+                        <ellipse class="i_dot" rx="18" ry="18" cx="510" cy="18" fill="white" stroke="0"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="half">
+                <ul>
+                    <li><a href="http://skinnyfe.jediq.com/skinnyFE-all.jar">Download SkinnyFE</a></li>
+                    <li><a href="docs">Documentation</a></li>
+                    <li><a href="docs/GettingStarted">Getting Started</a></li>
+                    <li><a href="docs/Examples">Examples</a></li>
+                    <li><a href="docs/Configuration">Configuration</a></li>
+                </ul>
+            </div>
+
         </div>
     </footer>
 </body>

@@ -1,6 +1,6 @@
 #Getting Started
 
-SkinnyFE comes pre-packaged as a Java executable JAR file, the latest release of this can be downloaded from [here](http://static.jediq.com/skinnyFE-all.jar).
+SkinnyFE comes pre-packaged as a Java executable JAR file, the latest release of this can be downloaded from [here](http://skinnyfe.jediq.com/skinnyFE-all.jar).
 
 ##Example 1 : A basic server
 

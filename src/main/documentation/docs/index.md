@@ -1,6 +1,6 @@
 #Welcome
 
-Welcome to SkinnyFE, a Front End framework that removes the ability to embed business logic in a front end application.
+Welcome to [SkinnyFE](../), a Front End framework that removes the ability to embed business logic in a front end application.
 
 The easiest way to learn to use SkinnyFE within your projects is to follow the [Getting Started](GettingStarted) guide,
 which provides simple steps to configuring and starting your first server and embedding API calls.
