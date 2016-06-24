@@ -1,0 +1,153 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    margin:0;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+}
+
+*, *:after, *:before {
+    box-sizing: border-box;
+}
+
+#hero, header {
+    background:#e37151;
+}
+
+#hero .content {
+    text-align:center;
+    padding-top:50px;
+}
+
+#hero img {
+    width:75px;
+    padding:50px 0 50px 0;
+}
+
+#hero:after {
+    border-top: solid 50px #e37151;
+}
+
+#documentation:after {
+    border-top: solid 50px rgb(246, 246, 246);
+}
+
+#hero:after, #documentation:after {
+    content:'';
+    position: relative;
+    top: 68px;
+    left: 50%;
+    margin-left: -50px;
+    width: 0;
+    height: 0;
+    border-left: solid 50px transparent;
+    border-right: solid 50px transparent;
+}
+
+#hero h1 {
+    font-size:3em;
+    font-weight:600;
+    color:white;
+    margin-bottom:0;
+}
+
+#hero h2 {
+    font-size:1.4em;
+    color:#F8D6CD;
+    padding-bottom:60px;
+
+}
+
+#explain {
+    padding-top:100px;
+}
+
+#documentation {
+    background:rgb(246, 246, 246);
+}
+
+#example {
+    padding-top:80px;
+    background:#e37151;
+    color:white;
+}
+
+h3 {
+    text-align:center;
+    font-weight:300;
+    position:relative;
+    top:-10px;
+    text-transform:uppercase;
+}
+
+h3 span {
+    border:1px solid lightgray;
+    padding:10px;
+    background:white;
+}
+
+p {
+    font-size:1.4em;
+    line-height:1.6em;
+    padding-bottom:1em;
+}
+
+.content {
+    max-width:1000px;
+    margin:0 auto;
+    padding:10px;
+    overflow:auto;
+}
+
+.half {
+    float:left;
+    width:48%;
+    margin:2% 1%;
+}
+
+pre {
+    background:rgb(64, 64, 64);
+    padding:10px;
+    white-space: pre-wrap;
+}
+
+.third {
+    float:left;
+    width:33.33%;
+}
+
+.third p {
+    font-size:1.2em;
+    padding-right:30px;
+}
+
+footer {
+    padding:50px 0;
+    background:rgb(64, 64, 64);
+    color:white;
+}
+
+footer svg {
+    position:relative;
+    left:-8px;
+}
+
+#jediqLinkText {
+    display:none;
+}
+
+
+@media handheld, only screen and (max-width: 767px) {
+    .third {
+        width:100%;
+    }
+
+    .half {
+        width:100%;
+    }
+
+}

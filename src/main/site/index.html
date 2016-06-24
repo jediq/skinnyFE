@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Skinny Front End">
+    <meta name="author" content="Jediq Ltd">
+    <title>Skinny FE</title>
+
+    <link rel="stylesheet" href="css/default.css"/>
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <header>
+        <a href="https://github.com/jediq/skinnyFE"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+    </header>
+
+    <div id="hero">
+        <div class="content">
+            <h1>SkinnyFE</h1>
+            <img src="img/logo-outline.svg"/>
+            <h1>Say goodbye to bloated middleware.</h1>
+            <h2>SkinnyFE lets you render RESTful back-end data in HTML with minimal coding.</h2>
+        </div>
+    </div>
+
+    <div id="explain" class="content">
+        <p>SkinnyFE is a Front End framework that removes the ability to embed business logic in a front end application.</p>
+
+        <p>At it's core, SkinnyFE declares within the HTML template the RESTful API resources that are required to render
+            the page. These resource references are then looked up in configuration and HTTP calls are made.
+            Finally, the response data from the resources is made available to the HTML template to embed in the output HTML.</p>
+    </div>
+
+    <div id="documentation">
+        <h3><span>Documentation</span></h3>
+        <div class="content">
+            <p>Projects and frameworks live and die by the quality and
+            usability of their documentation and so we are taking documentation very seriously on SkinnyFE.</p>
+            <div class="third">
+                <h4>Getting started</h4>
+                <p>Our getting started guide helps you progress from zero knowledge to expert.</p>
+            </div>
+            <div class="third">
+                <h4>Examples</h4>
+                <p>We have working examples for you to download and play with.</p>
+            </div>
+            <div class="third">
+                <h4>Configuration</h4>
+                <p>We've documented all of the configurations that you can make on SkinnyFE here.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="example">
+        <div class="content">
+            <h2>So, what does it look like?</h2>
+            <p>We aim to keep the configuration as light touch as possible, choosing convention over configuration
+                where we can.  SkinnyFE requires a simple Json config file and at least one moustache template
+                (roots of folders are resolved to <code>index.moustache</code>).</p>
+
+            <div class="half">
+                <aside>
+
+                    <small>config.json</small>
+					<pre>
+<code>
+{
+    "port":8027,
+    "resources":[
+        {
+            "name":"Posts",
+            "url":"http://localhost:8009/posts"
+        }
+    ]
+}
+</code>
+					</pre>
+                </aside>
+           </div>
+
+
+
+            <div class="half">
+            <aside>
+                <small>index.moustache</small>
+					<pre>
+<code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en-US"&gt;
+
+    &lt;head&gt;
+    &lt;meta property="posts" resource="Posts"/&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Posts&lt;/h1&gt;
+        {{#each posts}}
+            &lt;h2&gt;{{title}} by {{author}}&lt;/h2&gt;
+        {{/each}}
+    &lt;/body&gt;
+&lt;/html&gt;
+
+</code>
+                        </pre>
+                </aside>
+            </div>
+            <p>That's all you need, the SkinnyFE JAR file distributable contains all of the libraries required, including
+            an embedded web server, so launching the application is simple a case of telling it where the config is: </p>
+                <pre>
+$ java -jar SkinnyFE-all.jar config.json
+08:37:40.248 [main] INFO  com.jediq.skinnyfe.SkinnyFE [42] - Starting SkinnyFE server on port : 8027
+08:37:40.275 [main] INFO  org.eclipse.jetty.util.log [186] - Logging initialized @718ms
+08:37:40.681 [main] INFO  o.eclipse.jetty.server.Server [345] - jetty-9.3.z-SNAPSHOT
+08:37:40.713 [main] INFO  o.e.j.server.ServerConnector [270] - Started ServerConnector@610f7aa{HTTP/1.1,[http/1.1]}{0.0.0.0:8027}
+08:37:40.714 [main] INFO  o.eclipse.jetty.server.Server [397] - Started @1160ms
+08:37:40.714 [main] INFO  com.jediq.skinnyfe.SkinnyFE [46] - Started SkinnyFE server on port : 8027
+                </pre>
+            <p>You can then navigate to <code>http://localhost:8027</code> and if you've got a service providing json
+            on port 8009, you'll see the web page.  Don't worry, the examples walk you through this and have a demo service
+                for you to try.</p>
+            <p>Go ahead, have a play!</p>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="content">
+            <h2>Made with &#9829; by</h2>
+            <a href="http://jediq.com"><span id="jediqLinkText">Jediq</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 725 240">
+                    <g style="stroke:white; stroke-width:32; stroke-miterlimit:4; fill:none">
+                        <path class="j_curve" d="M 150,120 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60"/>
+                        <path class="j_line" d="m 150,120 0,-120 0,0 0,0"/>
+                        <path class="e_curve" d="m 292,161 a 60,60 0 0 1 -77,7 60,60 0 0 1 -22,-74 60,60 0 0 1 68,-35 60,60 0 0 1 48,60"/>
+                        <path class="e_line" d="m 189,120 134.5,0"/>
+                        <path class="d_curve" d="m 467,121 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60 60,60 0 0 1 60,-60 60,60 0 0 1 60,60"/>
+                        <path class="d_line" d="m 467,118 0,-118 0,0 0,0"/>
+                        <path class="i_line" d="m 510,194 0,-143 0,0 0,0"/>
+                        <path class="q_curve" d="m 672,121 a 60,60 0 0 1 -60,60 60,60 0 0 1 -60,-60 60,60 0 0 1 60,-60 60,60 0 0 1 60,60"/>
+                        <path class="q_line" d="m 672,240 0,-118 0,0 0,0"/>
+                    </g>
+                    <ellipse class="i_dot" rx="18" ry="18" cx="510" cy="18" fill="white" stroke="0"/>
+                </svg>
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
