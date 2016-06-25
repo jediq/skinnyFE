@@ -51,6 +51,7 @@ public class TemplateResolver {
             urlPath += "index";
         }
         Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
+        logger.debug("Looking for template from path : " + path);
         if (path.toFile().exists()) {
             SkinnyTemplate template = new SkinnyTemplate();
             template.setFile(path.toFile().getAbsolutePath());

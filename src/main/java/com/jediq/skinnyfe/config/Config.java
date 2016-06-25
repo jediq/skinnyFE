@@ -19,6 +19,7 @@ public class Config {
     private List <SkinnyTemplate> templates = new ArrayList<>();
     private String assetsPath;
     private String assetsFolder;
+    private String baseLocation = "";
 
     public static Config load(String configLocation) {
         try {
@@ -42,7 +43,7 @@ public class Config {
     }
 
     public String getDefaultTemplates() {
-        return defaultTemplates;
+        return getBaseLocation() + defaultTemplates;
     }
 
     public void setDefaultTemplates(String defaultTemplates) {
@@ -58,7 +59,7 @@ public class Config {
     }
 
     public String getAssetsPath() {
-        return assetsPath;
+        return getBaseLocation() + assetsPath;
     }
 
     public void setAssetsPath(String assetsPath) {
@@ -66,7 +67,7 @@ public class Config {
     }
 
     public String getAssetsFolder() {
-        return assetsFolder;
+        return getBaseLocation() + assetsFolder;
     }
 
     public void setAssetsFolder(String assetsFolder) {
@@ -79,5 +80,13 @@ public class Config {
 
     public void setTemplates(List<SkinnyTemplate> templates) {
         this.templates = templates;
+    }
+
+    public void setBaseLocation(String baseLocation) {
+        this.baseLocation = baseLocation;
+    }
+
+    public String getBaseLocation() {
+        return baseLocation;
     }
 }
