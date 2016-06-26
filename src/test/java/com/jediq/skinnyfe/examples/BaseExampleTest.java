@@ -2,9 +2,11 @@ package com.jediq.skinnyfe.examples;
 
 import com.jediq.skinnyfe.SkinnyFE;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -61,6 +63,13 @@ public abstract class BaseExampleTest {
         assertThat(content, startsWith("<!doctype html>"));
 
         return content;
+    }
+
+    protected String post(String path, Map<String, String> formFields) throws Exception {
+        Request post = httpClient.POST(baseUrl + port + "/" + path);
+        formFields.forEach(post::param);
+        ContentResponse response = post.send();
+        return response.getContentAsString();
     }
 
     public  Process startupJsonServer() throws Exception {
