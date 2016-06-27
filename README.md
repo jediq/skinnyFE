@@ -1,5 +1,7 @@
 #SkinnyFE - Skinny Frontend
 
+[![Join the chat at https://gitter.im/jediq/skinnyFE](https://badges.gitter.im/jediq/skinnyFE.svg)](https://gitter.im/jediq/skinnyFE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/jediq/skinnyFE.svg?branch=master)](https://travis-ci.org/jediq/skinnyFE)
 [![license](https://img.shields.io/github/license/jediq/skinnyFE.svg?maxAge=2592000)]()
 
