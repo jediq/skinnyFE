@@ -15,7 +15,6 @@ public class Resource {
     private String name;
     private String url;
     private String methods = "GET";
-    private String enricher;
     private Map<String, String> headers = new HashMap<>();
 
     private HandlebarsCompiler handlebarsCompiler = new HandlebarsCompiler();
@@ -42,14 +41,6 @@ public class Resource {
 
     public void setMethods(String methods) {
         this.methods = methods;
-    }
-
-    public String getEnricher() {
-        return enricher;
-    }
-
-    public void setEnricher(String enricher) {
-        this.enricher = enricher;
     }
 
     public Map<String, String> getHeaders() {

@@ -37,7 +37,7 @@ public class TemplateResolver {
 
         logger.debug("Found template for {} at {}", url, template.getFile());
 
-        template.loadContent(config);
+        template.loadContent();
 
         return template;
     }

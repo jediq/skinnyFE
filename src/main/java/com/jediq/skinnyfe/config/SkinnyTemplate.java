@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
  */
 public class SkinnyTemplate {
 
-    private String name;
     private String regex;
     private String file;
     private String enricher;
@@ -20,14 +19,6 @@ public class SkinnyTemplate {
     private String content;
     private List<Meta> metaList = new ArrayList<>();
     private Pattern pattern;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getRegex() {
         return regex;
@@ -66,7 +57,7 @@ public class SkinnyTemplate {
         return pattern.matcher(url).matches();
     }
 
-    public void loadContent(Config config) throws IOException {
+    public void loadContent() throws IOException {
         if (this.content == null) {
             this.content = new String(Files.readAllBytes(Paths.get(getFile())));
         }

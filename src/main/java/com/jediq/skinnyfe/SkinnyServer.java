@@ -20,6 +20,7 @@ import java.util.Optional;
  */
 public class SkinnyServer {
 
+    public static final String WRAPPED_EXCEPTION_MESSAGE = "Caught exception starting SkinnyFE server on port : ";
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private int port;
@@ -75,8 +76,8 @@ public class SkinnyServer {
         try {
             server.start();
         } catch (Exception e) {
-            logger.info("Caught exception starting SkinnyFE server on port : " + port);
-            throw new WrappedException("Caught exception starting SkinnyFE server on port : " + port, e);
+            logger.info(WRAPPED_EXCEPTION_MESSAGE + port);
+            throw new WrappedException(WRAPPED_EXCEPTION_MESSAGE + port, e);
         }
     }
 
@@ -84,8 +85,8 @@ public class SkinnyServer {
         try {
             server.stop();
         } catch (Exception e) {
-            logger.info("Caught exception stopping SkinnyFE server on port : " + port);
-            throw new WrappedException("Caught exception starting SkinnyFE server on port : " + port, e);
+            logger.info(WRAPPED_EXCEPTION_MESSAGE + port);
+            throw new WrappedException(WRAPPED_EXCEPTION_MESSAGE + port, e);
         }
     }
 }
