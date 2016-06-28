@@ -66,7 +66,7 @@ public class SkinnyTemplate {
         return pattern.matcher(url).matches();
     }
 
-    public void loadContent() throws IOException {
+    public void loadContent(Config config) throws IOException {
         if (this.content == null) {
             this.content = new String(Files.readAllBytes(Paths.get(getFile())));
         }

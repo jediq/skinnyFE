@@ -1,0 +1,16 @@
+{
+  "port":8027,
+  "resources":[
+    {
+      "name":"Posts",
+      "url":"http://localhost:8009/posts"
+    }
+  ],
+  "templates":[
+    {
+    "regex":".*",
+    "file":"index.moustache",
+    "enricher":"post-enricher.js"
+    }
+  ]
+}

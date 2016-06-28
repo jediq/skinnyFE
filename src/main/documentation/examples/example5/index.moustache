@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta property="posts" resource="Posts"/>
+    </head>
+    <body>
+        <h1>Posts</h1>
+        {{#each posts}}
+            <h2>{{title}} <small> by </small> {{author}}</h2>
+        {{/each}}
+    </body>
+</html>

@@ -36,6 +36,10 @@
             the page. These resource references are then looked up in configuration and HTTP calls are made.
             Finally, the response data from the resources is made available to the HTML template to embed in the output HTML.</p>
 
+        <p>SkinnyFE renders on the server side. That doesn't mean you can only use server side rendering, the HTML that
+            it renders can obviously contain javascript, it just means that you don't need it.  Rendering on the server
+            first and then progressively enhancing with javascript later means that you can still treat clients with #nojs
+            requirements (such as screen-readers) as first class citizens.</p>
     </div>
 
     <div id="documentation">

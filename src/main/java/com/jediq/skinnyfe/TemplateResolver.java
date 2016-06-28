@@ -37,7 +37,7 @@ public class TemplateResolver {
 
         logger.debug("Found template for {} at {}", url, template.getFile());
 
-        template.loadContent();
+        template.loadContent(config);
 
         return template;
     }
@@ -64,6 +64,7 @@ public class TemplateResolver {
     private Optional <SkinnyTemplate> fromConfig(String url) {
         for (SkinnyTemplate template : config.getTemplates()) {
             if (template.matches(url)) {
+                template.setFile(config.getBaseLocation() + template.getFile());
                 return Optional.of(template);
             }
         }

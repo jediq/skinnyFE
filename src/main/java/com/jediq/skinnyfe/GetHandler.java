@@ -90,7 +90,7 @@ public class GetHandler extends Handler {
     }
 
     private JsonNode enrichData(String enricherFile, JsonNode jsonNode) throws IOException {
-        String enricher = new String(Files.readAllBytes(Paths.get(enricherFile)));
+        String enricher = new String(Files.readAllBytes(Paths.get(config.getBaseLocation(), enricherFile)));
 
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {

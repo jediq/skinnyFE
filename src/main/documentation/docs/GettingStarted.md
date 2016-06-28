@@ -42,14 +42,23 @@ You should see (something like) the following output on the console:
 
 You can navigate your browser to `http://localhost:8027` and you should see a simple Hello World! page.
 
-That's it, you're now running SkinnyFE, but it's not very useful, the next example adds a resource and you can start
+That's it, you're now running SkinnyFE, but admittedly, it's not very useful, the next example adds a resource and you can start
 to see how powerful SkinnyFE can be.
 
 ##Example 2 : Using a resource
 
-We'll be pulling our resources from [http://jsonplaceholder.typicode.com](http://jsonplaceholder.typicode.com), a free
-online set of JSON endpoints for developers and testers.  To render the posts resource our files needs to look
-like :
+As we progress through the examples, we'll need a back-end resource to interact with, for this we'll be using a local
+instance of the open-sourced [json-server](https://github.com/typicode/json-server).  Follow the installation instructions
+in the previous link (it's dead easy) and pull down the SkinnyFE examples [db.json](../db.json).  It can then be started using :
+
+```
+json-server --port 8009 --watch db.json
+```
+
+You should now be able to navigate to `http://localhost:3000` and get the json-server status page.  We'll be using the 
+`posts` endpoint which has the following fields, `title`, `author` and `content`.
+
+To render json-server posts with SkinnyFE our files needs to look like :
 
 #####config.json
 ```
@@ -183,3 +192,94 @@ serving static content.
 The static content is achieved by the configuration values `assetsPath` and `assetsFolder`.  Any urls starting with the
 `assetsPath` value will automatically be transposed into the `assetsFolder` value and served as static content from there.
 This allows us to serve local static content without requiring a second server or CDN.
+
+
+##Example 4 : Creating to a resource
+
+So far in our examples we've been reading resource entities rather than creating new instances, this will change with
+example 4.  We create elements by posting values in html `<form>`s.
+
+The files required to perform the simplest of Posts are :
+
+#####config.json
+```
+{
+  "port":8027,
+  "resources":[
+    {
+      "name":"Posts",
+      "url":"http://localhost:8009/posts"
+    },
+    {
+      "name":"Post",
+      "url":"http://localhost:8009/posts/{{PARAM.id}}"
+    }
+  ],
+  "assetsPath":"/assets",
+  "assetsFolder":"static/"
+}
+```
+
+####index.moustache
+```
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta property="posts" resource="Posts"/>
+        <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <h1>Posts</h1>
+        {{#each posts}}
+            <h2><a href="post?id={{id}}">{{title}} <small> by </small> {{author}}</a></h2>
+            <p>{{body}}</p>
+        {{/each}}
+
+        <hr/>
+        <h1>New post</h1>
+        <form method="post">
+            <input type="text" placeholder="Title" name="posts.title">
+            <input type="text" placeholder="Author" name="posts.author">
+            <textarea name="posts.content" placeholder="Content"></textarea>
+            <button>post</button>
+        </form>
+    </body>
+</html>
+```
+
+####post.moustache
+```
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta property="post" resource="Post"/>
+        <meta property="posts" resource="Posts"/>
+        <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+
+        <h1>{{post.title}}</h1>
+        <p>{{post.content}}</p>
+        <br>
+        <hr>
+        <h2><a href="/">All posts</a></h2>
+        {{#each posts}}
+            <h3><a href="/post?id={{id}}">{{title}}</a></h3>
+            <hr>
+        {{/each}}
+    </body>
+</html>
+```
+
+SkinnyFE uses the [POST/REDIRECT/GET](https://en.wikipedia.org/wiki/Post/Redirect/Get) design pattern for creating
+elements, this allows us to render the values without breaking the back or refresh buttons.
+
+The names of the form values should correspond to the Resource fields that need updating prefixed with the resource
+property name, in our example, `posts.title`.  
+
+SkinnyFE will look for all of the fields POSTed in and will send any
+values that it finds to the Resources url, so it will send the `title` value to the `posts` resource.  All values for
+the same resource are POSTed at the same time.
+
