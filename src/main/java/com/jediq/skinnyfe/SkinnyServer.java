@@ -1,18 +1,24 @@
 package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Config;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.*;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,18 +37,53 @@ public class SkinnyServer {
             this.server = constructServer(port);
             this.port = port;
 
-            HandlerCollection handlerCollection = new HandlerList();
+            Connector connector = new LocalConnector(server);
+            server.addConnector(connector);
+
+            HandlerCollection handlerCollection = new HandlerCollection();
+            HandlerList handlerList = new HandlerList();
 
             Optional<Handler> staticFileHandler = makeResourceHandler(config);
-            staticFileHandler.ifPresent(handlerCollection::addHandler);
+            staticFileHandler.ifPresent(handlerList::addHandler);
 
             Optional<Handler> skinnyFEHandler = makeServletHandler(config);
-            skinnyFEHandler.ifPresent(handlerCollection::addHandler);
+            skinnyFEHandler.ifPresent(handlerList::addHandler);
+
+            Optional<ErrorPageErrorHandler> errorHandler = makeErrorHandler(config);
+            errorHandler.ifPresent(handlerList::addHandler);
+
+            handlerCollection.setHandlers(new Handler[] { handlerList });
 
             server.setHandler(handlerCollection);
+
         } catch (ServletException | NullPointerException e) {
             throw new WrappedException(e);
         }
+    }
+
+    private Optional<ErrorPageErrorHandler> makeErrorHandler(Config config) {
+        if (config.getErrorPages().isEmpty()) {
+            return Optional.empty();
+        }
+        ErrorPageErrorHandler handler = new MyErrorPageErrorHandler();
+        for (Map.Entry<Integer, String> page : config.getErrorPages().entrySet()) {
+            handler.addErrorPage(page.getKey(), page.getValue());
+        }
+        return Optional.of(handler);
+    }
+
+    private class MyErrorPageErrorHandler extends ErrorPageErrorHandler {
+        @Override
+        public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+            super.handle(target, baseRequest, request, response);
+        }
+
+        @Override
+        protected void handleErrorPage(HttpServletRequest request, Writer writer, int code, String message) throws IOException {
+            super.handleErrorPage(request, writer, code, message);
+        }
+
+
     }
 
     private Optional<Handler> makeResourceHandler(Config config) {

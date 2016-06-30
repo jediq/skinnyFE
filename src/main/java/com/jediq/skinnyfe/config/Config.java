@@ -6,7 +6,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -20,6 +22,7 @@ public class Config {
     private String assetsPath;
     private String assetsFolder;
     private String baseLocation = "";
+    private Map<Integer, String> errorPages = new HashMap<>();
 
     public static Config load(String configLocation) {
         try {
@@ -88,5 +91,13 @@ public class Config {
 
     public String getBaseLocation() {
         return baseLocation;
+    }
+
+    public Map<Integer, String> getErrorPages() {
+        return errorPages;
+    }
+
+    public void setErrorPages(Map<Integer, String> errorPages) {
+        this.errorPages = errorPages;
     }
 }

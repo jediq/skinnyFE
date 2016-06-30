@@ -47,21 +47,24 @@ public class GetHandlerTest {
         HttpClient httpClient = new HttpClient();
         httpClient.start();
 
-        ContentResponse response = httpClient.GET(BASE_URL);
-        assertThat(response.getStatus(), is(200));
+        try {
+            ContentResponse response = httpClient.GET(BASE_URL);
+            assertThat(response.getStatus(), is(200));
 
-        String content = response.getContentAsString();
-        assertThat(content, startsWith("<!doctype html>"));
-        assertThat(content, containsString("Car: FR123JON"));
-        assertThat(content, containsString("Driver: Fred Jones"));
+            String content = response.getContentAsString();
+            assertThat(content, startsWith("<!doctype html>"));
+            assertThat(content, containsString("Car: FR123JON"));
+            assertThat(content, containsString("Driver: Fred Jones"));
 
-        ContentResponse assetResponse = httpClient.GET(BASE_URL + "assets/plain.txt");
-        assertThat(assetResponse.getStatus(), is(200));
-        assertThat(assetResponse.getContentAsString(), is("Plain text file\n"));
+            ContentResponse assetResponse = httpClient.GET(BASE_URL + "assets/plain.txt");
+            assertThat(assetResponse.getStatus(), is(200));
+            assertThat(assetResponse.getContentAsString(), is("Plain text file\n"));
 
-        httpClient.stop();
-        vehicleEndpoint.close();
-        userEndpoint.close();
+        } finally {
+            httpClient.stop();
+            vehicleEndpoint.close();
+            userEndpoint.close();
+        }
     }
 
     @Test
@@ -71,7 +74,6 @@ public class GetHandlerTest {
         ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
         assertThat(response.getStatus(), is(404));
         httpClient.stop();
-
     }
 
     @Test
@@ -90,23 +92,25 @@ public class GetHandlerTest {
         HttpClient httpClient = new HttpClient();
         httpClient.start();
 
-        ContentResponse response = httpClient.GET(BASE_URL + "enricherView");
-        String content = response.getContentAsString();
+        try {
 
-        assertThat(content, startsWith("<!doctype html>"));
-        assertThat(content, containsString("Car: FR123JON"));
-        assertThat(content, containsString("Driver: Fred Jones"));
-        assertThat(content, containsString("Fruit: Banana"));
+            ContentResponse response = httpClient.GET(BASE_URL + "enricherView");
+            String content = response.getContentAsString();
 
-        httpClient.stop();
-        vehicleEndpoint.close();
-        userEndpoint.close();
+            assertThat(content, startsWith("<!doctype html>"));
+            assertThat(content, containsString("Car: FR123JON"));
+            assertThat(content, containsString("Driver: Fred Jones"));
+            assertThat(content, containsString("Fruit: Banana"));
+        } finally {
+            httpClient.stop();
+            vehicleEndpoint.close();
+            userEndpoint.close();
+        }
 
     }
 
     @Test
     public void testEndToEndPathResource() throws Exception {
-
 
         FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
         vehicleEndpoint.start();
@@ -115,14 +119,17 @@ public class GetHandlerTest {
 
         HttpClient httpClient = new HttpClient();
         httpClient.start();
-        ContentResponse goodResponse = httpClient.GET(BASE_URL + "pathed/12345");
-        assertThat(goodResponse.getStatus(), is(200));
 
-        ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
-        assertThat(badResponse.getStatus(), is(404));
-        vehicleEndpoint.close();
+        try {
+            ContentResponse goodResponse = httpClient.GET(BASE_URL + "pathed/12345");
+            assertThat(goodResponse.getStatus(), is(200));
 
-        httpClient.stop();
+            ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
+            assertThat(badResponse.getStatus(), is(404));
+        } finally {
+            vehicleEndpoint.close();
+            httpClient.stop();
+        }
     }
 
     @AfterClass
