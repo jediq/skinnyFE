@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assume.assumeThat;
 import org.junit.Test;
 
 /**
@@ -31,6 +32,10 @@ public class CacheTest {
     
     @Test
     public void testForceGarbageCollectionOfCache() {
+
+        // Don't try to force out of memory for Travis-CI
+        assumeThat(System.getProperty("os.name"), is("Mac OS X"));
+
         
         Cache<String, Object> cache = new Cache<>(100000);
         Object createdObjectString = cache.item("item1", Object::new).toString();
