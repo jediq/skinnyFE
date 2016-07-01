@@ -36,7 +36,7 @@ public class TemplateResolverTest {
         SkinnyTemplate template = templateResolver.resolveTemplate("http://localhost/none");
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected=IllegalArgumentException.class)
     public void testResolveTemplate_nullUrl() throws Exception {
         TemplateResolver templateResolver = new TemplateResolver(config);
         SkinnyTemplate template = templateResolver.resolveTemplate(null);

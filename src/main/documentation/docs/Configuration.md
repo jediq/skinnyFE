@@ -34,3 +34,14 @@ This allows us to serve local static content without requiring a second server o
   "assetsFolder":"static/"
 }
 ```
+
+##Caching templates
+
+Templates can be cached for a configurable period, once that period has expired they will be re-read from the disk.
+The default cache time is 0 and therefore no caching.  The `millisToCacheTemplates` root level numeric value is
+used to configure this.  The below example would cache templates for 1 second.
+```
+{
+  "millisToCacheTemplates":1000
+}
+```

@@ -20,13 +20,20 @@ public class TemplateResolver {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private Config config;
+    private final Config config;
+
+    private final Cache <String, SkinnyTemplate> cache;
 
     public TemplateResolver(Config config) {
         this.config = config;
+        cache = new Cache <> (config.getMillisToCacheTemplates());
     }
 
     public SkinnyTemplate resolveTemplate(String url) throws IOException {
+        return cache.item(url, () -> resolveTemplateInternal(url));
+    }
+
+    private SkinnyTemplate resolveTemplateInternal(String url) {
 
         SkinnyTemplate template = Stream.of(fromConfig(url), fromFile(url))
                 .filter(Optional::isPresent)
@@ -42,22 +49,27 @@ public class TemplateResolver {
         return template;
     }
 
-    private Optional<SkinnyTemplate> fromFile(String url) throws MalformedURLException {
-        if (url==null) {
+    private Optional<SkinnyTemplate> fromFile(String url) {
+        try {
+            if (url == null) {
+                return Optional.empty();
+            }
+
+            String urlPath = new URL(url).getPath();
+            if (urlPath.endsWith("/")) {
+                urlPath += "index";
+            }
+            Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
+            logger.debug("Looking for template from path : " + path);
+            if (path.toFile().exists()) {
+                SkinnyTemplate template = new SkinnyTemplate();
+                template.setFile(path.toFile().getAbsolutePath());
+                return Optional.of(template);
+            }
             return Optional.empty();
+        } catch (IOException e) {
+            throw new WrappedException("Error finding template for url :" + url, e);
         }
-        String urlPath = new URL(url).getPath();
-        if (urlPath.endsWith("/")) {
-            urlPath += "index";
-        }
-        Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
-        logger.debug("Looking for template from path : " + path);
-        if (path.toFile().exists()) {
-            SkinnyTemplate template = new SkinnyTemplate();
-            template.setFile(path.toFile().getAbsolutePath());
-            return Optional.of(template);
-        }
-        return Optional.empty();
 
     }
 

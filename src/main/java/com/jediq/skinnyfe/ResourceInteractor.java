@@ -71,7 +71,7 @@ public class ResourceInteractor {
         }
     }
 
-    private String loadResource(Meta meta, Request request) {
+    protected String loadResource(Meta meta, Request request) {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());

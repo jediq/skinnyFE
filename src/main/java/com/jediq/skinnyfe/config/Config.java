@@ -19,6 +19,7 @@ public class Config {
     private String defaultTemplates = ".";
     private List <Resource> resources = new ArrayList<>();
     private List <SkinnyTemplate> templates = new ArrayList<>();
+    private long millisToCacheTemplates = 0;
     private String assetsPath;
     private String assetsFolder;
     private String baseLocation = "";
@@ -99,5 +100,13 @@ public class Config {
 
     public void setErrorPages(Map<Integer, String> errorPages) {
         this.errorPages = errorPages;
+    }
+
+    public long getMillisToCacheTemplates() {
+        return millisToCacheTemplates;
+    }
+
+    public void setMillisToCacheTemplates(long millisToCacheTemplates) {
+        this.millisToCacheTemplates = millisToCacheTemplates;
     }
 }

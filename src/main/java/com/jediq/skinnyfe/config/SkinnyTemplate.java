@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe.config;
 
+import com.jediq.skinnyfe.WrappedException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -57,9 +58,13 @@ public class SkinnyTemplate {
         return pattern.matcher(url).matches();
     }
 
-    public void loadContent() throws IOException {
+    public void loadContent() {
         if (this.content == null) {
-            this.content = new String(Files.readAllBytes(Paths.get(getFile())));
+            try {
+                this.content = new String(Files.readAllBytes(Paths.get(getFile())));
+            } catch (IOException e) {
+                throw new WrappedException("Couldn't read content from file " + getFile(), e);
+            }
         }
     }
 }
