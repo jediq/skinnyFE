@@ -20,6 +20,11 @@ json-server --port 8009 --watch db.json
 You should now be able to navigate to `http://localhost:3000` and get the json-server status page.  We'll be using the 
 `posts` endpoint which has the following fields, `title`, `author` and `content`.
 
+!!! note "Note:"
+    Some endpoints claiming to serve valid JSON actually don't as they start the JSON with an array (`[]`).
+    When SkinnyFE encounters this it generates the following JSON Node `{ "array":[ ] }` with the arrays content
+    embedded.
+
 To render json-server posts with SkinnyFE our files needs to look like :
 
 #####config.json
@@ -35,6 +40,7 @@ To render json-server posts with SkinnyFE our files needs to look like :
 }
 ```
 
+
 #####index.moustache
 ```
 <!doctype html>
@@ -46,7 +52,7 @@ To render json-server posts with SkinnyFE our files needs to look like :
     <body>
         <h1>Posts</h1>
         <small>Random lorem ipsum posts for demo purposes.</small>
-        {{#each posts}}
+        {{#each posts.array}}
             <h2>{{title}}</h2>
             <p>{{body}}</p>
         {{/each}}
@@ -110,7 +116,7 @@ To select and display a particular post in our example, we would use the followi
     <body>
         <h1>Posts</h1>
         <small>Random lorem ipsum posts for demo purposes.</small>
-        {{#each posts}}
+        {{#each posts.array}}
             <h2><a href="post?id={{id}}">{{title}}</a></h2>
             <p>{{body}}</p>
         {{/each}}
@@ -195,7 +201,7 @@ The files required to perform the simplest of Posts are :
     </head>
     <body>
         <h1>Posts</h1>
-        {{#each posts}}
+        {{#each posts.array}}
             <h2><a href="post?id={{id}}">{{title}} <small> by </small> {{author}}</a></h2>
             <p>{{body}}</p>
         {{/each}}
@@ -229,7 +235,7 @@ The files required to perform the simplest of Posts are :
         <br>
         <hr>
         <h2><a href="/">All posts</a></h2>
-        {{#each posts}}
+        {{#each posts.array}}
             <h3><a href="/post?id={{id}}">{{title}}</a></h3>
             <hr>
         {{/each}}
@@ -270,7 +276,7 @@ var enrich = function(dataString) {
 
   var data = JSON.parse(dataString);
 
-  data.posts.forEach(function(post) {
+  data.posts.array.forEach(function(post) {
     post.title = post.title ? post.title.toUpperCase() : "";
     post.author = post.author ? post.author.toUpperCase() : "";
   });
@@ -309,7 +315,7 @@ var enrich = function(dataString) {
     </head>
     <body>
         <h1>Posts</h1>
-        {{#each posts}}
+        {{#each posts.array}}
             <h2>{{title}} <small> by </small> {{author}}</h2>
         {{/each}}
     </body>

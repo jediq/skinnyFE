@@ -3,7 +3,7 @@ var enrich = function(dataString) {
 
   var data = JSON.parse(dataString);
 
-  data.posts.forEach(function(post) {
+  data.posts.array.forEach(function(post) {
     post.title = post.title ? post.title.toUpperCase() : "";
     post.author = post.author ? post.author.toUpperCase() : "";
   });

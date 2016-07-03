@@ -8,25 +8,24 @@ import com.github.jknack.handlebars.JsonNodeValueResolver;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
+import com.jediq.skinnyfe.enricher.DataEnricher;
+import com.jediq.skinnyfe.enricher.ForceMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 public class GetHandler extends Handler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final DataEnricher dataEnricher;
+
     public GetHandler(Config config) {
         super(config);
+        dataEnricher = new DataEnricher(config);
     }
 
     public void doGet(Request request, Response response) throws IOException {
@@ -45,7 +44,7 @@ public class GetHandler extends Handler {
         response.setContentType(skinnyTemplate.getContentType());
 
         try {
-            Map<Meta, String> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
+            Map<Meta, ResourceResponse> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
             JsonNode aggregatedNode = aggregateData(resourceDataMap);
 
             logger.debug("aggregated data into : {} ", aggregatedNode);
@@ -53,8 +52,10 @@ public class GetHandler extends Handler {
             JsonNode enrichedNode;
 
             logger.debug("enriching data? : {} ", skinnyTemplate.getEnricher());
+            ForceMethods forceMethods = null;
             if (skinnyTemplate.getEnricher() != null) {
-                enrichedNode = enrichData(skinnyTemplate.getEnricher(), aggregatedNode);
+                forceMethods = new ForceMethods();
+                enrichedNode = dataEnricher.enrich(skinnyTemplate.getEnricher(), aggregatedNode, forceMethods);
                 logger.debug("enriched data into : {} ", enrichedNode);
             } else {
                 enrichedNode = aggregatedNode;
@@ -65,7 +66,7 @@ public class GetHandler extends Handler {
 
             String rendered = handlebarsCompiler.compile(skinnyTemplate.getContent(), context, 1);
 
-            response.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(calculateStatus(HttpServletResponse.SC_OK, forceMethods));
             response.getWriter().println(rendered);
         } catch(BadResponseException e) {
             logger.debug("Resource returned a bad response code : " + e.getStatus(), e);
@@ -73,13 +74,31 @@ public class GetHandler extends Handler {
         }
     }
 
-    private JsonNode aggregateData(Map<Meta, String> resourceDataMap) {
+    private int calculateStatus(int defaultStatus, ForceMethods forceMethods) {
+        if (forceMethods == null) {
+            return defaultStatus;
+        }
+        return forceMethods.getResponseCode().orElse(defaultStatus);
+    }
+
+    private JsonNode aggregateData(Map<Meta, ResourceResponse> resourceDataMap) {
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
-        for (Map.Entry<Meta, String> entry : resourceDataMap.entrySet()) {
+        for (Map.Entry<Meta, ResourceResponse> entry : resourceDataMap.entrySet()) {
             try {
-                JsonNode node = mapper.readTree(entry.getValue());
+                ObjectNode node = mapper.createObjectNode();
+                if (!entry.getValue().content.isEmpty()) {
+                    JsonNode jsonNode = mapper.readTree(entry.getValue().content);
+                    if (jsonNode instanceof ObjectNode) {
+                        node = (ObjectNode) jsonNode;
+                    } else {
+                        node.put("array", jsonNode);
+                    }
+                }
+                ObjectNode metaNode = node.putObject("_meta");
+                metaNode.put("code", entry.getValue().code);
+                metaNode.put("reason", entry.getValue().reason);
                 rootNode.put(entry.getKey().getProperty(), node);
                 logger.debug("Put {} into property {}", node, entry.getKey().getProperty());
             } catch (IOException e) {
@@ -89,23 +108,4 @@ public class GetHandler extends Handler {
         return rootNode;
     }
 
-    private JsonNode enrichData(String enricherFile, JsonNode jsonNode) throws IOException {
-        String enricher = new String(Files.readAllBytes(Paths.get(config.getBaseLocation(), enricherFile)));
-
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        try {
-            engine.eval(enricher);
-
-            Invocable invocable = (Invocable) engine;
-
-            String result = (String) invocable.invokeFunction("enrich", jsonNode.toString());
-
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readTree(result);
-
-        } catch (ScriptException | NoSuchMethodException e) {
-            logger.info("Caught exception trying to execute " + enricher, e);
-            throw new WrappedException(enricher, e);
-        }
-    }
 }

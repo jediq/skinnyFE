@@ -7,3 +7,7 @@ pages:
     - Getting Started: GettingStarted.md
     - Configuration: Configuration.md
     - Examples: Examples.md
+
+
+markdown_extensions:
+    - admonition:

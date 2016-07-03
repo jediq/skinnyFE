@@ -15,7 +15,7 @@
         <appender-ref ref="SAME_LINE"/>
     </logger>
 
-    <logger name="org.eclipse" level="DEBUG"/>
+    <logger name="org.eclipse" level="INFO"/>
     <logger name="com.jediq" level="DEBUG"/>
 
     <root level="DEBUG">

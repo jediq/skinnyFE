@@ -59,6 +59,9 @@ public class SkinnyTemplate {
     }
 
     public void loadContent() {
+        if (file == null) {
+            throw new IllegalStateException("File cannot be null");
+        }
         if (this.content == null) {
             try {
                 this.content = new String(Files.readAllBytes(Paths.get(getFile())));

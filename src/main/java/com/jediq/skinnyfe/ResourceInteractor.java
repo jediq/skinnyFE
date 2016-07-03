@@ -38,13 +38,10 @@ public class ResourceInteractor {
         }
     }
 
-    public Map<Meta, String> loadResources(List<Meta> metaList, Request request) {
-        Map <Meta, String> metaMap = new HashMap<>();
+    public Map<Meta, ResourceResponse> loadResources(List<Meta> metaList, Request request) {
+        Map <Meta, ResourceResponse> metaMap = new HashMap<>();
         for (Meta meta : metaList) {
-            String resourceData = loadResource(meta, request);
-            if (!resourceData.isEmpty()) {
-                metaMap.put(meta, resourceData);
-            }
+            metaMap.put(meta, loadResource(meta, request));
         }
         return metaMap;
     }
@@ -71,7 +68,7 @@ public class ResourceInteractor {
         }
     }
 
-    protected String loadResource(Meta meta, Request request) {
+    protected ResourceResponse loadResource(Meta meta, Request request) {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
@@ -84,13 +81,16 @@ public class ResourceInteractor {
 
             resource.getHeaders().forEach(httpRequest::header);
             logger.debug("Sending {} headers with the request", httpRequest.getHeaders().size());
-            ContentResponse response = httpRequest.send();
+            ContentResponse contentResponse = httpRequest.send();
 
-            if (response.getStatus() != 200) {
-                logger.info("Resource at '{}' responded with status : {}", enrichedUrl, response.getStatus());
-                throw new BadResponseException(response.getStatus());
-            }
-            return response.getContentAsString();
+            ResourceResponse resourceResponse = new ResourceResponse();
+            resourceResponse.code = contentResponse.getStatus();
+            resourceResponse.content = contentResponse.getContentAsString();
+            resourceResponse.reason = contentResponse.getReason();
+            contentResponse.getHeaders()
+                    .forEach(field -> resourceResponse.headers.put(field.getName(), field.getValue()));
+
+            return resourceResponse;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new WrappedException(e);
         }
