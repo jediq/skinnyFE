@@ -2,6 +2,4 @@
 target/*
 .DS_Store
 *.iml
-gradle*
-.gradle
 build/
