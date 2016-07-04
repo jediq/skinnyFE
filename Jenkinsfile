@@ -1,5 +1,5 @@
 node {
     checkout scm
     sh 'chmod +x gradlew'
-    sh './gradlew clean build'
+    sh './gradlew clean test jacoco sonarqube -Dsonar.scm.disabled=true'
 }
