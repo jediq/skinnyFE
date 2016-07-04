@@ -19,7 +19,8 @@
   "templates":[
     {
       "regex":".*\/pathed\/.*",
-      "file":"src/test/resources/basic/templates/pathed.moustache"
+      "file":"src/test/resources/basic/templates/pathed.moustache",
+      "enricher":"src/test/resources/basic/enrichers/pathed.js"
     },
     {
       "regex":".*\/enricherView",

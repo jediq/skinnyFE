@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Posts</h1>
-        {{#each posts}}
+        {{#each posts.array}}
             <h2>{{title}} <small> by </small> {{author}}</h2>
         {{/each}}
     </body>

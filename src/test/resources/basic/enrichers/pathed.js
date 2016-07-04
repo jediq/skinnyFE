@@ -2,8 +2,7 @@
 var enrich = function(dataString) {
 
     var data = JSON.parse(dataString);
-
-    data.fruit = "Banana";
+    force.responseCode(data.car._meta.code);
 
     return JSON.stringify(data);
 };
