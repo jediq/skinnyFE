@@ -29,7 +29,7 @@ To start a SkinnyFE server use the following :
     
 ##Documentation
 
-The documentation is built using [mkdocs](), this can be installed using PIP with : 
+The documentation is built using [mkdocs](http://www.mkdocs.org/), this can be installed using PIP with : 
 
     pip install mkdocs
     
