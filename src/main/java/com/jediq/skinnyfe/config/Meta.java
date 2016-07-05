@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe.config;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
@@ -47,6 +48,6 @@ public class Meta {
 
     @Override
     public boolean equals(Object obj) {
-        return hashCode() == obj.hashCode();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 }

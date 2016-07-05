@@ -55,7 +55,7 @@ public class ResourceInteractor {
         }
     }
 
-    private boolean saveResource(Meta meta, String string, Request request) {
+    private int saveResource(Meta meta, String string, Request request) {
         try {
 
             logger.info("Loading resource from : " + meta.getResource());
@@ -64,14 +64,14 @@ public class ResourceInteractor {
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
                     .send();
-            return response.getStatus() == 200;
+            return response.getStatus();
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new WrappedException(e);
         }
     }
 
-    protected ResourceResponse loadResource(Meta meta, Request request) {
+    private ResourceResponse loadResource(Meta meta, Request request) {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
@@ -99,12 +99,12 @@ public class ResourceInteractor {
         }
     }
 
-    private Resource findResource(String resourceName) {
+    private Resource findResource(String resourceName) throws ExecutionException {
         for (Resource resource : config.getResources()) {
             if (resourceName.equals(resource.getName())) {
                 return resource;
             }
         }
-        throw new IllegalArgumentException("Could not find resource for : " + resourceName);
+        throw new ExecutionException(new IllegalArgumentException("Could not find resource for : " + resourceName));
     }
 }

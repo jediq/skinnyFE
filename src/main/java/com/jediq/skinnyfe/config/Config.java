@@ -62,7 +62,11 @@ public class Config {
     }
 
     public String getAssetsPath() {
-        return getBaseLocation() + assetsPath;
+        if (assetsPath != null) {
+            return getBaseLocation() + assetsPath;
+        } else {
+            return null;
+        }
     }
 
     public void setAssetsPath(String assetsPath) {
