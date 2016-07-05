@@ -62,11 +62,7 @@ public class Config {
     }
 
     public String getAssetsPath() {
-        if (assetsPath != null) {
-            return getBaseLocation() + assetsPath;
-        } else {
-            return null;
-        }
+        return assetsPath;
     }
 
     public void setAssetsPath(String assetsPath) {
@@ -74,7 +70,11 @@ public class Config {
     }
 
     public String getAssetsFolder() {
-        return getBaseLocation() + assetsFolder;
+        if (assetsFolder != null) {
+            return getBaseLocation() + assetsFolder;
+        } else {
+            return null;
+        }
     }
 
     public void setAssetsFolder(String assetsFolder) {

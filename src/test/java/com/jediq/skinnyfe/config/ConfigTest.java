@@ -1,5 +1,7 @@
 package com.jediq.skinnyfe.config;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,5 +16,20 @@ public class ConfigTest {
     @Test
     public void testLoadConfigWhenPortIsSet() throws Exception {
         Config.load("src/test/resources/configForMainTest.json");
+    }
+
+    @Test
+    public void testGetAssetsFolder_isNullWhenNotSet() {
+        Config config = new Config();
+        config.setBaseLocation("bbbb");
+        assertThat(config.getAssetsFolder(), is(nullValue()));
+    }
+
+    @Test
+    public void testGetAssetsFolder_conflatesBaseLocation() {
+        Config config = new Config();
+        config.setBaseLocation("bbbb");
+        config.setAssetsFolder("cccc");
+        assertThat(config.getAssetsFolder(), is("bbbbcccc"));
     }
 }
