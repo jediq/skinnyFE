@@ -13,11 +13,11 @@ The website [skinnyfe.jediq.com](http://skinnyfe.jediq.com) is the best place to
 
 SkinnyFE is built using gradle with the following command : 
 
-    gradle clean build shadowJar
+    ./gradlew clean build shadowJar
     
 to execute with test coverage and local sonarqube integration use : 
 
-    gradle clean test jacoco sonarqube -Dsonar.scm.disabled=true
+    ./gradlew clean test jacoco sonarqube -Dsonar.scm.disabled=true
 
 
 ##Executing

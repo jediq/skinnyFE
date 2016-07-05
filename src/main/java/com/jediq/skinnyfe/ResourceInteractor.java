@@ -28,13 +28,17 @@ public class ResourceInteractor {
 
     public ResourceInteractor(Config config) {
         this.config = config;
-        httpClient = new HttpClient(new SslContextFactory());
+        httpClient = createHttpClient();
 
         try {
             httpClient.start();
         } catch (Exception e) {
             throw new WrappedException(e);
         }
+    }
+
+    protected HttpClient createHttpClient() {
+        return new HttpClient(new SslContextFactory());
     }
 
     public Map<Meta, ResourceResponse> loadResources(List<Meta> metaList, Request request) {

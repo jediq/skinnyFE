@@ -2,13 +2,11 @@
   "resources":[
     {
       "name":"Vehicle",
-      "url":"http://localhost:9019/{{identifier}}",
-      "methods":"GET,POST,PUT,DELETE"
+      "url":"http://localhost:9019/{{identifier}}"
     },
     {
       "name":"User",
-      "url":"http://localhost:9020/{{identifier}}",
-      "methods":"GET"
+      "url":"http://localhost:9020/{{identifier}}"
     }
   ],
   "defaultTemplates":"src/test/resources/basic/templates",
