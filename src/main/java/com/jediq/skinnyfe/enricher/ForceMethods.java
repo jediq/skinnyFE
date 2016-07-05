@@ -11,14 +11,14 @@ public class ForceMethods {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private ThreadLocal<Integer> responseCodeThreadLocal = new ThreadLocal<>();
+    private Integer responseCode;
 
     public void responseCode(int code) {
         logger.debug("Forcing response code to : " + code);
-        responseCodeThreadLocal.set(code);
+        responseCode = code;
     }
 
     public Optional<Integer> getResponseCode() {
-        return Optional.ofNullable(responseCodeThreadLocal.get());
+        return Optional.ofNullable(responseCode);
     }
 }

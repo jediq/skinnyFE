@@ -2,11 +2,10 @@ package com.jediq.skinnyfe.config;
 
 import com.jediq.skinnyfe.HandlebarsCompiler;
 import com.jediq.skinnyfe.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Resource {
 

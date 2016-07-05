@@ -10,12 +10,11 @@ import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
 import com.jediq.skinnyfe.enricher.DataEnricher;
 import com.jediq.skinnyfe.enricher.ForceMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GetHandler extends Handler {
 
@@ -43,35 +42,30 @@ public class GetHandler extends Handler {
         templatePopulater.populate(skinnyTemplate);
         response.setContentType(skinnyTemplate.getContentType());
 
-        try {
-            Map<Meta, ResourceResponse> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
-            JsonNode aggregatedNode = aggregateData(resourceDataMap);
+        Map<Meta, ResourceResponse> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
+        JsonNode aggregatedNode = aggregateData(resourceDataMap);
 
-            logger.debug("aggregated data into : {} ", aggregatedNode);
+        logger.debug("aggregated data into : {} ", aggregatedNode);
 
-            JsonNode enrichedNode;
+        JsonNode enrichedNode;
 
-            logger.debug("enriching data? : {} ", skinnyTemplate.getEnricher());
-            ForceMethods forceMethods = null;
-            if (skinnyTemplate.getEnricher() != null) {
-                forceMethods = new ForceMethods();
-                enrichedNode = dataEnricher.enrich(skinnyTemplate.getEnricher(), aggregatedNode, forceMethods);
-                logger.debug("enriched data into : {} ", enrichedNode);
-            } else {
-                enrichedNode = aggregatedNode;
-            }
-
-            Context context = Context.newBuilder(enrichedNode)
-                    .resolver(JsonNodeValueResolver.INSTANCE).build();
-
-            String rendered = handlebarsCompiler.compile(skinnyTemplate.getContent(), context, 1);
-
-            response.setStatus(calculateStatus(HttpServletResponse.SC_OK, forceMethods));
-            response.getWriter().println(rendered);
-        } catch(BadResponseException e) {
-            logger.debug("Resource returned a bad response code : " + e.getStatus(), e);
-            response.setStatus(e.getStatus());
+        logger.debug("enriching data? : {} ", skinnyTemplate.getEnricher());
+        ForceMethods forceMethods = null;
+        if (skinnyTemplate.getEnricher() != null) {
+            forceMethods = new ForceMethods();
+            enrichedNode = dataEnricher.enrich(skinnyTemplate.getEnricher(), aggregatedNode, forceMethods);
+            logger.debug("enriched data into : {} ", enrichedNode);
+        } else {
+            enrichedNode = aggregatedNode;
         }
+
+        Context context = Context.newBuilder(enrichedNode)
+                .resolver(JsonNodeValueResolver.INSTANCE).build();
+
+        String rendered = handlebarsCompiler.compile(skinnyTemplate.getContent(), context, 1);
+
+        response.setStatus(calculateStatus(HttpServletResponse.SC_OK, forceMethods));
+        response.getWriter().println(rendered);
     }
 
     private int calculateStatus(int defaultStatus, ForceMethods forceMethods) {

@@ -1,25 +1,25 @@
 package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Config;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.*;
-import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 import java.util.Optional;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

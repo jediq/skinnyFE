@@ -28,10 +28,10 @@ public class DataEnricher {
     }
 
     public JsonNode enrich(String enricherFile, JsonNode jsonNode, ForceMethods forceMethods) throws IOException {
-        String enricher = new String(Files.readAllBytes(Paths.get(config.getBaseLocation(), enricherFile)));
-
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
+            String enricher = new String(Files.readAllBytes(Paths.get(config.getBaseLocation(), enricherFile)));
+            ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+
             // Needs to be a per request instance
             engine.put("force", forceMethods);
 
@@ -48,9 +48,9 @@ public class DataEnricher {
 
             return node;
 
-        } catch (ScriptException | NoSuchMethodException e) {
-            logger.info("Caught exception trying to execute " + enricher, e);
-            throw new WrappedException(enricher, e);
+        } catch (ScriptException | NoSuchMethodException | IOException e) {
+            logger.info("Caught exception trying to execute " + enricherFile, e);
+            throw new WrappedException("Caught exception trying to execute " + enricherFile, e);
         }
     }
 }

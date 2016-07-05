@@ -3,6 +3,11 @@ package com.jediq.skinnyfe;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
@@ -10,12 +15,6 @@ import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 /**
  *

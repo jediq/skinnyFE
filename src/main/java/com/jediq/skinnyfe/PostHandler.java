@@ -4,13 +4,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is implemented as POST/REDIRECT/GET.
