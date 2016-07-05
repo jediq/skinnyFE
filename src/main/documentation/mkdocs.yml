@@ -5,6 +5,9 @@ pages:
 - Welcome: index.md
 - User Guide:
     - Getting Started: GettingStarted.md
+    - Templates: Templates.md
+    - Resources: Resources.md
+    - Enrichers: Enrichers.md
     - Configuration: Configuration.md
     - Examples: Examples.md
 
