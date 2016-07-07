@@ -71,6 +71,8 @@ repositories {
 // build the example zips
 File[] examplesDir = file('src/main/documentation/examples').listFiles();
 
+Map examplesInProps = new Properties();
+
 examplesDir.each {
     if (!it.name.startsWith('example')) {
         return;
@@ -84,10 +86,23 @@ examplesDir.each {
         baseName = exampleName
     }
     build.dependsOn exampleName
+
+    File[] exampleFiles = file(it).listFiles();
+    exampleFiles.each { exampleFile ->
+        if (exampleFile.isFile()) {
+            examplesInProps.put(exampleName + "_" + (exampleFile.name - "."), exampleFile.getText('UTF-8'));
+        }
+    }
 }
 
-task docs(type:Exec, dependsOn:shadowJar) {
-    workingDir 'src/main/documentation'
+task stageDocs(type:Copy, dependsOn:shadowJar) {
+    from 'src/main/documentation'
+    into 'build/doc-staging'
+    expand examplesInProps
+}
+
+task docs(type:Exec, dependsOn:stageDocs) {
+    workingDir 'build/doc-staging'
     commandLine 'mkdocs', 'build'
 }
 
