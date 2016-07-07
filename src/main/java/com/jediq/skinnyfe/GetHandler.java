@@ -39,7 +39,6 @@ public class GetHandler extends Handler {
             return;
         }
 
-        templatePopulater.populate(skinnyTemplate);
         response.setContentType(skinnyTemplate.getContentType());
 
         Map<Meta, ResourceResponse> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);

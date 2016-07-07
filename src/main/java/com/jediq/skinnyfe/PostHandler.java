@@ -45,8 +45,6 @@ public class PostHandler extends Handler {
         }
 
         try {
-            templatePopulater.populate(skinnyTemplate);
-
             ObjectNode rootNode = dotNotationTransformer.toJson(request.getParams());
 
             Map <Meta, String> metaStringMap = new HashMap<>();

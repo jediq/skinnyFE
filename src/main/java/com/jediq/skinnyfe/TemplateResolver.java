@@ -22,6 +22,8 @@ public class TemplateResolver {
 
     private final Cache <String, SkinnyTemplate> cache;
 
+    private final TemplatePopulater templatePopulater = new TemplatePopulater();
+
     public TemplateResolver(Config config) {
         this.config = config;
         cache = new Cache <> (config.getMillisToCacheTemplates());
@@ -43,6 +45,8 @@ public class TemplateResolver {
         logger.debug("Found template for {} at {}", url, template.getFile());
 
         template.loadContent();
+
+        templatePopulater.populate(template);
 
         return template;
     }
