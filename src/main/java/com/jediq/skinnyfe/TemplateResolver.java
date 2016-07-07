@@ -35,49 +35,49 @@ public class TemplateResolver {
 
     private SkinnyTemplate resolveTemplateInternal(String url) {
 
-        SkinnyTemplate template = Stream.of(fromConfig(url), fromFile(url))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No template found for : " + url));
-
-
-        logger.debug("Found template for {} at {}", url, template.getFile());
-
-        template.loadContent();
-
-        templatePopulater.populate(template);
-
-        return template;
-    }
-
-    private Optional<SkinnyTemplate> fromFile(String url) {
-        try {
-            if (url == null) {
-                return Optional.empty();
-            }
-
-            String urlPath = new URL(url).getPath();
-            if (urlPath.endsWith("/")) {
-                urlPath += "index";
-            }
-            Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
-            logger.debug("Looking for template from path : " + path);
-            if (path.toFile().exists()) {
-                SkinnyTemplate template = new SkinnyTemplate();
-                template.setFile(path.toFile().getAbsolutePath());
-                return Optional.of(template);
-            }
-            return Optional.empty();
-        } catch (IOException e) {
-            throw new WrappedException("Error finding template for url :" + url, e);
+        if (url == null) {
+            return null;
         }
+        try {
+            String urlPath = new URL(url).getPath();
+
+            Optional <SkinnyTemplate> template = Stream.of(fromConfig(urlPath), fromFile(urlPath))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .findFirst();
+
+            template.ifPresent(t -> {
+                logger.debug("Found template for {} at {}", urlPath, t.getFile());
+                t.loadContent();
+                templatePopulater.populate(t);
+            });
+
+            return template.orElse(null);
+
+        } catch (IOException e) {
+            throw new WrappedException("Error finding template for url path :" + url, e);
+        }
+    }
+
+    private Optional<SkinnyTemplate> fromFile(String urlPath) {
+        if (urlPath.endsWith("/")) {
+            urlPath += "index";
+        }
+        Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
+        logger.debug("Looking for template from path : " + path);
+
+        if (path.toFile().exists()) {
+            SkinnyTemplate template = new SkinnyTemplate();
+            template.setFile(path.toFile().getAbsolutePath());
+            return Optional.of(template);
+        }
+        return Optional.empty();
 
     }
 
-    private Optional <SkinnyTemplate> fromConfig(String url) {
+    private Optional <SkinnyTemplate> fromConfig(String urlPath) {
         for (SkinnyTemplate template : config.getTemplates()) {
-            if (template.matches(url)) {
+            if (template.matches(urlPath)) {
                 template.setFile(config.getBaseLocation() + template.getFile());
                 return Optional.of(template);
             }

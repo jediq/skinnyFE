@@ -29,12 +29,10 @@ public class GetHandler extends Handler {
 
     public void doGet(Request request, Response response) throws IOException {
 
-        SkinnyTemplate skinnyTemplate;
-        try {
-            skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
-        } catch (IllegalStateException | IOException e) {
+        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
+        if (skinnyTemplate == null) {
             // we could not find the template
-            logger.debug("Could not find template for : " + request.getUrl(), e);
+            logger.debug("Could not find template for : " + request.getUrl());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -57,6 +55,17 @@ public class GetHandler extends Handler {
         } else {
             enrichedNode = aggregatedNode;
         }
+
+        if (forceMethods != null && forceMethods.getTemplate().isPresent()) {
+            skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
+            if (skinnyTemplate == null) {
+                // we could not find the template
+                logger.debug("Could not find template for : " + request.getUrl());
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+        }
+
 
         Context context = Context.newBuilder(enrichedNode)
                 .resolver(JsonNodeValueResolver.INSTANCE).build();

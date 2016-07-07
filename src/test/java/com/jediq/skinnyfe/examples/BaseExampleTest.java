@@ -11,13 +11,27 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import org.junit.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static org.junit.Assume.assumeThat;
 import static org.junit.Assume.assumeTrue;
 
 /**
- * json-server --port 8009 --watch db.json
+ * The example tests require json-server to be installed on the executing machine.
+ *
+ * If json-server is not installed, the tests will not fail but will also
+ * not carry on as it uses an assume().
+ *
+ * This can be installed with :
+ *
+ *      npm install -g json-server
+ *
+ *
  */
 public abstract class BaseExampleTest {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String examplesLocation = "src/main/documentation/examples/example";
     private String baseUrl = "http://localhost:";
@@ -32,6 +46,9 @@ public abstract class BaseExampleTest {
 
     @Before
     public void start() throws Exception {
+        httpClient = new HttpClient();
+        httpClient.start();
+
         process = startupJsonServer();
         String folder = examplesLocation + getExampleNumber() + "/";
 
@@ -40,9 +57,6 @@ public abstract class BaseExampleTest {
 
         port = initialPort + getExampleNumber();
         skinnyFE.startServer(port);
-
-        httpClient = new HttpClient();
-        httpClient.start();
     }
 
     @BeforeClass
@@ -74,8 +88,17 @@ public abstract class BaseExampleTest {
 
     public  Process startupJsonServer() throws Exception {
         String command = "json-server --port 8009 --watch src/main/documentation/examples/db.json";
+        logger.info("Starting Json Server with : {}", command);
         Process process = Runtime.getRuntime().exec(command);
         process.waitFor(500, TimeUnit.MILLISECONDS);
+        ContentResponse checkResponse;
+        do {
+            Thread.sleep(500);
+            String uri = "http://localhost:8009/posts";
+            checkResponse = httpClient.GET(uri);
+            logger.info("Json Server is alive at {}? : {}", uri, checkResponse.getStatus());
+        } while (checkResponse.getStatus() != 200);
+
         return process;
 
     }

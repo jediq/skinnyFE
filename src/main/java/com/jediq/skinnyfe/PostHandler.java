@@ -32,14 +32,13 @@ public class PostHandler extends Handler {
         dotNotationTransformer = new DotNotationTransformer();
     }
 
-    public void doPost(Request request, Response response) {
+    public void doPost(Request request, Response response) throws IOException {
 
-        SkinnyTemplate skinnyTemplate;
-        try {
-            skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
-        } catch (IllegalStateException | IOException e) {
+
+        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
+        if (skinnyTemplate == null) {
             // we could not find the template
-            logger.debug("Could not find template for : " + request.getUrl(), e);
+            logger.debug("Could not find template for : " + request.getUrl());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
