@@ -10,7 +10,7 @@
     {
     "regex":".*",
     "file":"index.moustache",
-    "enricher":"post-enricher.js"
+    "enricher":"post_enricher.js"
     }
   ]
 }

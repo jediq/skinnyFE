@@ -29,35 +29,13 @@ To render json-server posts with SkinnyFE our files needs to look like :
 
 #####config.json
 ```
-{
-  "port":8027,
-  "resources":[
-    {
-      "name":"Posts",
-      "url":"http://jsonplaceholder.typicode.com/posts"
-    }
-  ]
-}
+${example2_configjson}
 ```
 
 
 #####index.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta property="posts" resource="Posts" identifier=""/>
-    </head>
-    <body>
-        <h1>Posts</h1>
-        <small>Random lorem ipsum posts for demo purposes.</small>
-        {{#each posts.array}}
-            <h2>{{title}}</h2>
-            <p>{{body}}</p>
-        {{/each}}
-    </body>
-</html>
+${example2_indexmoustache}
 ```
 
 Again, running the `java -jar skinnyFE-all.jar config.json` command from the directory should give you similar output
@@ -83,71 +61,19 @@ To select and display a particular post in our example, we would use the followi
 
 #####config.json
 ```
-{
-  "port":8027,
-  "resources":[
-    {
-      "name":"Posts",
-      "url":"http://jsonplaceholder.typicode.com/posts"
-    },
-    {
-      "name":"Post",
-      "url":"http://jsonplaceholder.typicode.com/posts/{{PARAM.id}}"
-    },
-    {
-      "name":"Comments",
-      "url":"http://jsonplaceholder.typicode.com/posts/{{PARAM.id}}/comments"
-    }
-  ],
-  "assetsPath":"/assets",
-  "assetsFolder":"static/"
-}
+
+${example3_configjson}
 ```
 
 #####index.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta property="posts" resource="Posts"/>   
-         <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
-    </head>
-    <body>
-        <h1>Posts</h1>
-        <small>Random lorem ipsum posts for demo purposes.</small>
-        {{#each posts.array}}
-            <h2><a href="post?id={{id}}">{{title}}</a></h2>
-            <p>{{body}}</p>
-        {{/each}}
-    </body>
-</html>
+
+${example3_indexmoustache}
 ```
 
 #####post.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta property="post" resource="Post"/>
-        <meta property="comments" resource="Comments"/>       
-         <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
-    </head>
-    <body>
-        <h1>Post : {{post.id}}</h1>
-        <h2>{{post.title}}</h2>
-        <p>{{post.body}}</p>
-        <br>
-        <hr>
-        <h2>Comments</h2>
-        {{#each comments}}
-            <h3>{{name}} ({{email}})</h3>
-            <p>{{body}}</p>
-            <hr>
-        {{/each}}
-    </body>
-</html>
+${example3_postmoustache}
 ```
 
 #####static/example.css
@@ -173,74 +99,18 @@ The files required to perform the simplest of Posts are :
 
 #####config.json
 ```
-{
-  "port":8027,
-  "resources":[
-    {
-      "name":"Posts",
-      "url":"http://localhost:8009/posts"
-    },
-    {
-      "name":"Post",
-      "url":"http://localhost:8009/posts/{{PARAM.id}}"
-    }
-  ],
-  "assetsPath":"/assets",
-  "assetsFolder":"static/"
-}
+${example4_configjson}
 ```
 
 ####index.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta property="posts" resource="Posts"/>
-        <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
-    </head>
-    <body>
-        <h1>Posts</h1>
-        {{#each posts.array}}
-            <h2><a href="post?id={{id}}">{{title}} <small> by </small> {{author}}</a></h2>
-            <p>{{body}}</p>
-        {{/each}}
-
-        <hr/>
-        <h1>New post</h1>
-        <form method="post">
-            <input type="text" placeholder="Title" name="posts.title">
-            <input type="text" placeholder="Author" name="posts.author">
-            <textarea name="posts.content" placeholder="Content"></textarea>
-            <button>post</button>
-        </form>
-    </body>
-</html>
+${example4_indexmoustache}
 ```
 
 ####post.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta property="post" resource="Post"/>
-        <meta property="posts" resource="Posts"/>
-        <link href="/assets/example.css" media="screen" rel="stylesheet" type="text/css">
-    </head>
-    <body>
 
-        <h1>{{post.title}}</h1>
-        <p>{{post.content}}</p>
-        <br>
-        <hr>
-        <h2><a href="/">All posts</a></h2>
-        {{#each posts.array}}
-            <h3><a href="/post?id={{id}}">{{title}}</a></h3>
-            <hr>
-        {{/each}}
-    </body>
-</html>
+${example4_postmoustache}
 ```
 
 SkinnyFE uses the [POST/REDIRECT/GET](https://en.wikipedia.org/wiki/Post/Redirect/Get) design pattern for creating
@@ -272,54 +142,18 @@ Our example takes a Post and simply converts the title and authors names fields 
 
 ####post-enricher.js
 ```
-var enrich = function(dataString) {
-
-  var data = JSON.parse(dataString);
-
-  data.posts.array.forEach(function(post) {
-    post.title = post.title ? post.title.toUpperCase() : "";
-    post.author = post.author ? post.author.toUpperCase() : "";
-  });
-
-  return JSON.stringify(data);
-};
+${example5_post_enricherjs}
 ```
 
 ####config.json
 ```
-{
-  "port":8027,
-  "resources":[
-    {
-      "name":"Posts",
-      "url":"http://localhost:8009/posts"
-    }
-  ],
-  "templates":[
-    {
-    "regex":".*",
-    "file":"index.moustache",
-    "enricher":"post-enricher.js"
-    }
-  ]
-}
+${example5_configjson}
 ```
 
 ####index.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta property="posts" resource="Posts"/>
-    </head>
-    <body>
-        <h1>Posts</h1>
-        {{#each posts.array}}
-            <h2>{{title}} <small> by </small> {{author}}</h2>
-        {{/each}}
-    </body>
-</html>
+
+${example5_indexmoustache}
 ```
 
 The example also introduces the concept of Templates specifically described in the configuration file.  Using this

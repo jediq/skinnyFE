@@ -6,22 +6,12 @@ The most basic installation requires only 2 files, a json configuration file and
 
 #####config.json
 ```
-{
-    "port":8027
-}
+${example1_configjson}
 ```
 
 #####index.moustache
 ```
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+${example1_indexmoustache}
 ```
 
 Download the JAR and copy the two files above into an empty directory and execute the following command line :

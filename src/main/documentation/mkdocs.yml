@@ -1,5 +1,5 @@
 site_name: SkinnyFE Docs
-site_dir: ../../../build/distributions/docs
+site_dir: ../distributions/docs
 
 pages:
 - Welcome: index.md
