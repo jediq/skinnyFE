@@ -24,6 +24,11 @@
       "regex":".*\/enricherView",
       "file":"src/test/resources/basic/templates/enricherView.moustache",
       "enricher":"src/test/resources/basic/enrichers/enricherView.js"
+    },
+    {
+      "regex":".*\/enricherChangingResource",
+      "file":"src/test/resources/basic/templates/enricherView.moustache",
+      "enricher":"src/test/resources/basic/enrichers/enricherChangingResource.js"
     }
   ],
 

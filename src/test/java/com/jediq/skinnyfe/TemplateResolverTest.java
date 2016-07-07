@@ -21,28 +21,28 @@ public class TemplateResolverTest {
     @Test
     public void testResolveTemplate_rootTemplate() throws Exception {
         TemplateResolver templateResolver = new TemplateResolver(config);
-        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate("http://localhost/");
+        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate("/");
         assertThat(skinnyTemplate, is(notNullValue()));
     }
 
     @Test
     public void testResolveTemplate_secondTemplate() throws Exception {
         TemplateResolver templateResolver = new TemplateResolver(config);
-        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate("http://localhost/second");
+        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate("/second");
         assertThat(skinnyTemplate, is(notNullValue()));
     }
 
     @Test
     public void testResolveTemplate_noTemplate() throws Exception {
         TemplateResolver templateResolver = new TemplateResolver(config);
-        SkinnyTemplate template = templateResolver.resolveTemplate("http://localhost/none");
+        SkinnyTemplate template = templateResolver.resolveTemplate("/none");
         assertThat(template, is(nullValue()));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testResolveTemplate_nullUrl() throws Exception {
         TemplateResolver templateResolver = new TemplateResolver(config);
-        SkinnyTemplate template = templateResolver.resolveTemplate(null);
+        templateResolver.resolveTemplate(null);
     }
 
     private Config createConfig() {

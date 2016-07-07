@@ -76,5 +76,5 @@ For example, you may wish to return the same response code as the Resource you a
     This does not load any references to Resources that the new Template will have so you'll need to be careful not
      to force the template to one which requires specific not-loaded values.
 
-The path is relative to the `baseLocation` (by default the startup directory) that SkinnyFE has defined.
+The Template's location is resolved using the same rules as when finding a Template based on a URL path.
 

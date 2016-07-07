@@ -8,6 +8,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -106,7 +108,37 @@ public class GetHandlerTest {
             vehicleEndpoint.close();
             userEndpoint.close();
         }
+    }
 
+    @Test
+    public void testGetWithEnricherChangingTemplate() throws Exception {
+
+        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
+        vehicleEndpoint.start();
+        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
+        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
+
+        FixedResponseJetty userEndpoint = new FixedResponseJetty(9020);
+        userEndpoint.start();
+        String userAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "user.json")));
+        userEndpoint.addResponseString(userAsJson, "text/html");
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.start();
+
+        try {
+            ContentResponse response = httpClient.GET(BASE_URL + "enricherChangingResource");
+            String content = response.getContentAsString();
+
+            assertThat(content, startsWith("<!doctype html>"));
+            assertThat(content, containsString("Car: FR123JON"));
+            assertThat(content, containsString("Driver: Fred Jones"));
+            assertThat(content, not(containsString("Fruit: Banana")));
+        } finally {
+            httpClient.stop();
+            vehicleEndpoint.close();
+            userEndpoint.close();
+        }
     }
 
     @Test

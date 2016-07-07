@@ -33,30 +33,19 @@ public class TemplateResolver {
         return cache.item(url, () -> resolveTemplateInternal(url));
     }
 
-    private SkinnyTemplate resolveTemplateInternal(String url) {
+    private SkinnyTemplate resolveTemplateInternal(String urlPath) {
+        Optional <SkinnyTemplate> template = Stream.of(fromConfig(urlPath), fromFile(urlPath))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
 
-        if (url == null) {
-            return null;
-        }
-        try {
-            String urlPath = new URL(url).getPath();
+        template.ifPresent(t -> {
+            logger.debug("Found template for {} at {}", urlPath, t.getFile());
+            t.loadContent();
+            templatePopulater.populate(t);
+        });
 
-            Optional <SkinnyTemplate> template = Stream.of(fromConfig(urlPath), fromFile(urlPath))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .findFirst();
-
-            template.ifPresent(t -> {
-                logger.debug("Found template for {} at {}", urlPath, t.getFile());
-                t.loadContent();
-                templatePopulater.populate(t);
-            });
-
-            return template.orElse(null);
-
-        } catch (IOException e) {
-            throw new WrappedException("Error finding template for url path :" + url, e);
-        }
+        return template.orElse(null);
     }
 
     private Optional<SkinnyTemplate> fromFile(String urlPath) {

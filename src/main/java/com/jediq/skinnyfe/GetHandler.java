@@ -11,6 +11,7 @@ import com.jediq.skinnyfe.config.SkinnyTemplate;
 import com.jediq.skinnyfe.enricher.DataEnricher;
 import com.jediq.skinnyfe.enricher.ForceMethods;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class GetHandler extends Handler {
 
     public void doGet(Request request, Response response) throws IOException {
 
-        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
+        SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(new URL(request.getUrl()).getPath());
         if (skinnyTemplate == null) {
             // we could not find the template
             logger.debug("Could not find template for : " + request.getUrl());

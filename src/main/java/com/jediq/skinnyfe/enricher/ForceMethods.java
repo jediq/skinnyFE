@@ -15,7 +15,7 @@ public class ForceMethods {
     private String template;
 
     public void template(String template) {
-        logger.debug("Forcing tempalte to : {}", template);
+        logger.debug("Forcing template to : {}", template);
         this.template = template;
     }
 
