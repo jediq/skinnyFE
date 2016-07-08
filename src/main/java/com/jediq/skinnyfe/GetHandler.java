@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -22,6 +23,8 @@ public class GetHandler extends Handler {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final DataEnricher dataEnricher;
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public GetHandler(Config config) {
         super(config);
@@ -58,7 +61,7 @@ public class GetHandler extends Handler {
         }
 
         if (forceMethods != null && forceMethods.getTemplate().isPresent()) {
-            skinnyTemplate = templateResolver.resolveTemplate(request.getUrl());
+            skinnyTemplate = templateResolver.resolveTemplate(forceMethods.getTemplate().get());
             if (skinnyTemplate == null) {
                 // we could not find the template
                 logger.debug("Could not find template for : " + request.getUrl());
@@ -85,20 +88,11 @@ public class GetHandler extends Handler {
     }
 
     private JsonNode aggregateData(Map<Meta, ResourceResponse> resourceDataMap) {
-        ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
         for (Map.Entry<Meta, ResourceResponse> entry : resourceDataMap.entrySet()) {
             try {
-                ObjectNode node = mapper.createObjectNode();
-                if (!entry.getValue().content.isEmpty()) {
-                    JsonNode jsonNode = mapper.readTree(entry.getValue().content);
-                    if (jsonNode instanceof ObjectNode) {
-                        node = (ObjectNode) jsonNode;
-                    } else {
-                        node.put("array", jsonNode);
-                    }
-                }
+                ObjectNode node = parseJsonFromResponse(entry.getValue());
                 ObjectNode metaNode = node.putObject("_meta");
                 metaNode.put("code", entry.getValue().code);
                 metaNode.put("reason", entry.getValue().reason);
@@ -109,6 +103,23 @@ public class GetHandler extends Handler {
             }
         }
         return rootNode;
+    }
+
+    private ObjectNode parseJsonFromResponse(ResourceResponse resourceResponse) throws IOException {
+        ObjectNode node = mapper.createObjectNode();
+        if (!resourceResponse.content.isEmpty()) {
+            try {
+                JsonNode jsonNode = mapper.readTree(resourceResponse.content);
+                if (jsonNode instanceof ObjectNode) {
+                    node = (ObjectNode) jsonNode;
+                } else {
+                    node.put("array", jsonNode);
+                }
+            } catch (JsonParseException e) {
+                logger.debug("Response didn't give valid json : " + resourceResponse.content, e);
+            }
+        }
+        return node;
     }
 
 }
