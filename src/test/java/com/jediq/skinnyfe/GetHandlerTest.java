@@ -10,10 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  *
@@ -25,6 +22,10 @@ public class GetHandlerTest {
     private static SkinnyFE skinnyFE;
     private static String path = "src/test/resources/basic/";
 
+    private FixedResponseJetty vehicleEndpoint;
+    private FixedResponseJetty userEndpoint;
+    private HttpClient httpClient;
+
     @BeforeClass
     public static void setup() throws Exception {
         skinnyFE = new SkinnyFE(path + "config.json");
@@ -33,135 +34,106 @@ public class GetHandlerTest {
         BASE_URL = "http://localhost:" + PORT + "/";
     }
 
-    @Test
-    public void testEndToEnd() throws Exception {
+    @Before
+    public void before() throws Exception {
 
-        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
+        vehicleEndpoint = new FixedResponseJetty(9019);
         vehicleEndpoint.start();
         String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
         vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
 
-        FixedResponseJetty userEndpoint = new FixedResponseJetty(9020);
+        userEndpoint = new FixedResponseJetty(9020);
         userEndpoint.start();
         String userAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "user.json")));
         userEndpoint.addResponseString(userAsJson, "text/html");
 
-        HttpClient httpClient = new HttpClient();
+        httpClient = new HttpClient();
         httpClient.start();
 
-        try {
-            ContentResponse response = httpClient.GET(BASE_URL);
-            assertThat(response.getStatus(), is(200));
-
-            String content = response.getContentAsString();
-            assertThat(content, startsWith("<!doctype html>"));
-            assertThat(content, containsString("Car: FR123JON"));
-            assertThat(content, containsString("Driver: Fred Jones"));
-
-            ContentResponse assetResponse = httpClient.GET(BASE_URL + "assets/plain.txt");
-            assertThat(assetResponse.getStatus(), is(200));
-            assertThat(assetResponse.getContentAsString(), is("Plain text file\n"));
-
-        } finally {
-            httpClient.stop();
-            vehicleEndpoint.close();
-            userEndpoint.close();
-        }
     }
 
-    @Test
-    public void testEndToEndForUnknownTemplate() throws Exception {
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-        ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
-        assertThat(response.getStatus(), is(404));
+    @After
+    public void after() throws Exception {
+        vehicleEndpoint.close();
+        userEndpoint.close();
         httpClient.stop();
     }
 
     @Test
+    public void testEndToEnd() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL);
+        assertThat(response.getStatus(), is(200));
+
+        String content = response.getContentAsString();
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+    }
+
+    @Test
+    public void testEndToEndFailingValidation() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "?regexingParam=fail");
+        assertThat(response.getStatus(), is(200));
+
+        String content = response.getContentAsString();
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver:"));
+    }
+
+    @Test
+    public void testEndToEndPassingValidation() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "?regexingParam=pass");
+        assertThat(response.getStatus(), is(200));
+
+        String content = response.getContentAsString();
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+    }
+
+    @Test
+    public void testRequestAsset() throws Exception {
+        ContentResponse assetResponse = httpClient.GET(BASE_URL + "assets/plain.txt");
+        assertThat(assetResponse.getStatus(), is(200));
+        assertThat(assetResponse.getContentAsString(), is("Plain text file\n"));
+    }
+
+    @Test
+    public void testEndToEndForUnknownTemplate() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "/bananas");
+        assertThat(response.getStatus(), is(404));
+    }
+
+    @Test
     public void testGetWithEnricher() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "enricherView");
+        String content = response.getContentAsString();
 
-        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
-        vehicleEndpoint.start();
-        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
-        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
-
-        FixedResponseJetty userEndpoint = new FixedResponseJetty(9020);
-        userEndpoint.start();
-        String userAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "user.json")));
-        userEndpoint.addResponseString(userAsJson, "text/html");
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-
-        try {
-
-            ContentResponse response = httpClient.GET(BASE_URL + "enricherView");
-            String content = response.getContentAsString();
-
-            assertThat(content, startsWith("<!doctype html>"));
-            assertThat(content, containsString("Car: FR123JON"));
-            assertThat(content, containsString("Driver: Fred Jones"));
-            assertThat(content, containsString("Fruit: Banana"));
-        } finally {
-            httpClient.stop();
-            vehicleEndpoint.close();
-            userEndpoint.close();
-        }
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+        assertThat(content, containsString("Fruit: Banana"));
     }
 
     @Test
     public void testGetWithEnricherChangingTemplate() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "enricherChangingResource");
+        String content = response.getContentAsString();
 
-        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
-        vehicleEndpoint.start();
-        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
-        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
-
-        FixedResponseJetty userEndpoint = new FixedResponseJetty(9020);
-        userEndpoint.start();
-        String userAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "user.json")));
-        userEndpoint.addResponseString(userAsJson, "text/html");
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-
-        try {
-            ContentResponse response = httpClient.GET(BASE_URL + "enricherChangingResource");
-            String content = response.getContentAsString();
-
-            assertThat(content, startsWith("<!doctype html>"));
-            assertThat(content, containsString("Car: FR123JON"));
-            assertThat(content, containsString("Driver: Fred Jones"));
-            assertThat(content, not(containsString("Fruit: Banana")));
-        } finally {
-            httpClient.stop();
-            vehicleEndpoint.close();
-            userEndpoint.close();
-        }
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+        assertThat(content, not(containsString("Fruit: Banana")));
     }
 
     @Test
     public void testEndToEndPathResource() throws Exception {
+        ContentResponse goodResponse = httpClient.GET(BASE_URL + "pathed/12345");
+        assertThat(goodResponse.getStatus(), is(200));
 
-        FixedResponseJetty vehicleEndpoint = new FixedResponseJetty(9019);
-        vehicleEndpoint.start();
-        String vehicleAsJson = new String(Files.readAllBytes(Paths.get(path, "endpoints", "vehicle.json")));
-        vehicleEndpoint.addResponseString(vehicleAsJson, "text/html");
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-
-        try {
-            ContentResponse goodResponse = httpClient.GET(BASE_URL + "pathed/12345");
-            assertThat(goodResponse.getStatus(), is(200));
-
-            ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
-            assertThat(badResponse.getStatus(), is(404));
-        } finally {
-            vehicleEndpoint.close();
-            httpClient.stop();
-        }
+        ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
+        assertThat(badResponse.getStatus(), is(404));
     }
 
     @AfterClass

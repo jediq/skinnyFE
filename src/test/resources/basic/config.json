@@ -6,7 +6,10 @@
     },
     {
       "name":"User",
-      "url":"http://localhost:9020/{{identifier}}"
+      "url":"http://localhost:9020/{{identifier}}",
+      "inputValidators":{
+        "regexingParam":"(pass)"
+      }
     }
   ],
   "defaultTemplates":"src/test/resources/basic/templates",

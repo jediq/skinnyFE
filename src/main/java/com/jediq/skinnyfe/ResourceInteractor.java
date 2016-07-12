@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.function.BiConsumer;
+
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
@@ -60,6 +62,10 @@ public class ResourceInteractor {
 
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
+
+            request.getParams().forEach(resource::validateInput);
+            resource.getHeaders().forEach(resource::validateInput);
+
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
@@ -75,8 +81,18 @@ public class ResourceInteractor {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
-            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
 
+            try {
+                request.getParams().forEach(resource::validateInput);
+                resource.getHeaders().forEach(resource::validateInput);
+            } catch (IllegalArgumentException e) {
+                ResourceResponse resourceResponse = new ResourceResponse();
+                resourceResponse.code = 400;
+                resourceResponse.content = "Input data did not validate";
+                return resourceResponse;
+            }
+
+            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
             logger.info("Requesting resource from : " + enrichedUrl);
 
             org.eclipse.jetty.client.api.Request httpRequest = httpClient.newRequest(enrichedUrl);

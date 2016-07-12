@@ -14,6 +14,7 @@ public class Resource {
     private String name;
     private String url;
     private Map<String, String> headers = new HashMap<>();
+    private Map<String, String> inputValidators = new HashMap<>();
 
     private HandlebarsCompiler handlebarsCompiler = new HandlebarsCompiler();
 
@@ -37,6 +38,10 @@ public class Resource {
         return headers;
     }
 
+    public Map<String, String> getInputValidators() {
+        return inputValidators;
+    }
+
     public String getResolvedUrl(String identifier, Request request) {
         Map <String, Object> map = new HashMap<>();
         map.put("identifier", identifier);
@@ -54,5 +59,12 @@ public class Resource {
         String resolved = handlebarsCompiler.compile(getUrl(), enrichmentValues, 2);
         logger.debug("Resolved URL to : {}", resolved);
         return resolved;
+    }
+
+    public void validateInput(String key, String value) {
+        String regex = inputValidators.getOrDefault(key, ".*");
+        if (!value.matches(regex)) {
+            throw new IllegalArgumentException(value + " does not match " + regex);
+        }
     }
 }
