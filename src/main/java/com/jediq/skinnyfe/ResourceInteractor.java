@@ -63,9 +63,6 @@ public class ResourceInteractor {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
 
-            request.getParams().forEach(resource::validateInput);
-            resource.getHeaders().forEach(resource::validateInput);
-
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
             ContentResponse response = httpClient.POST(enrichedUrl)
                     .content(new StringContentProvider(string), "application/json")
@@ -88,7 +85,8 @@ public class ResourceInteractor {
             } catch (IllegalArgumentException e) {
                 ResourceResponse resourceResponse = new ResourceResponse();
                 resourceResponse.code = 400;
-                resourceResponse.content = "Input data did not validate";
+                resourceResponse.reason = "{ \"error\":\"Input data did not validate\" }";
+                resourceResponse.content = "{}";
                 return resourceResponse;
             }
 
