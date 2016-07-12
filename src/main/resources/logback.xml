@@ -6,8 +6,12 @@
     </appender>
 
     <logger name="org.eclipse" level="INFO"/>
-    <logger name="com.jediq" level="DEBUG"/>
+    <logger name="com.jediq" level="INFO"/>
     <logger name="org.eclipse.jetty.server.Server" level="OFF"/>
+    <logger name="org.eclipse.jetty.server.ServerConnector" level="OFF"/>
+    <logger name="org.eclipse.jetty.server.LocalConnector" level="OFF"/>
+    <logger name="org.eclipse.jetty.server.handler.ContextHandler" level="OFF"/>
+    <logger name="org.eclipse.jetty.util" level="OFF"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

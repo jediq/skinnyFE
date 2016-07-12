@@ -22,6 +22,7 @@ public class Config {
     private String assetsPath;
     private String assetsFolder;
     private String baseLocation = "";
+    private String name = "NO-NAME";
     private Map<Integer, String> errorPages = new HashMap<>();
 
     public static Config load(String configLocation) {
@@ -111,5 +112,13 @@ public class Config {
 
     public void setMillisToCacheTemplates(long millisToCacheTemplates) {
         this.millisToCacheTemplates = millisToCacheTemplates;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
