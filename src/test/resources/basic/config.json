@@ -12,6 +12,7 @@
       }
     }
   ],
+  "name":"TEST INSTANCE",
   "defaultTemplates":"src/test/resources/basic/templates",
   "port":8008,
   "assetsPath":"/assets",
@@ -32,6 +33,11 @@
       "regex":".*\/enricherChangingResource",
       "file":"src/test/resources/basic/templates/enricherView.moustache",
       "enricher":"src/test/resources/basic/enrichers/enricherChangingResource.js"
+    },
+    {
+      "regex":".*\/enricherChangingResourceBadly",
+      "file":"src/test/resources/basic/templates/enricherView.moustache",
+      "enricher":"src/test/resources/basic/enrichers/enricherChangingResourceBadly.js"
     }
   ],
 

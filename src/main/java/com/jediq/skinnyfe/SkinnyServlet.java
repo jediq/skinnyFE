@@ -1,15 +1,18 @@
 package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Config;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 public class SkinnyServlet extends HttpServlet {
 
@@ -18,9 +21,7 @@ public class SkinnyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) throws ServletException, IOException {
-        if (getHandler == null) {
-            throw new IllegalStateException("Configuration.md has not been set");
-        }
+        notNull(getHandler);
         Request request = transformRequest(servletRequest);
         Response response = new ServletWrappingResponse(servletResponse);
 
@@ -29,9 +30,7 @@ public class SkinnyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) throws ServletException, IOException {
-        if (postHandler == null) {
-            throw new IllegalStateException("Configuration.md has not been set");
-        }
+        notNull(postHandler);
         Request request = transformRequest(servletRequest);
         Response response = new ServletWrappingResponse(servletResponse);
 

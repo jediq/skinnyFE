@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe.config;
 
 import com.jediq.skinnyfe.WrappedException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,10 +21,6 @@ public class SkinnyTemplate {
     private String content;
     private List<Meta> metaList = new ArrayList<>();
     private Pattern pattern;
-
-    public String getRegex() {
-        return regex;
-    }
 
     public void setRegex(String regex) {
         this.regex = regex;

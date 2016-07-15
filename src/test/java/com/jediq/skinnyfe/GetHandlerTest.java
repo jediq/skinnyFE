@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import java.net.HttpCookie;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.eclipse.jetty.client.HttpClient;
@@ -93,6 +94,28 @@ public class GetHandlerTest {
     }
 
     @Test
+    public void testEndToEndFailingValidationViaCookie() throws Exception {
+        ContentResponse response = httpClient.newRequest(BASE_URL).cookie(new HttpCookie("regexingParam", "fail")).send();
+        assertThat(response.getStatus(), is(200));
+
+        String content = response.getContentAsString();
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver:"));
+    }
+
+    @Test
+    public void testEndToEndPassingValidationViaCookie() throws Exception {
+        ContentResponse response = httpClient.newRequest(BASE_URL).cookie(new HttpCookie("regexingParam", "pass")).send();
+
+        assertThat(response.getStatus(), is(200));
+        String content = response.getContentAsString();
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+    }
+
+    @Test
     public void testRequestAsset() throws Exception {
         ContentResponse assetResponse = httpClient.GET(BASE_URL + "assets/plain.txt");
         assertThat(assetResponse.getStatus(), is(200));
@@ -125,6 +148,14 @@ public class GetHandlerTest {
         assertThat(content, containsString("Car: FR123JON"));
         assertThat(content, containsString("Driver: Fred Jones"));
         assertThat(content, not(containsString("Fruit: Banana")));
+    }
+
+    @Test
+    public void testGetWithEnricherChangingTemplateToAnUnknownTemplate() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "enricherChangingResourceBadly");
+        String content = response.getContentAsString();
+        assertThat(response.getStatus(), is(404));
+        assertThat(content, is(""));
     }
 
     @Test

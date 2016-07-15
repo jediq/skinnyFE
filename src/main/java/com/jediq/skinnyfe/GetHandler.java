@@ -1,6 +1,5 @@
 package com.jediq.skinnyfe;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -11,12 +10,13 @@ import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
 import com.jediq.skinnyfe.enricher.DataEnricher;
 import com.jediq.skinnyfe.enricher.ForceMethods;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GetHandler extends Handler {
 
@@ -25,6 +25,8 @@ public class GetHandler extends Handler {
     private final DataEnricher dataEnricher;
 
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private final ResponseParser responseParser = new ResponseParser();
 
     public GetHandler(Config config) {
         super(config);
@@ -88,38 +90,16 @@ public class GetHandler extends Handler {
     }
 
     private JsonNode aggregateData(Map<Meta, ResourceResponse> resourceDataMap) {
-
         ObjectNode rootNode = mapper.createObjectNode();
         for (Map.Entry<Meta, ResourceResponse> entry : resourceDataMap.entrySet()) {
-            try {
-                ObjectNode node = parseJsonFromResponse(entry.getValue());
-                ObjectNode metaNode = node.putObject("_meta");
-                metaNode.put("code", entry.getValue().code);
-                metaNode.put("reason", entry.getValue().reason);
-                rootNode.put(entry.getKey().getProperty(), node);
-                logger.debug("Put {} into property {}", node, entry.getKey().getProperty());
-            } catch (IOException e) {
-                logger.info("Caught exception processing : " + entry.getValue(), e);
-            }
+            ObjectNode node = responseParser.parseJsonFromResponse(entry.getValue());
+            ObjectNode metaNode = node.putObject("_meta");
+            metaNode.put("code", entry.getValue().code);
+            metaNode.put("reason", entry.getValue().reason);
+            rootNode.put(entry.getKey().getProperty(), node);
+            logger.debug("Put {} into property {}", node, entry.getKey().getProperty());
         }
         return rootNode;
-    }
-
-    private ObjectNode parseJsonFromResponse(ResourceResponse resourceResponse) throws IOException {
-        ObjectNode node = mapper.createObjectNode();
-        if (!resourceResponse.content.isEmpty()) {
-            try {
-                JsonNode jsonNode = mapper.readTree(resourceResponse.content);
-                if (jsonNode instanceof ObjectNode) {
-                    node = (ObjectNode) jsonNode;
-                } else {
-                    node.put("array", jsonNode);
-                }
-            } catch (JsonParseException e) {
-                logger.debug("Response didn't give valid json : " + resourceResponse.content, e);
-            }
-        }
-        return node;
     }
 
 }

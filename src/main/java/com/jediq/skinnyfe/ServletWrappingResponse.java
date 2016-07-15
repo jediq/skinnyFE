@@ -1,8 +1,8 @@
 package com.jediq.skinnyfe;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.http.HttpServletResponse;
 
 public class ServletWrappingResponse implements Response {
 
