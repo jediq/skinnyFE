@@ -53,7 +53,7 @@ public class Cache<K, V> {
     }
 
     public Set<V> itemSet() {
-        return cacheMap.values().stream().filter(i -> i != null).map(SoftReference::get).collect(Collectors.toSet());
+        return cacheMap.values().stream().map(SoftReference::get).filter(i -> i != null).collect(Collectors.toSet());
     }
 
     public interface Generator <V> {

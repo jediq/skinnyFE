@@ -29,7 +29,24 @@ public class CacheTest {
         assertThat(cache.itemSet().size(), is(4));
         assertThat(cache.itemSet(), containsInAnyOrder("i1", "i3", "i4", "i5"));
     }
-    
+
+    @Test
+    public void testClear() {
+        Cache<String, Object> cache = new Cache<>(100000);
+        cache.item("item1", Object::new);
+        assertThat(cache.itemSet().size(), is(1));
+        cache.clear();
+        assertThat(cache.itemSet().size(), is(0));
+    }
+
+    @Test
+    public void testItemSetWithEmptyElements() {
+        Cache<String, Object> cache = new Cache<>(100000);
+        cache.item("item1", Object::new);
+        cache.item("item2", ()->null);
+        assertThat(cache.itemSet().size(), is(1));
+    }
+
     @Test
     public void testForceGarbageCollectionOfCache() {
 
@@ -48,9 +65,7 @@ public class CacheTest {
 
         assertThat(createdObjectString, is(cachedObjectString));
         assertThat(createdObjectString, is(not(newObjectString)));
-        
     }
-    
     
     private void forceOutOfMemory() {
         // Force an OoM
