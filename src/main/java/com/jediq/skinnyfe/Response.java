@@ -7,6 +7,8 @@ public interface Response {
 
     void setStatus(int status);
 
+    int getStatus();
+
     void setContentType(String contentType);
 
     void sendRedirect(String location) throws IOException;

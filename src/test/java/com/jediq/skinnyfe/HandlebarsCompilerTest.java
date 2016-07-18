@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import junitx.util.PrivateAccessor;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

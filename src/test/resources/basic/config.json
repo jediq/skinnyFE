@@ -14,6 +14,7 @@
   ],
   "name":"TEST INSTANCE",
   "defaultTemplates":"src/test/resources/basic/templates",
+  "millisToCacheTemplates":0,
   "port":8008,
   "assetsPath":"/assets",
   "assetsFolder":"src/test/resources/basic/assets/",
@@ -42,6 +43,6 @@
   ],
 
   "errorPages":{
-    "404":"/assets/404.html"
+    "404":"src/test/resources/basic/assets/404.html"
   }
 }

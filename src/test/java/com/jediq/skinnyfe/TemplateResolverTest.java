@@ -2,12 +2,10 @@ package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
-import java.util.Optional;
-
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**

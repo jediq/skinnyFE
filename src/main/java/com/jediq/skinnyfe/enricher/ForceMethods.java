@@ -1,9 +1,8 @@
 package com.jediq.skinnyfe.enricher;
 
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 /**
  *

@@ -2,14 +2,13 @@ package com.jediq.skinnyfe;
 
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -49,10 +48,9 @@ public class TemplateResolver {
     }
 
     private Optional<SkinnyTemplate> fromFile(String urlPath) {
-        if (urlPath.endsWith("/")) {
-            urlPath += "index";
-        }
-        Path path = Paths.get(config.getDefaultTemplates(), urlPath + ".moustache");
+        String indexedUrlPath = urlPath + (urlPath.endsWith("/") ? "index" : "");
+
+        Path path = Paths.get(config.getDefaultTemplates(), indexedUrlPath + ".moustache");
         logger.debug("Looking for template from path : " + path);
 
         if (path.toFile().exists()) {
@@ -61,7 +59,6 @@ public class TemplateResolver {
             return Optional.of(template);
         }
         return Optional.empty();
-
     }
 
     private Optional <SkinnyTemplate> fromConfig(String urlPath) {

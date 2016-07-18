@@ -4,9 +4,7 @@ import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
 import junitx.util.PrivateAccessor;
-import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 

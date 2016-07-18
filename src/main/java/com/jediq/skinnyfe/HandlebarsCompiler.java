@@ -3,7 +3,6 @@ package com.jediq.skinnyfe;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-
 import java.io.IOException;
 import java.util.Map;
 

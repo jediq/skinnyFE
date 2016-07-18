@@ -2,9 +2,8 @@ package com.jediq.skinnyfe.config;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ConfigTest {
 

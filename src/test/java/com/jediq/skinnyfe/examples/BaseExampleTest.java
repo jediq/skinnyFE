@@ -10,12 +10,12 @@ import org.eclipse.jetty.client.api.Request;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import org.junit.*;
+import org.junit.After;
+import static org.junit.Assume.assumeTrue;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.junit.Assume.assumeThat;
-import static org.junit.Assume.assumeTrue;
 
 /**
  * The example tests require json-server to be installed on the executing machine.

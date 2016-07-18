@@ -2,7 +2,6 @@ package com.jediq.skinnyfe.config;
 
 import com.jediq.skinnyfe.WrappedException;
 import java.io.File;
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**

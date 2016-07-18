@@ -2,11 +2,10 @@ package com.jediq.skinnyfe.config;
 
 import com.jediq.skinnyfe.HandlebarsCompiler;
 import com.jediq.skinnyfe.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Resource {
 
@@ -63,7 +62,7 @@ public class Resource {
     }
 
     public void validateInput(String key, String value) {
-        String regex = inputValidators.getOrDefault(key, ".*");
+        String regex = getInputValidators().getOrDefault(key, ".*");
         logger.debug("Validating {} against {}", key, regex);
         if (!value.matches(regex)) {
             throw new IllegalArgumentException(value + " does not match " + regex);

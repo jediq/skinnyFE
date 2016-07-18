@@ -1,7 +1,6 @@
 package com.jediq.skinnyfe.config;
 
 import com.jediq.skinnyfe.WrappedException;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,7 +13,6 @@ import java.util.regex.Pattern;
  */
 public class SkinnyTemplate {
 
-    private String regex;
     private String file;
     private String enricher;
     private String contentType = "text/html";
@@ -23,7 +21,6 @@ public class SkinnyTemplate {
     private Pattern pattern;
 
     public void setRegex(String regex) {
-        this.regex = regex;
         this.pattern = Pattern.compile(regex);
     }
 

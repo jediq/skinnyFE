@@ -10,7 +10,6 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
-
 import org.junit.*;
 
 /**
@@ -155,7 +154,7 @@ public class GetHandlerTest {
         ContentResponse response = httpClient.GET(BASE_URL + "enricherChangingResourceBadly");
         String content = response.getContentAsString();
         assertThat(response.getStatus(), is(404));
-        assertThat(content, is(""));
+        assertThat(content, is("ballas"));
     }
 
     @Test
@@ -165,6 +164,7 @@ public class GetHandlerTest {
 
         ContentResponse badResponse = httpClient.GET(BASE_URL + "pathed/23456");
         assertThat(badResponse.getStatus(), is(404));
+        assertThat(badResponse.getContentAsString(), is("ballas"));
     }
 
     @AfterClass

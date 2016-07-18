@@ -6,7 +6,7 @@ import com.jediq.skinnyfe.WrappedException;
 import com.jediq.skinnyfe.config.Config;
 import java.util.Optional;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**

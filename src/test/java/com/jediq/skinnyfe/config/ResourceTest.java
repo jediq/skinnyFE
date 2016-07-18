@@ -1,22 +1,16 @@
 package com.jediq.skinnyfe.config;
 
-import com.github.jknack.handlebars.Handlebars;
 import com.jediq.skinnyfe.HandlebarsCompiler;
 import com.jediq.skinnyfe.Request;
 import com.jediq.skinnyfe.WrappedException;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import junitx.util.PrivateAccessor;
 import org.hamcrest.CoreMatchers;
-import static org.hamcrest.CoreMatchers.is;
-
 import org.junit.Assert;
 import org.junit.Test;
 import static org.mockito.Matchers.any;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.mock;
 
 /**
  *

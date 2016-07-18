@@ -10,13 +10,12 @@ import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
 import com.jediq.skinnyfe.enricher.DataEnricher;
 import com.jediq.skinnyfe.enricher.ForceMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GetHandler extends Handler {
 
