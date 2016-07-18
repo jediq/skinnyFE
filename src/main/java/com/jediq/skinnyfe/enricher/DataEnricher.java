@@ -7,6 +7,7 @@ import com.jediq.skinnyfe.config.Config;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -25,6 +26,15 @@ public class DataEnricher {
 
     public DataEnricher(Config config) {
         this.config = config;
+    }
+
+    public JsonNode enrich(List<String> enricherFiles, JsonNode jsonNode, ForceMethods forceMethods) throws IOException {
+        for (String enricherFile : enricherFiles) {
+            jsonNode = enrich(enricherFile, jsonNode, forceMethods);
+
+            //TODO : Need a force method to stop enriching further
+        }
+        return jsonNode;
     }
 
     public JsonNode enrich(String enricherFile, JsonNode jsonNode, ForceMethods forceMethods) throws IOException {

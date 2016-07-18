@@ -51,11 +51,11 @@ public class GetHandler extends Handler {
 
         JsonNode enrichedNode;
 
-        logger.debug("enriching data? : {} ", skinnyTemplate.getEnricher());
+        logger.debug("enriching data with {} enrichers", skinnyTemplate.getEnrichers().size());
         ForceMethods forceMethods = null;
-        if (skinnyTemplate.getEnricher() != null) {
+        if (!skinnyTemplate.getEnrichers().isEmpty()) {
             forceMethods = new ForceMethods();
-            enrichedNode = dataEnricher.enrich(skinnyTemplate.getEnricher(), aggregatedNode, forceMethods);
+            enrichedNode = dataEnricher.enrich(skinnyTemplate.getEnrichers(), aggregatedNode, forceMethods);
             logger.debug("enriched data into : {} ", enrichedNode);
         } else {
             enrichedNode = aggregatedNode;

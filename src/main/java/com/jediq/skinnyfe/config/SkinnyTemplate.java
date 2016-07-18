@@ -14,10 +14,10 @@ import java.util.regex.Pattern;
 public class SkinnyTemplate {
 
     private String file;
-    private String enricher;
     private String contentType = "text/html";
     private String content;
     private List<Meta> metaList = new ArrayList<>();
+    private List<String> enrichers = new ArrayList<>();
     private Pattern pattern;
 
     public void setRegex(String regex) {
@@ -32,8 +32,8 @@ public class SkinnyTemplate {
         this.file = file;
     }
 
-    public String getEnricher() {
-        return enricher;
+    public List<String> getEnrichers() {
+        return enrichers;
     }
 
     public String getContentType() {

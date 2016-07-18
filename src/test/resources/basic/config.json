@@ -23,22 +23,28 @@
     {
       "regex":".*\/pathed\/.*",
       "file":"src/test/resources/basic/templates/pathed.moustache",
-      "enricher":"src/test/resources/basic/enrichers/pathed.js"
+      "enrichers":["src/test/resources/basic/enrichers/pathed.js"]
     },
     {
       "regex":".*\/enricherView",
       "file":"src/test/resources/basic/templates/enricherView.moustache",
-      "enricher":"src/test/resources/basic/enrichers/enricherView.js"
+      "enrichers":["src/test/resources/basic/enrichers/enricherView.js"]
+    },
+    {
+      "regex":".*\/multipleEnricherView",
+      "file":"src/test/resources/basic/templates/enricherView.moustache",
+      "enrichers":["src/test/resources/basic/enrichers/enricherView.js",
+                   "src/test/resources/basic/enrichers/multipleEnricherView.js"]
     },
     {
       "regex":".*\/enricherChangingResource",
       "file":"src/test/resources/basic/templates/enricherView.moustache",
-      "enricher":"src/test/resources/basic/enrichers/enricherChangingResource.js"
+      "enrichers":["src/test/resources/basic/enrichers/enricherChangingResource.js"]
     },
     {
       "regex":".*\/enricherChangingResourceBadly",
       "file":"src/test/resources/basic/templates/enricherView.moustache",
-      "enricher":"src/test/resources/basic/enrichers/enricherChangingResourceBadly.js"
+      "enrichers":["src/test/resources/basic/enrichers/enricherChangingResourceBadly.js"]
     }
   ],
 

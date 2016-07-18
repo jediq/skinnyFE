@@ -139,6 +139,17 @@ public class GetHandlerTest {
     }
 
     @Test
+    public void testGetWithMultipleEnricher() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "multipleEnricherView");
+        String content = response.getContentAsString();
+
+        assertThat(content, startsWith("<!doctype html>"));
+        assertThat(content, containsString("Car: FR123JON"));
+        assertThat(content, containsString("Driver: Fred Jones"));
+        assertThat(content, containsString("Fruit: Split"));
+    }
+
+    @Test
     public void testGetWithEnricherChangingTemplate() throws Exception {
         ContentResponse response = httpClient.GET(BASE_URL + "enricherChangingResource");
         String content = response.getContentAsString();
