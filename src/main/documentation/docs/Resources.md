@@ -41,12 +41,13 @@ achieves this with regular expression patterns that can be configured against ea
 ```
 {
   "name":"Todos",
-  "url":"http://api.example.com/todos/{{PARAM.title}}",
+  "url":"http://api.example.com/todos/{{PARAM.greeting}}",
   "inputValidators":{
-     "title":"^[a-zA-Z]{0,50}$"  
+     "greeting":"hi|hello"  
   }
 }
 ```
 
-The example above will validate the todo title that is passed to the url.
+The example above will validate the todo greeting that is passed to the url is either "hi" or "hello".
+
 
