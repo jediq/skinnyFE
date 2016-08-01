@@ -31,6 +31,14 @@ public class SkinnyServer {
             HandlerCollection handlerCollection = new HandlerCollection();
             HandlerList handlerList = new HandlerList();
 
+            MetricRegistry registry = new MetricRegistry();
+            InstrumentedHandler handler = new InstrumentedHandler(registry, "SkinnyFE-registry");
+            handlerList.addHandler(handler);
+
+            ServletHandler servletHandler = new ServletHandler();
+            servletHandler.addServletWithMapping(MetricsServlet.class, "/metrics");
+            handlerList.addHandler(new InstrumentedHandler(registry, "SkinnyFE-servlet"));
+
             Optional<Handler> staticFileHandler = makeResourceHandler(config);
             staticFileHandler.ifPresent(handlerList::addHandler);
 

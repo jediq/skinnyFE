@@ -13,6 +13,7 @@ public class ForceMethods {
 
     private Integer responseCode;
     private String template;
+    private boolean stopEnriching;
 
     public void template(String template) {
         logger.debug("Forcing template to : {}", template);
@@ -32,5 +33,11 @@ public class ForceMethods {
         return Optional.ofNullable(template);
     }
 
+    public void stopEnriching() {
+        this.stopEnriching = true;
+    }
 
+    public boolean getStopEnriching() {
+        return stopEnriching;
+    }
 }

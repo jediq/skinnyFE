@@ -86,6 +86,7 @@ public class ResourceInteractor {
                 resourceResponse.code = 400;
                 resourceResponse.reason = "{ \"error\":\"Input data did not validate\" }";
                 resourceResponse.content = "{}";
+                resourceResponse.url = resource.getUrl();
                 return resourceResponse;
             }
 
@@ -103,6 +104,7 @@ public class ResourceInteractor {
             resourceResponse.code = contentResponse.getStatus();
             resourceResponse.content = contentResponse.getContentAsString();
             resourceResponse.reason = contentResponse.getReason();
+            resourceResponse.url = enrichedUrl;
             contentResponse.getHeaders()
                     .forEach(field -> resourceResponse.headers.put(field.getName(), field.getValue()));
 

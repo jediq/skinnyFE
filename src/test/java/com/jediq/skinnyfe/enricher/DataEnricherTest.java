@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jediq.skinnyfe.WrappedException;
 import com.jediq.skinnyfe.config.Config;
+import java.util.Arrays;
 import java.util.Optional;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -21,6 +22,30 @@ public class DataEnricherTest {
         ForceMethods forceMethods = new ForceMethods();
         JsonNode enriched = dataEnricher.enrich("src/test/resources/enricherTests/simpleEnricher.js", jsonNode, forceMethods);
         assertThat(enriched.has("banana"), is(true));
+    }
+
+    @Test
+    public void testMultipleEnrichers() throws Exception {
+        DataEnricher dataEnricher = new DataEnricher(new Config());
+        JsonNode jsonNode = new ObjectMapper().createObjectNode();
+        ForceMethods forceMethods = new ForceMethods();
+        String enricherFile = "src/test/resources/enricherTests/multipleEnricher.js";
+        String enricherSecondFile = "src/test/resources/enricherTests/simpleEnricher.js";
+        JsonNode enriched = dataEnricher.enrich(Arrays.asList(enricherFile, enricherSecondFile), jsonNode, forceMethods);
+        assertThat(enriched.has("banana"), is(true));
+        assertThat(enriched.has("apple"), is(true));
+    }
+
+    @Test
+    public void testMultipleEnrichersForcingStop() throws Exception {
+        DataEnricher dataEnricher = new DataEnricher(new Config());
+        JsonNode jsonNode = new ObjectMapper().createObjectNode();
+        ForceMethods forceMethods = new ForceMethods();
+        String enricherFile = "src/test/resources/enricherTests/multipleEnricherForcingStop.js";
+        String enricherSecondFile = "src/test/resources/enricherTests/simpleEnricher.js";
+        JsonNode enriched = dataEnricher.enrich(Arrays.asList(enricherFile, enricherSecondFile), jsonNode, forceMethods);
+        assertThat(enriched.has("banana"), is(false));
+        assertThat(enriched.has("apple"), is(true));
     }
 
     @Test

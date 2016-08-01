@@ -32,7 +32,9 @@ public class DataEnricher {
         for (String enricherFile : enricherFiles) {
             jsonNode = enrich(enricherFile, jsonNode, forceMethods);
 
-            //TODO : Need a force method to stop enriching further
+            if (forceMethods.getStopEnriching()) {
+                break;
+            }
         }
         return jsonNode;
     }

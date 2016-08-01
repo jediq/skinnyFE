@@ -78,3 +78,7 @@ For example, you may wish to return the same response code as the Resource you a
 
 The Template's location is resolved using the same rules as when finding a Template based on a URL path.
 
+###Stopping Enrichment
+`FORCE.stopEnriching()` will stop SkinnyFE from calling any further Enrichers for that request.  This is useful
+when a particular resource has failed that is required by a later Enricher, such as Authentication.
+
