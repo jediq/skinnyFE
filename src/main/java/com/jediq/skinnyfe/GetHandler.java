@@ -95,6 +95,7 @@ public class GetHandler extends Handler {
             ObjectNode metaNode = node.putObject("_meta");
             metaNode.put("code", entry.getValue().code);
             metaNode.put("reason", entry.getValue().reason);
+            metaNode.put("url", entry.getValue().url);
             rootNode.put(entry.getKey().getProperty(), node);
             logger.debug("Put {} into property {}", node, entry.getKey().getProperty());
         }

@@ -1,5 +1,8 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.jetty9.InstrumentedHandler;
+import com.codahale.metrics.servlets.MetricsServlet;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.enricher.SkinnyErrorHandler;
 import java.util.Optional;
