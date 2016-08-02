@@ -10,7 +10,7 @@ public class SkinnyFE {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final Map<Integer, SkinnyServer> servers;
+    private final Map<Integer, SkinnyMainServer> servers;
     private final Config config;
 
     public SkinnyFE(String configLocation) {
@@ -39,7 +39,7 @@ public class SkinnyFE {
 
     public void startServer(int port) {
         logger.debug("Starting SkinnyFE server on port : " + port);
-        SkinnyServer server = new SkinnyServer(port, config);
+        SkinnyMainServer server = new SkinnyMainServer(port, config);
         server.start();
         servers.put(port, server);
         logger.info("Started SkinnyFE server for " + config.getName() + " on port : " + port);

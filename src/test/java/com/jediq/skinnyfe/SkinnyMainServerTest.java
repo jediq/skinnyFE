@@ -22,7 +22,7 @@ import org.junit.Test;
 /**
  *
  */
-public class SkinnyServerTest {
+public class SkinnyMainServerTest {
 
 
     @Test
@@ -33,8 +33,8 @@ public class SkinnyServerTest {
 
         Config config = new Config();
         config.getErrorPages().put(404, "src/test/resources/basic/assets/404.html");
-        SkinnyServer skinnyServer = new SkinnyServer(7890, config);
-        skinnyServer.start();
+        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config);
+        skinnyMainServer.start();
 
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
         String content = response.getContentAsString();
@@ -42,7 +42,7 @@ public class SkinnyServerTest {
         assertThat(content, is("ballas"));
 
         httpClient.stop();
-        skinnyServer.stop();
+        skinnyMainServer.stop();
     }
 
     @Test
@@ -53,8 +53,8 @@ public class SkinnyServerTest {
 
         Config config = new Config();
         config.getErrorPages().put(408, "src/test/resources/basic/assets/404.html");
-        SkinnyServer skinnyServer = new SkinnyServer(7890, config);
-        skinnyServer.start();
+        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config);
+        skinnyMainServer.start();
 
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
         String content = response.getContentAsString();
@@ -62,7 +62,7 @@ public class SkinnyServerTest {
         assertThat(content, is(""));
 
         httpClient.stop();
-        skinnyServer.stop();
+        skinnyMainServer.stop();
     }
 
 
@@ -104,37 +104,37 @@ public class SkinnyServerTest {
 
         @Test(expected=WrappedException.class)
     public void testConstructor_serverThrowsARuntimeException() throws Exception {
-        LocalSkinnyServer.localServer.set(null);
-        new LocalSkinnyServer();
+        LocalSkinnyMainServer.localServer.set(null);
+        new LocalSkinnyMainServer();
         fail(); // should never get here
     }
 
     @Test(expected=WrappedException.class)
     public void testConstructor_startThrowsARuntimeException() throws Exception {
-        LocalSkinnyServer.localServer.set(new Server());
-        SkinnyServer skinnyServer = new LocalSkinnyServer();
-        PrivateAccessor.setField(skinnyServer, "server", null);
-        skinnyServer.start();
+        LocalSkinnyMainServer.localServer.set(new Server());
+        SkinnyMainServer skinnyMainServer = new LocalSkinnyMainServer();
+        PrivateAccessor.setField(skinnyMainServer, "server", null);
+        skinnyMainServer.start();
         fail(); // should never get here
     }
 
     @Test(expected=WrappedException.class)
     public void testConstructor_stopThrowsARuntimeException() throws Exception {
-        LocalSkinnyServer.localServer.set(new Server());
-        SkinnyServer skinnyServer = new LocalSkinnyServer();
-        PrivateAccessor.setField(skinnyServer, "server", null);
-        skinnyServer.stop();
+        LocalSkinnyMainServer.localServer.set(new Server());
+        SkinnyMainServer skinnyMainServer = new LocalSkinnyMainServer();
+        PrivateAccessor.setField(skinnyMainServer, "server", null);
+        skinnyMainServer.stop();
         fail(); // should never get here
     }
 
-    private static class LocalSkinnyServer extends SkinnyServer {
+    private static class LocalSkinnyMainServer extends SkinnyMainServer {
 
         // Need to use a ThreadLocal here as constructServer can't be modified prior to the super
         // constructor being called.  ThreadLocal allows our tests to run in parallel with
         // deterministic results.
         static ThreadLocal <Server> localServer = new ThreadLocal<>();
 
-        public LocalSkinnyServer() {
+        public LocalSkinnyMainServer() {
             super(8800, new Config());
         }
 
