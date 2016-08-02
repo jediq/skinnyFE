@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
  */
 public class SkinnyServer {
 
-    public static final String WRAPPED_EXCEPTION_MESSAGE = "Caught exception starting %s server on port : %s";
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected static final String WRAPPED_EXCEPTION_MESSAGE = "Caught exception starting %s server on port : %s";
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected int port;
     protected Server server;

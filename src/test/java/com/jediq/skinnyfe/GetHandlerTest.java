@@ -180,6 +180,6 @@ public class GetHandlerTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-        skinnyFE.stopServer(PORT);
+        skinnyFE.stopServers();
     }
 }

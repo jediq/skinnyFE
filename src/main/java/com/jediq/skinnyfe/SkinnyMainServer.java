@@ -1,5 +1,7 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.jetty9.InstrumentedHandler;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.enricher.SkinnyErrorHandler;
 import java.util.Optional;
@@ -16,33 +18,38 @@ import org.slf4j.LoggerFactory;
  */
 public class SkinnyMainServer extends SkinnyServer {
 
-    public static final String WRAPPED_EXCEPTION_MESSAGE = "Caught exception starting SkinnyFE server on port : ";
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
-    public SkinnyMainServer(int port, Config config) {
+    public SkinnyMainServer(int port, Config config, MetricRegistry metrics) {
         super(port);
 
         try {
             HandlerCollection handlerCollection = new HandlerCollection();
             HandlerList handlerList = new HandlerList();
 
-            Optional<Handler> staticFileHandler = makeResourceHandler(config);
-            staticFileHandler.ifPresent(handlerList::addHandler);
+            if (config.getAssetsPath() != null) {
+                Handler staticFileHandler = makeResourceHandler(config);
+                handlerList.addHandler(instrumentHandler(staticFileHandler, metrics, "StaticFile"));
+            }
 
-            Optional<Handler> skinnyFEHandler = makeServletHandler(config);
-            skinnyFEHandler.ifPresent(handlerList::addHandler);
+            Handler skinnyFEHandler = makeServletHandler(config);
+            handlerList.addHandler(instrumentHandler(skinnyFEHandler, metrics, "SkinnyFE"));
 
             ErrorHandler errorHandler = makeErrorHandler(config);
             server.addBean(errorHandler);
+            errorHandler.setServer(server);
 
             handlerCollection.setHandlers(new Handler[] { handlerList });
-
             server.setHandler(handlerCollection);
 
         } catch (ServletException | NullPointerException e) {
             throw new WrappedException(e);
         }
+    }
+
+    private Handler instrumentHandler(Handler handler, MetricRegistry metrics, String name) {
+        InstrumentedHandler instrumentedHandler = new InstrumentedHandler(metrics);
+        instrumentedHandler.setName(name);
+        instrumentedHandler.setHandler(handler);
+        return instrumentedHandler;
     }
 
     private ErrorHandler makeErrorHandler(Config config) {
@@ -52,25 +59,23 @@ public class SkinnyMainServer extends SkinnyServer {
     }
 
 
-    private Optional<Handler> makeResourceHandler(Config config) {
-        if (config.getAssetsPath() == null) {
-            return Optional.empty();
-        }
-
+    private Handler makeResourceHandler(Config config) {
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setResourceBase(config.getAssetsFolder());
 
         ContextHandler contextHandler = new ContextHandler(config.getAssetsPath());
         contextHandler.setHandler(resourceHandler);
 
-        return Optional.of(contextHandler);
+        return contextHandler;
     }
 
-    private Optional<Handler> makeServletHandler(Config config) throws ServletException {
+    private Handler makeServletHandler(Config config) throws ServletException {
         ServletHandler handler = new ServletHandler();
-        ServletHolder servletHolder = handler.addServletWithMapping(SkinnyServlet.class, "/*");
-        SkinnyServlet servlet = (SkinnyServlet) servletHolder.getServlet();
+        ServletHolder servletHolder = new ServletHolder();
+        SkinnyServlet servlet = new SkinnyServlet();
         servlet.setConfig(config);
-        return Optional.of(handler);
+        servletHolder.setServlet(servlet);
+        handler.addServletWithMapping(servletHolder, "/*");
+        return handler;
     }
 }

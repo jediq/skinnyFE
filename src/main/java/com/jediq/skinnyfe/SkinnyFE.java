@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.jediq.skinnyfe.config.Config;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ public class SkinnyFE {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final MetricRegistry metrics = new MetricRegistry();
     private final Map<Integer, SkinnyServer> servers;
     private final Config config;
 
@@ -43,24 +45,28 @@ public class SkinnyFE {
 
     public void startMainServer(int port) {
         logger.debug("Starting SkinnyFE server on port : " + port);
-        SkinnyMainServer server = new SkinnyMainServer(port, config);
+        SkinnyMainServer server = new SkinnyMainServer(port, config, metrics);
         server.start();
         servers.put(port, server);
         logger.info("Started SkinnyFE server for " + config.getName() + " on port : " + port);
     }
 
     public void startAdminServer(int port) {
-        logger.debug("Starting SkinnyFE server on port : " + port);
-        SkinnyAdminServer server = new SkinnyAdminServer(port, config);
+        logger.debug("Starting SkinnyFE admin server on port : " + port);
+        SkinnyAdminServer server = new SkinnyAdminServer(port, metrics);
         server.start();
         servers.put(port, server);
-        logger.info("Started SkinnyFE server for " + config.getName() + " on port : " + port);
+        logger.info("Started SkinnyFE admin server for " + config.getName() + " on port : " + port);
     }
 
     public void stopServer(int port) {
         logger.debug("Stopping SkinnyFE server on port : " + port);
         servers.get(port).stop();
         logger.info("Stopped SkinnyFE server on port : " + port);
+    }
+
+    public void stopServers() {
+        servers.keySet().forEach(this::stopServer);
     }
 
     public Config getConfig() {

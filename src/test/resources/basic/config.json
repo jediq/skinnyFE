@@ -16,6 +16,7 @@
   "defaultTemplates":"src/test/resources/basic/templates",
   "millisToCacheTemplates":0,
   "port":8008,
+  "adminPort":8009,
   "assetsPath":"/assets",
   "assetsFolder":"src/test/resources/basic/assets/",
 

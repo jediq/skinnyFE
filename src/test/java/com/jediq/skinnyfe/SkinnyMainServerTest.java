@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.jediq.skinnyfe.config.Config;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -24,16 +28,24 @@ import org.junit.Test;
  */
 public class SkinnyMainServerTest {
 
+    private HttpClient httpClient;
+
+    @Before
+    public void before() throws Exception{
+        httpClient = new HttpClient();
+        httpClient.start();
+    }
+
+    @After
+    public void after() throws Exception {
+        httpClient.stop();
+    }
 
     @Test
     public void testErrorHandling() throws Exception {
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-
         Config config = new Config();
         config.getErrorPages().put(404, "src/test/resources/basic/assets/404.html");
-        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config);
+        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config, new MetricRegistry());
         skinnyMainServer.start();
 
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
@@ -41,19 +53,14 @@ public class SkinnyMainServerTest {
 
         assertThat(content, is("ballas"));
 
-        httpClient.stop();
         skinnyMainServer.stop();
     }
 
     @Test
     public void testErrorHandlingWithoutMappedPage() throws Exception {
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-
         Config config = new Config();
         config.getErrorPages().put(408, "src/test/resources/basic/assets/404.html");
-        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config);
+        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config, new MetricRegistry());
         skinnyMainServer.start();
 
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
@@ -61,24 +68,18 @@ public class SkinnyMainServerTest {
 
         assertThat(content, is(""));
 
-        httpClient.stop();
         skinnyMainServer.stop();
     }
 
 
     @Test
     public void testErrorHandling2() throws Exception {
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.start();
-
         Server server = new Server(8908);
 
         HandlerCollection handlerCollection = new HandlerCollection();
         HandlerList handlerList = new HandlerList();
         handlerCollection.setHandlers(new Handler[] { handlerList });
         server.setHandler(handlerCollection);
-
 
         server.start();
 
@@ -93,10 +94,6 @@ public class SkinnyMainServerTest {
         ContentResponse response = httpClient.GET("http://localhost:8908");
 
         assertThat(response.getContentAsString(), startsWith("handled"));
-
-
-
-
     }
 
 
@@ -135,7 +132,7 @@ public class SkinnyMainServerTest {
         static ThreadLocal <Server> localServer = new ThreadLocal<>();
 
         public LocalSkinnyMainServer() {
-            super(8800, new Config());
+            super(8800, new Config(), new MetricRegistry());
         }
 
         @Override
