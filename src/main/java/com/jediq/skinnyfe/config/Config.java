@@ -15,6 +15,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class Config {
 
     private int port;
+    private int adminPort;
     private String defaultTemplates = ".";
     private List <Resource> resources = new ArrayList<>();
     private List <SkinnyTemplate> templates = new ArrayList<>();
@@ -60,6 +61,14 @@ public class Config {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getAdminPort() {
+        return adminPort;
+    }
+
+    public void setAdminPort(int adminPort) {
+        this.adminPort = adminPort;
     }
 
     public String getAssetsPath() {

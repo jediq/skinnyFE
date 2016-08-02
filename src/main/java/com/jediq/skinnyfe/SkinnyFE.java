@@ -10,7 +10,7 @@ public class SkinnyFE {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final Map<Integer, SkinnyMainServer> servers;
+    private final Map<Integer, SkinnyServer> servers;
     private final Config config;
 
     public SkinnyFE(String configLocation) {
@@ -25,7 +25,11 @@ public class SkinnyFE {
         } else {
             String configLocation = args[0];
             SkinnyFE skinnyFE = new SkinnyFE(configLocation);
-            skinnyFE.startServer(skinnyFE.getConfig().getPort());
+            skinnyFE.startMainServer(skinnyFE.getConfig().getPort());
+
+            if (skinnyFE.getConfig().getAdminPort() > 0) {
+                skinnyFE.startAdminServer(skinnyFE.getConfig().getAdminPort());
+            }
         }
     }
 
@@ -37,9 +41,17 @@ public class SkinnyFE {
         System.out.println(builder.toString()); //NOSONAR
     }
 
-    public void startServer(int port) {
+    public void startMainServer(int port) {
         logger.debug("Starting SkinnyFE server on port : " + port);
         SkinnyMainServer server = new SkinnyMainServer(port, config);
+        server.start();
+        servers.put(port, server);
+        logger.info("Started SkinnyFE server for " + config.getName() + " on port : " + port);
+    }
+
+    public void startAdminServer(int port) {
+        logger.debug("Starting SkinnyFE server on port : " + port);
+        SkinnyAdminServer server = new SkinnyAdminServer(port, config);
         server.start();
         servers.put(port, server);
         logger.info("Started SkinnyFE server for " + config.getName() + " on port : " + port);

@@ -29,7 +29,7 @@ public class GetHandlerTest {
     @BeforeClass
     public static void setup() throws Exception {
         skinnyFE = new SkinnyFE(path + "config.json");
-        skinnyFE.startServer(PORT);
+        skinnyFE.startMainServer(PORT);
 
         BASE_URL = "http://localhost:" + PORT + "/";
     }
