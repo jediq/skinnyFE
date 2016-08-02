@@ -61,11 +61,9 @@ public class Resource {
         return resolved;
     }
 
-    public void validateInput(String key, String value) {
+    public boolean validateInput(String key, String value) {
         String regex = getInputValidators().getOrDefault(key, ".*");
         logger.debug("Validating {} against {}", key, regex);
-        if (!value.matches(regex)) {
-            throw new IllegalArgumentException(value + " does not match " + regex);
-        }
+        return value.matches(regex);
     }
 }

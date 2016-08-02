@@ -1,16 +1,12 @@
 package com.jediq.skinnyfe;
 
 import com.codahale.metrics.MetricRegistry;
-import com.jediq.skinnyfe.config.Config;
 import org.eclipse.jetty.client.HttpClient;
+import static org.hamcrest.Matchers.containsString;
 import org.junit.After;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
 
 /**
  */

@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe;
 
 import com.codahale.metrics.MetricRegistry;
+import static com.codahale.metrics.MetricRegistry.name;
 import com.codahale.metrics.Timer;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
@@ -17,8 +18,6 @@ import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static com.codahale.metrics.MetricRegistry.name;
 
 /**
  *
@@ -61,43 +60,21 @@ public class ResourceInteractor {
         }
     }
 
-    private int saveResource(Meta meta, String string, Request request) {
-        try {
-
-            logger.info("Loading resource from : " + meta.getResource());
-            Resource resource = findResource(meta.getResource());
-
-            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
-
-            final Timer timer = metrics.timer(name(ResourceInteractor.class, meta.getResource(), "post-requests"));
-
-            final Timer.Context context = timer.time();
-            ContentResponse response;
-            try {
-                response = httpClient.POST(enrichedUrl)
-                        .content(new StringContentProvider(string), "application/json")
-                        .send();
-            } finally {
-                context.stop();
-            }
-
-            return response.getStatus();
-
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            throw new WrappedException(e);
-        }
-    }
-
     private ResourceResponse loadResource(Meta meta, Request request) {
         try {
             logger.info("Loading resource from : " + meta.getResource());
             Resource resource = findResource(meta.getResource());
 
-            try {
-                request.getParams().forEach(resource::validateInput);
-                resource.getHeaders().forEach(resource::validateInput);
-            } catch (IllegalArgumentException e) {
-                logger.debug("Input data did not validate", e);
+            boolean valid = true;
+            for (String key : request.getParams().keySet()) {
+                valid &= resource.validateInput(key, request.getParams().get(key));
+            }
+            for (String key : request.getHeaders().keySet()) {
+                valid &= resource.validateInput(key, request.getHeaders().get(key));
+            }
+
+            if (!valid) {
+                logger.debug("Input data did not validate");
                 ResourceResponse resourceResponse = new ResourceResponse();
                 resourceResponse.code = 400;
                 resourceResponse.reason = "{ \"error\":\"Input data did not validate\" }";
@@ -134,6 +111,33 @@ public class ResourceInteractor {
                     .forEach(field -> resourceResponse.headers.put(field.getName(), field.getValue()));
 
             return resourceResponse;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new WrappedException(e);
+        }
+    }
+
+    private int saveResource(Meta meta, String string, Request request) {
+        try {
+
+            logger.info("Loading resource from : " + meta.getResource());
+            Resource resource = findResource(meta.getResource());
+
+            String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
+
+            final Timer timer = metrics.timer(name(ResourceInteractor.class, meta.getResource(), "post-requests"));
+
+            final Timer.Context context = timer.time();
+            ContentResponse response;
+            try {
+                response = httpClient.POST(enrichedUrl)
+                        .content(new StringContentProvider(string), "application/json")
+                        .send();
+            } finally {
+                context.stop();
+            }
+
+            return response.getStatus();
+
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new WrappedException(e);
         }

@@ -27,11 +27,7 @@ public class SkinnyFE {
         } else {
             String configLocation = args[0];
             SkinnyFE skinnyFE = new SkinnyFE(configLocation);
-            skinnyFE.startMainServer(skinnyFE.getConfig().getPort());
-
-            if (skinnyFE.getConfig().getAdminPort() > 0) {
-                skinnyFE.startAdminServer(skinnyFE.getConfig().getAdminPort());
-            }
+            skinnyFE.start();
         }
     }
 
@@ -41,6 +37,14 @@ public class SkinnyFE {
         builder.append("java -jar skinnyFE-all.jar config.json\n");
         builder.append("   config.json - Your config file\n");
         System.out.println(builder.toString()); //NOSONAR
+    }
+
+    public void start() {
+        startMainServer(getConfig().getPort());
+
+        if (getConfig().getAdminPort() > 0) {
+            startAdminServer(getConfig().getAdminPort());
+        }
     }
 
     public void startMainServer(int port) {

@@ -15,8 +15,8 @@
   "name":"TEST INSTANCE",
   "defaultTemplates":"src/test/resources/basic/templates",
   "millisToCacheTemplates":0,
-  "port":8008,
-  "adminPort":8009,
+  "port":8007,
+  "adminPort":8008,
   "assetsPath":"/assets",
   "assetsFolder":"src/test/resources/basic/assets/",
 

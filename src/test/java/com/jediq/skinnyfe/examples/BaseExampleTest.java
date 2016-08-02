@@ -54,9 +54,10 @@ public abstract class BaseExampleTest {
 
         skinnyFE = new SkinnyFE(folder + "config.json");
         skinnyFE.getConfig().setBaseLocation(folder);
+        skinnyFE.getConfig().setPort(initialPort + getExampleNumber());
 
         port = initialPort + getExampleNumber();
-        skinnyFE.startMainServer(port);
+        skinnyFE.start();
     }
 
     @BeforeClass
