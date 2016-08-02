@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import java.util.Arrays;
@@ -26,7 +27,7 @@ public class ResourceInteractorTest {
 
     @Test(expected=WrappedException.class)
     public void testLoadResource_nonExistantResource() throws Exception {
-        ResourceInteractor resourceInteractor = new ResourceInteractor(new Config());
+        ResourceInteractor resourceInteractor = new ResourceInteractor(new Config(), new MetricRegistry());
         Meta meta = new Meta();
         meta.setResource("banana");
         Request request = new Request();
@@ -35,7 +36,7 @@ public class ResourceInteractorTest {
 
     @Test(expected=WrappedException.class)
     public void testSaveResource_nonExistantResource() throws Exception {
-        ResourceInteractor resourceInteractor = new ResourceInteractor(new Config());
+        ResourceInteractor resourceInteractor = new ResourceInteractor(new Config(), new MetricRegistry());
         Meta meta = new Meta();
         meta.setResource("banana");
         Request request = new Request();

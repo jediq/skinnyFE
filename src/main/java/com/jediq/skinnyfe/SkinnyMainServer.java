@@ -30,7 +30,7 @@ public class SkinnyMainServer extends SkinnyServer {
                 handlerList.addHandler(instrumentHandler(staticFileHandler, metrics, "StaticFile"));
             }
 
-            Handler skinnyFEHandler = makeServletHandler(config);
+            Handler skinnyFEHandler = makeServletHandler(config, metrics);
             handlerList.addHandler(instrumentHandler(skinnyFEHandler, metrics, "SkinnyFE"));
 
             ErrorHandler errorHandler = makeErrorHandler(config);
@@ -69,11 +69,10 @@ public class SkinnyMainServer extends SkinnyServer {
         return contextHandler;
     }
 
-    private Handler makeServletHandler(Config config) throws ServletException {
+    private Handler makeServletHandler(Config config, MetricRegistry metrics) throws ServletException {
         ServletHandler handler = new ServletHandler();
         ServletHolder servletHolder = new ServletHolder();
-        SkinnyServlet servlet = new SkinnyServlet();
-        servlet.setConfig(config);
+        SkinnyServlet servlet = new SkinnyServlet(config, metrics);
         servletHolder.setServlet(servlet);
         handler.addServletWithMapping(servletHolder, "/*");
         return handler;

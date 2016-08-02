@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class PostHandlerTest {
     public void testDoPostNoTemplate() throws Exception {
 
         Config config = Config.load("src/test/resources/basic/config.json");
-        PostHandler postHandler = new PostHandler(config);
+        PostHandler postHandler = new PostHandler(config, new MetricRegistry());
         Request request = new Request();
         request.setUrl("http://localhost/notemplate");
         request.getParams().put("car.registration", "123456");
@@ -32,7 +33,7 @@ public class PostHandlerTest {
     public void testDoPostGreenRoute() throws Exception {
 
         Config config = Config.load("src/test/resources/basic/config.json");
-        PostHandler postHandler = new PostHandler(config);
+        PostHandler postHandler = new PostHandler(config, new MetricRegistry());
         Request request = new Request();
         request.setUrl("http://localhost/posting");
         request.getParams().put("car.registration", "123456");
@@ -59,7 +60,7 @@ public class PostHandlerTest {
     public void testDoPostExceptionFromServer() throws Exception {
 
         Config config = Config.load("src/test/resources/basic/config.json");
-        PostHandler postHandler = new PostHandler(config);
+        PostHandler postHandler = new PostHandler(config, new MetricRegistry());
         Request request = new Request();
         request.setUrl("http://localhost/posting");
         request.getParams().put("car.registration", "123456");

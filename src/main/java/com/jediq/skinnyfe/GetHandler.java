@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -27,8 +28,8 @@ public class GetHandler extends Handler {
 
     private final ResponseParser responseParser = new ResponseParser();
 
-    public GetHandler(Config config) {
-        super(config);
+    public GetHandler(Config config, MetricRegistry metrics) {
+        super(config, metrics);
         dataEnricher = new DataEnricher(config);
     }
 

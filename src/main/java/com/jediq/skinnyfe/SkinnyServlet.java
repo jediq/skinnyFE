@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.jediq.skinnyfe.config.Config;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,6 +17,11 @@ public class SkinnyServlet extends HttpServlet {
 
     private transient GetHandler getHandler;
     private transient PostHandler postHandler;
+
+    public SkinnyServlet(Config config, MetricRegistry metrics) {
+        getHandler = new GetHandler(config, metrics);
+        postHandler = new PostHandler(config, metrics);
+    }
 
     @Override
     protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) throws ServletException, IOException {
@@ -52,10 +58,5 @@ public class SkinnyServlet extends HttpServlet {
         }
         servletRequest.getParameterMap().forEach((k,v) -> request.getParams().put(k, v[0]));
         return request;
-    }
-
-    public void setConfig(Config config) {
-        getHandler = new GetHandler(config);
-        postHandler = new PostHandler(config);
     }
 }

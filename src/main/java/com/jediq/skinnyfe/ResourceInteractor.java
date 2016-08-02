@@ -1,5 +1,7 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.Resource;
@@ -16,6 +18,8 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 /**
  *
  */
@@ -25,9 +29,11 @@ public class ResourceInteractor {
 
     private final HttpClient httpClient;
     private final Config config;
+    private final MetricRegistry metrics;
 
-    public ResourceInteractor(Config config) {
+    public ResourceInteractor(Config config, MetricRegistry metrics) {
         this.config = config;
+        this.metrics = metrics;
         httpClient = createHttpClient();
 
         try {
@@ -62,9 +68,19 @@ public class ResourceInteractor {
             Resource resource = findResource(meta.getResource());
 
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
-            ContentResponse response = httpClient.POST(enrichedUrl)
-                    .content(new StringContentProvider(string), "application/json")
-                    .send();
+
+            final Timer timer = metrics.timer(name(ResourceInteractor.class, meta.getResource(), "post-requests"));
+
+            final Timer.Context context = timer.time();
+            ContentResponse response;
+            try {
+                response = httpClient.POST(enrichedUrl)
+                        .content(new StringContentProvider(string), "application/json")
+                        .send();
+            } finally {
+                context.stop();
+            }
+
             return response.getStatus();
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -98,7 +114,16 @@ public class ResourceInteractor {
 
             resource.getHeaders().forEach(httpRequest::header);
             logger.debug("Sending {} headers with the request", httpRequest.getHeaders().size());
-            ContentResponse contentResponse = httpRequest.send();
+
+            final Timer timer = metrics.timer(name(ResourceInteractor.class, meta.getResource(), "get-requests"));
+
+            final Timer.Context context = timer.time();
+            ContentResponse contentResponse;
+            try {
+                contentResponse = httpRequest.send();
+            } finally {
+                context.stop();
+            }
 
             ResourceResponse resourceResponse = new ResourceResponse();
             resourceResponse.code = contentResponse.getStatus();

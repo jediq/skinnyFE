@@ -1,5 +1,6 @@
 package com.jediq.skinnyfe;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jediq.skinnyfe.config.Config;
 import com.jediq.skinnyfe.config.Meta;
@@ -28,8 +29,8 @@ public class PostHandler extends Handler {
 
     private final DotNotationTransformer dotNotationTransformer;
 
-    public PostHandler(Config config) {
-        super(config);
+    public PostHandler(Config config, MetricRegistry metrics) {
+        super(config, metrics);
         dotNotationTransformer = new DotNotationTransformer();
     }
 
