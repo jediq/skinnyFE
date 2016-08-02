@@ -1,6 +1,7 @@
 package com.jediq.skinnyfe;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.jediq.skinnyfe.resource.ResourceResponse;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.jediq.skinnyfe;
+package com.jediq.skinnyfe.resource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class ResourceResponse {
 
-    int code;
-    String reason;
-    String content;
-    String url;
+    public int code;
+    public String reason;
+    public String content;
+    public String url;
     Map<String, String> headers = new HashMap<>();
 }

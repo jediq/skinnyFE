@@ -11,6 +11,7 @@ import com.jediq.skinnyfe.config.Meta;
 import com.jediq.skinnyfe.config.SkinnyTemplate;
 import com.jediq.skinnyfe.enricher.DataEnricher;
 import com.jediq.skinnyfe.enricher.ForceMethods;
+import com.jediq.skinnyfe.resource.ResourceResponse;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class GetHandler extends Handler {
 
         response.setContentType(skinnyTemplate.getContentType());
 
-        Map<Meta, ResourceResponse> resourceDataMap = resourceInteractor.loadResources(skinnyTemplate.getMetaList(), request);
+        Map<Meta, ResourceResponse> resourceDataMap = resourceReader.loadResources(skinnyTemplate.getMetaList(), request);
         JsonNode aggregatedNode = aggregateData(resourceDataMap);
 
         logger.debug("aggregated data into : {} ", aggregatedNode);
