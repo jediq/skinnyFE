@@ -22,6 +22,20 @@ You guessed it, `port` is a root level config value with an integer denoting the
 ```
 Too simple.
 
+##Enabling Admin services
+
+SkinnyFE has a number of admin metrics, measures and healthchecks that are made accessible as JSON through an http
+ endpoint.  This is configured using:
+ 
+ ```
+ {
+    "adminPort":8051
+ }
+ ```
+ 
+!!! note "Note:"
+    If this value is not set the admin services are not exposed.   
+
 
 ##Serving static content
 
