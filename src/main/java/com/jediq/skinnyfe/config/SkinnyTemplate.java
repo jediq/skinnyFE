@@ -44,6 +44,10 @@ public class SkinnyTemplate {
         return content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public List<Meta> getMetaList() {
         return metaList;
     }

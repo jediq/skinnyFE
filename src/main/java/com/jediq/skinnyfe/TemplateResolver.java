@@ -21,11 +21,12 @@ public class TemplateResolver {
 
     private final Cache <String, SkinnyTemplate> cache;
 
-    private final TemplatePopulater templatePopulater = new TemplatePopulater();
+    private final TemplatePopulater templatePopulater;
 
     public TemplateResolver(Config config) {
         this.config = config;
-        cache = new Cache <> (config.getMillisToCacheTemplates());
+        this.templatePopulater = new TemplatePopulater(config);
+        this.cache = new Cache <> (config.getMillisToCacheTemplates());
     }
 
     public SkinnyTemplate resolveTemplate(String url) throws IOException {

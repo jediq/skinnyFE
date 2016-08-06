@@ -128,6 +128,13 @@ public class GetHandlerTest {
     }
 
     @Test
+    public void testEndToEndForFragment() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "/basicfragment");
+        assertThat(response.getStatus(), is(200));
+        assertThat(response.getContentAsString(), containsString("<h1>The Title</h1>"));
+    }
+
+    @Test
     public void testGetWithEnricher() throws Exception {
         ContentResponse response = httpClient.GET(BASE_URL + "enricherView");
         String content = response.getContentAsString();

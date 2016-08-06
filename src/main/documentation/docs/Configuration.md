@@ -59,3 +59,14 @@ used to configure this.  The below example would cache templates for 1 second.
   "millisToCacheTemplates":1000
 }
 ```
+
+##Changing default locations
+
+The default locations that SkinnyFE looks in to load templates and fragments can be modified through the configuration
+file.  The values used are relative to the directory that the process was started in, unless they start with `/`.
+```
+{
+  "defaultTemplates":"myTemplates",
+  "defaultFragments":"myFragments"
+}
+```

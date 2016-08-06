@@ -17,6 +17,7 @@ public class Config {
     private int port;
     private int adminPort;
     private String defaultTemplates = ".";
+    private String defaultFragments = ".";
     private List <Resource> resources = new ArrayList<>();
     private List <SkinnyTemplate> templates = new ArrayList<>();
     private long millisToCacheTemplates = 0;
@@ -53,6 +54,14 @@ public class Config {
 
     public void setDefaultTemplates(String defaultTemplates) {
         this.defaultTemplates = defaultTemplates;
+    }
+
+    public String getDefaultFragments() {
+        return defaultFragments;
+    }
+
+    public void setDefaultFragments(String defaultFragments) {
+        this.defaultFragments = defaultFragments;
     }
 
     public int getPort() {
