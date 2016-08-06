@@ -39,8 +39,6 @@ public class FragmentResolver {
         while (matcher.find()) {
             String fragmentId = matcher.group(1);
             String fragment = resolveFragment(fragmentId);
-            System.out.println("fragmentId = " + fragmentId);
-            System.out.println("fragment = " + fragment);
             replacedText = replacedText.replaceAll("\\[\\["+fragmentId+"\\]\\]", fragment);
         }
 
