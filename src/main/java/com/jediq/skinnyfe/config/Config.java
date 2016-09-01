@@ -24,6 +24,7 @@ public class Config {
     private String assetsPath;
     private String assetsFolder;
     private String baseLocation = "";
+    private String virtualHost = null;
     private String name = "NO-NAME";
     private Map<Integer, String> errorPages = new HashMap<>();
 
@@ -138,5 +139,13 @@ public class Config {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getVirtualHost() {
+        return virtualHost;
+    }
+
+    public void setVirtualHost(String virtualHost) {
+        this.virtualHost = virtualHost;
     }
 }

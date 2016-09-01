@@ -14,8 +14,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerList;
+
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import org.junit.After;
 import static org.junit.Assert.fail;
@@ -65,7 +68,7 @@ public class SkinnyMainServerTest {
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
         String content = response.getContentAsString();
 
-        assertThat(content, is(""));
+        assertThat(content, containsString("Powered by Jetty"));
 
         skinnyMainServer.stop();
     }

@@ -31,7 +31,6 @@ public class SkinnyServlet extends HttpServlet {
 
         getHandler.doGet(request, response);
         if (response.getStatus() > 299) {
-
             servletResponse.sendError(response.getStatus());
         }
     }

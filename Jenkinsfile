@@ -1,8 +1,11 @@
 node {
     stage 'Checkout'
     checkout scm
+    sh 'chmod +x gradlew'
 
     stage 'Build'
-    sh 'chmod +x gradlew'
-    sh './gradlew clean test jacoco sonarqube -Dsonar.scm.disabled=true'
+    sh './gradlew clean test jacoco'
+
+    stage 'SCA'
+    sh './gradlew sonarqube -Dsonar.scm.disabled=true'
 }

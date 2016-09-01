@@ -34,14 +34,14 @@ public class GetHandler extends Handler {
         dataEnricher = new DataEnricher(config);
     }
 
-    public void doGet(Request request, Response response) throws IOException {
+    public boolean doGet(Request request, Response response) throws IOException {
 
         SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(new URL(request.getUrl()).getPath());
         if (skinnyTemplate == null) {
             // we could not find the template
             logger.debug("Could not find template for : " + request.getUrl());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return false;
         }
 
         response.setContentType(skinnyTemplate.getContentType());
@@ -69,7 +69,7 @@ public class GetHandler extends Handler {
                 // we could not find the template
                 logger.debug("Could not find template for : " + request.getUrl());
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                return;
+                return false;
             }
         }
 
@@ -79,8 +79,12 @@ public class GetHandler extends Handler {
 
         String rendered = handlebarsCompiler.compile(skinnyTemplate.getContent(), context, 1);
 
-        response.setStatus(calculateStatus(HttpServletResponse.SC_OK, forceMethods));
-        response.getWriter().println(rendered);
+        int status = calculateStatus(HttpServletResponse.SC_OK, forceMethods);
+        response.setStatus(status);
+        if (status == HttpServletResponse.SC_OK) {
+            response.getWriter().println(rendered);
+        }
+        return true;
     }
 
     private int calculateStatus(int defaultStatus, ForceMethods forceMethods) {

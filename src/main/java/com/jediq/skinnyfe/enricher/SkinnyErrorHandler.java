@@ -30,14 +30,19 @@ public class SkinnyErrorHandler extends ErrorHandler {
         codeMappings.put(key, value);
     }
 
-    @Override
-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        logger.debug("error status is = {}", response.getStatus());
+    public void handle(Request baseRequest, HttpServletResponse response) throws IOException {
+
+        if (response.getStatus() < 400) {
+            return;
+        }
+
+        logger.debug("status check for error is = {}", response.getStatus());
         if (codeMappings.containsKey(response.getStatus())) {
             Path path = Paths.get(codeMappings.get(response.getStatus()));
             logger.debug("loading error page from = {}", path);
             byte[] allBytes = Files.readAllBytes(path);
-            response.getOutputStream().write(allBytes);
+            response.getWriter().write(new String(allBytes));
+            baseRequest.setHandled(true);
         }
     }
 }

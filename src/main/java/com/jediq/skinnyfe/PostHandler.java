@@ -34,7 +34,7 @@ public class PostHandler extends Handler {
         dotNotationTransformer = new DotNotationTransformer();
     }
 
-    public void doPost(Request request, Response response) throws IOException {
+    public boolean doPost(Request request, Response response) throws IOException {
 
 
         SkinnyTemplate skinnyTemplate = templateResolver.resolveTemplate(new URL(request.getUrl()).getPath());
@@ -42,7 +42,7 @@ public class PostHandler extends Handler {
             // we could not find the template
             logger.debug("Could not find template for : " + request.getUrl());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return false;
         }
 
         try {
@@ -64,9 +64,11 @@ public class PostHandler extends Handler {
 
             logger.info("POSTed, about to redirect to GET");
             response.sendRedirect(request.getUrl());
+            return true;
         } catch (IOException | NullPointerException e) {
             logger.info("Exception trying to redirect to : " + request.getUrl(), e);
             response.setStatus(500);
+            return false;
         }
     }
 }
