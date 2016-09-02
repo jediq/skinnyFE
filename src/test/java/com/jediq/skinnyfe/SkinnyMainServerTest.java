@@ -47,7 +47,8 @@ public class SkinnyMainServerTest {
     public void testErrorHandling() throws Exception {
         Config config = new Config();
         config.getErrorPages().put(404, "src/test/resources/basic/assets/404.html");
-        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config, new MetricRegistry());
+        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, new MetricRegistry());
+        skinnyMainServer.addConfiguration(config);
         skinnyMainServer.start();
 
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
@@ -62,7 +63,8 @@ public class SkinnyMainServerTest {
     public void testErrorHandlingWithoutMappedPage() throws Exception {
         Config config = new Config();
         config.getErrorPages().put(408, "src/test/resources/basic/assets/404.html");
-        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, config, new MetricRegistry());
+        SkinnyMainServer skinnyMainServer = new SkinnyMainServer(7890, new MetricRegistry());
+        skinnyMainServer.addConfiguration(config);
         skinnyMainServer.start();
 
         ContentResponse response = httpClient.GET("http://localhost:7890/enricherChangingResource");
@@ -134,7 +136,7 @@ public class SkinnyMainServerTest {
         static ThreadLocal <Server> localServer = new ThreadLocal<>();
 
         public LocalSkinnyMainServer() {
-            super(8800, new Config(), new MetricRegistry());
+            super(8800, new MetricRegistry());
         }
 
         @Override

@@ -49,7 +49,8 @@ public class SkinnyFE {
 
     public void startMainServer(int port) {
         logger.debug("Starting SkinnyFE server on port : " + port);
-        SkinnyMainServer server = new SkinnyMainServer(port, config, metrics);
+        SkinnyMainServer server = new SkinnyMainServer(port, metrics);
+        server.addConfiguration(config);
         server.start();
         servers.put(port, server);
         logger.info("Started SkinnyFE server for " + config.getName() + " on port : " + port);
