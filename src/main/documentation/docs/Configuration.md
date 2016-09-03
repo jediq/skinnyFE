@@ -70,3 +70,27 @@ file.  The values used are relative to the directory that the process was starte
   "defaultFragments":"myFragments"
 }
 ```
+
+
+##Protecting resources
+
+Sometimes you may with to protect your instance of SkinnyFE from talking to certain hosts, for instance calling back
+into localhost or 127.0.0.1, or other known hosts on your internal network.  This can be managed using the 
+`protectedHostsRegex` configuration value; for example : 
+```
+{
+  "protectedHostsRegex":".*localhost.*"
+}
+```
+would stop SkinnyFE from making resource calls to itself.
+
+
+##Virtual Hosts
+
+Multiple SkinnyFE configs can be registered on the same port, these can be distinguished by naming the Virtual Host
+that is pointing at the port.
+```
+{
+  "virtualHost":"myhost.com"
+}
+```

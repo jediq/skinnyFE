@@ -27,6 +27,7 @@ public class Config {
     private String virtualHost = null;
     private String name = "NO-NAME";
     private Map<Integer, String> errorPages = new HashMap<>();
+    private String protectedHostsRegex;
 
     public static Config load(String configLocation) {
         try {
@@ -147,5 +148,13 @@ public class Config {
 
     public void setVirtualHost(String virtualHost) {
         this.virtualHost = virtualHost;
+    }
+
+    public String getProtectedHostsRegex() {
+        return protectedHostsRegex;
+    }
+
+    public void setProtectedHostsRegex(String protectedHostsRegex) {
+        this.protectedHostsRegex = protectedHostsRegex;
     }
 }

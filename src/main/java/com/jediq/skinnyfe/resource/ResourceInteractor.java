@@ -22,6 +22,8 @@ public class ResourceInteractor {
     protected final Config config;
     protected final MetricRegistry metrics;
 
+    protected InternalHostProtection internalHostProtection;
+
     public ResourceInteractor(Config config, MetricRegistry metrics) {
         this.config = config;
         this.metrics = metrics;
@@ -32,6 +34,8 @@ public class ResourceInteractor {
         } catch (Exception e) {
             throw new WrappedException(e);
         }
+
+        internalHostProtection = new InternalHostProtection(config);
     }
 
     protected Resource findResource(String resourceName) throws ExecutionException {

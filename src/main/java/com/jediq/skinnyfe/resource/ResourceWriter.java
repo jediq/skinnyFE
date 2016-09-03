@@ -41,6 +41,10 @@ public class ResourceWriter extends ResourceInteractor {
 
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
 
+            if (internalHostProtection.isProtected(enrichedUrl)) {
+                return 403;
+            }
+
             final Timer timer = metrics.timer(name(ResourceWriter.class, meta.getResource(), "post-requests"));
 
             final Timer.Context context = timer.time();

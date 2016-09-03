@@ -60,6 +60,16 @@ public class ResourceReader extends ResourceInteractor {
             String enrichedUrl = resource.getResolvedUrl(meta.getIdentifier(), request);
             logger.info("Requesting resource from : " + enrichedUrl);
 
+            if (internalHostProtection.isProtected(enrichedUrl)) {
+                logger.debug("Tried to access a protected resource: {}", enrichedUrl);
+                ResourceResponse resourceResponse = new ResourceResponse();
+                resourceResponse.code = 403;
+                resourceResponse.reason = "{ \"error\":\"Forbidden\" }";
+                resourceResponse.content = "{}";
+                resourceResponse.url = resource.getUrl();
+                return resourceResponse;
+            }
+
             org.eclipse.jetty.client.api.Request httpRequest = httpClient.newRequest(enrichedUrl);
             httpRequest.method(HttpMethod.GET);
 

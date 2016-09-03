@@ -51,3 +51,14 @@ achieves this with regular expression patterns that can be configured against ea
 The example above will validate the todo greeting that is passed to the url is either "hi" or "hello".
 
 
+##Resource Protection
+
+Sometimes you may with to protect your instance of SkinnyFE from talking to certain hosts, for instance calling back
+into localhost or 127.0.0.1, or other known hosts on your internal network.  This can be managed using the 
+`protectedHostsRegex` configuration value; for example : 
+
+      "protectedHostsRegex":".*localhost.*",
+
+would stop SkinnyFE from making resource calls to itself.
+
+

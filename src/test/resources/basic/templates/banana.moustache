@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta property="banana" resource="Banana"/>
+
+</head>
+<body>
+banana?{{banana._meta.code}}
+</body>
+</html>

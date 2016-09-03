@@ -185,6 +185,14 @@ public class GetHandlerTest {
         assertThat(badResponse.getContentAsString(), is("ballas"));
     }
 
+
+    @Test
+    public void testAccessingProtectedResource() throws Exception {
+        ContentResponse response = httpClient.GET(BASE_URL + "banana");
+        assertThat(response.getStatus(), is(200));
+        assertThat(response.getContentAsString(), containsString("banana?403"));
+    }
+
     @AfterClass
     public static void tearDown() throws Exception {
         skinnyFE.stopServers();

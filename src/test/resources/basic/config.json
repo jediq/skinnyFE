@@ -10,6 +10,10 @@
       "inputValidators":{
         "regexingParam":"(pass)"
       }
+    },
+    {
+      "name":"Banana",
+      "url":"http://bananahost/"
     }
   ],
   "name":"TEST INSTANCE",
@@ -20,6 +24,7 @@
   "adminPort":8008,
   "assetsPath":"/assets",
   "assetsFolder":"src/test/resources/basic/assets/",
+  "protectedHostsRegex":".*bananahost.*",
 
   "templates":[
     {
