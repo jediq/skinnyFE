@@ -13,7 +13,15 @@ import static org.hamcrest.core.Is.is;
 
 
 /**
- * NOTE : This class requires, jeqiq1.local and jediq2.local to be resolvable to localhost
+ * NOTE : This class requires, skinny1.local and skinny2.local to be resolvable to localhost
+ *
+
+ sudo vi /etc/hosts
+
+ skinny1.local   localhost
+ skinny2.local   localhost
+
+ *
  */
 public class VirtualHostTest {
 
@@ -24,21 +32,21 @@ public class VirtualHostTest {
     @Test
     public void test() throws Exception {
 
-        assumePing("jediq1.local");
-        assumePing("jediq2.local");
+        assumePing("skinny1.local");
+        assumePing("skinny2.local");
 
         SkinnyMainServer server = new SkinnyMainServer(6786, new MetricRegistry());
         try {
 
             httpClient.start();
 
-            server.addConfiguration(createConfig("jediq1"));
-            server.addConfiguration(createConfig("jediq2"));
-
             server.start();
 
-            validateResponse("http://jediq1.local:6786", "skinny-jediq1\n");
-            validateResponse("http://jediq2.local:6786", "skinny-jediq2\n");
+            server.addConfiguration(createConfig("skinny1"));
+            server.addConfiguration(createConfig("skinny2"));
+
+            validateResponse("http://skinny1.local:6786", "skinny1\n");
+            validateResponse("http://skinny2.local:6786", "skinny2\n");
         } finally {
             server.stop();
             httpClient.stop();

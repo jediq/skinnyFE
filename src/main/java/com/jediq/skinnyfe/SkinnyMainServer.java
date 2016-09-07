@@ -4,7 +4,13 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jetty9.InstrumentedHandler;
 import com.jediq.skinnyfe.config.Config;
 
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.*;
 
 /**
@@ -34,7 +40,19 @@ public class SkinnyMainServer extends SkinnyServer {
     }
 
     private Handler instrumentHandler(Handler handler, MetricRegistry metrics, String name) {
-        InstrumentedHandler instrumentedHandler = new InstrumentedHandler(metrics);
+        InstrumentedHandler instrumentedHandler = new InstrumentedHandler(metrics) {
+            @Override
+            public void handle(String path, Request request, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException, ServletException {
+                if (!isStarted()) {
+                    try {
+                        doStart();
+                    } catch (Exception e) {
+                        logger.debug("Exception swallowed starting handler", e);
+                    }
+                }
+                super.handle(path, request, httpRequest, httpResponse);
+            }
+        };
         instrumentedHandler.setName(name);
         instrumentedHandler.setHandler(handler);
         return instrumentedHandler;
