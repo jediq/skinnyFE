@@ -83,8 +83,9 @@ public class GetHandler extends Handler {
         response.setStatus(status);
         if (status == HttpServletResponse.SC_OK) {
             response.getWriter().println(rendered);
+            return true;
         }
-        return true;
+        return false;
     }
 
     private int calculateStatus(int defaultStatus, ForceMethods forceMethods) {

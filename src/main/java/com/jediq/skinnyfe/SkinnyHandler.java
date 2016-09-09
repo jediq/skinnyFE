@@ -62,7 +62,9 @@ public class SkinnyHandler extends AbstractHandler {
             return;
         }
 
-        errorHandler.handle(baseRequest, response);
+        if (!baseRequest.isHandled()) {
+            errorHandler.handle(baseRequest, response);
+        }
     }
 
     private boolean handle(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) throws ServletException, IOException {

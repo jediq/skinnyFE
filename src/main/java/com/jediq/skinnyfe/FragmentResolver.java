@@ -56,7 +56,7 @@ public class FragmentResolver {
     private String fromFile(String urlPath) {
         String indexedUrlPath = urlPath + (urlPath.endsWith("/") ? "index" : "");
 
-        Path path = Paths.get(config.getDefaultFragments(), indexedUrlPath + ".fragment");
+        Path path = Paths.get(config.getBaseLocation(), config.getDefaultFragments(), indexedUrlPath + ".fragment");
         logger.debug("Looking for fragments from path : " + path);
 
         if (path.toFile().exists()) {
