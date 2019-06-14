@@ -1,4 +1,4 @@
-#Welcome
+# Welcome
 
 Welcome to [SkinnyFE](../), a Front End framework that removes the ability to embed business logic in a front end application.
 
@@ -9,12 +9,12 @@ More advanced configuration options can be found in the [Configuration](Configur
 
 The three main components of a SkinnyFE deployment are [Resources](Resources), [Templates](Templates) and [Enrichers](Enrichers).  
 
-##Resources
+## Resources
 Resources are external http(s) endpoints that serve the JSON data that SkinnyFE requires. [(more...)](Resources)
 
-##Templates
+## Templates
 Templates are [moustache](https://mustache.github.io/) html documents that are used to serve and render. [(more...)](Templates)
 
-##Enrichers
+## Enrichers
 Enrichers are Javascript functions that can be used to transform the output of [Resources](Resources) so that they
 can be more easily consumed by [Templates](Templates). [(more...)](Enrichers)
