@@ -1,15 +1,15 @@
-#Getting Started
+# Getting Started
 
 SkinnyFE comes pre-packaged as a Java executable JAR file, the latest release of this can be downloaded from [here](http://skinnyfe.jediq.com/skinnyFE-all.jar).
 
 The most basic installation requires only 2 files, a json configuration file and an html index file.  
 
-#####config.json
+##### config.json
 ```
 ${example1_configjson}
 ```
 
-#####index.moustache
+##### index.moustache
 ```
 ${example1_indexmoustache}
 ```
